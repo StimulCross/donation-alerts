@@ -1,0 +1,26 @@
+# npm & yarn
+node_modules
+.yarn
+package-lock.json
+yarn.lock
+yalc.lock
+.yalc
+*.tgz
+.yarn-integrity
+.yarnrc.yml
+*.code-workspace
+/.idea
+/.vscode
+docs
+generatedDocs
+packages/*/es
+packages/*/lib
+packages/*/docs.json
+docs*.json
+*.tsbuildinfo
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp.*

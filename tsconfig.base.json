@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		"composite": true,
+		"module": "commonjs",
+		"target": "es2019",
+		"lib": ["es2019", "es2021.promise", "es2022.error", "dom"],
+		"moduleResolution": "node",
+		"declaration": true,
+		"forceConsistentCasingInFileNames": true,
+		"noImplicitReturns": true,
+		"importHelpers": true,
+		"strict": true,
+		"noUnusedLocals": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"downlevelIteration": true,
+		"isolatedModules": true,
+		"declarationMap": true
+	},
+	"exclude": ["node_modules", "lib", "es"]
+}

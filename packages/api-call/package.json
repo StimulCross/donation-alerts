@@ -1,0 +1,56 @@
+{
+	"name": "@donation-alerts/api-call",
+	"version": "0.0.1",
+	"publishConfig": {
+		"access": "public"
+	},
+	"author": "StimulCross <stimulcross@gmail.com>",
+	"description": "Make calls to Donation Alerts API.",
+	"homepage": "https://github.com/StimulCross/donation-alerts/tree/main/packages/api-call#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/StimulCross/donation-alerts.git",
+		"directory": "packages/api-call"
+	},
+	"engines": {
+		"node": ">=12"
+	},
+	"keywords": [
+		"donation-alerts",
+		"api",
+		"donations",
+		"tips"
+	],
+	"license": "MIT",
+	"main": "lib",
+	"types": "lib",
+	"exports": {
+		".": {
+			"require": "./lib/index.js",
+			"import": "./es/index.mjs"
+		}
+	},
+	"files": [
+		"lib",
+		"LICENSE",
+		"README.md",
+		"!lib/**/*.d.ts.map",
+		"es",
+		"!es/**/*.d.ts",
+		"!es/**/*.d.ts.map"
+	],
+	"dependencies": {
+		"@donation-alerts/common": "^0.0.1",
+		"@stimulcross/shared-utils": "^0.1.3",
+		"cross-fetch": "^3.1.5",
+		"qs": "^6.11.0"
+	},
+	"devDependencies": {
+		"@types/qs": "^6.9.7"
+	},
+	"typedoc": {
+		"entryPoint": "./src/index.ts",
+		"readmeFile": "./README.md",
+		"displayName": "api-call"
+	}
+}

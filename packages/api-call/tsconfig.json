@@ -1,0 +1,16 @@
+{
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"rootDir": "src",
+		"outDir": "lib",
+		"paths": {
+			"@donation-alerts/common": ["../common/src"]
+		}
+	},
+	"references": [
+		{
+			"path": "../common"
+		}
+	],
+	"exclude": ["node_modules", "lib", "es"]
+}

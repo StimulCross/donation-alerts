@@ -1,0 +1,22 @@
+{
+	"name": "Donation Alerts",
+	"out": "docs",
+	"exclude": [
+		"./node_modules",
+		"**/node_modules/**",
+		"**/*.spec.ts",
+		"**/es/**",
+		"**/lib/**",
+		"packages/**/lib/*",
+		"packages/**/es/*"
+	],
+	"excludePrivate": true,
+	"entryPoints": ["packages/events", "packages/api", "packages/auth", "packages/api-call", "packages/common"],
+	"entryPointStrategy": "packages",
+	"cleanOutputDir": true,
+	"excludeProtected": true,
+	"excludeInternal": true,
+	"plugin": ["typedoc-plugin-resolve-crossmodule-references"],
+	"sort": ["source-order"],
+	"includeVersion": true
+}
