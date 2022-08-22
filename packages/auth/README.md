@@ -36,7 +36,7 @@ const clientId = 'YOUR_CLIENT_ID';
 const authProvider = new StaticAuthProvider(clientId);
 ```
 
-Optionally, you can provide an array of users to register on [StaticAuthProvider](https://stimulcross.github.io/donation-alerts/classes/auth.StaticAuthProvider.html) instance creation. Each user must implement [StaticAuthProvider](https://stimulcross.github.io/donation-alerts/classes/auth.StaticAuthProvider.html)
+Optionally, you can provide an array of users to register on [StaticAuthProvider](https://stimulcross.github.io/donation-alerts/classes/auth.StaticAuthProvider.html) instance creation. Each user must implement [StaticAuthUser](https://stimulcross.github.io/donation-alerts/interfaces/auth.StaticAuthUser.html)
 
 ```ts
 const authProvider = new StaticAuthUser(clientId, [
