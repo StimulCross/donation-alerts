@@ -1,1 +1,4 @@
 /docs
+/packages/*/es
+/packages/*/lib
+/packages/*/LICENSE
