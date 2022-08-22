@@ -3,3 +3,4 @@
 /packages/*/lib
 *.tsbuildinfo
 .eslintrc.js
+docs
