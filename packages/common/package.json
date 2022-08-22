@@ -5,7 +5,7 @@
 		"access": "public"
 	},
 	"author": "StimulCross <stimulcross@gmail.com>",
-	"description": "> TODO: description",
+	"description": "Common utils and types that are used in other @donation-alerts packages.",
 	"homepage": "https://github.com/StimulCross/donation-alerts/tree/main/packages/common#readme",
 	"repository": {
 		"type": "git",
