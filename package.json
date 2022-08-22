@@ -19,7 +19,7 @@
 		"build": "tsukuru",
 		"rebuild": "tsukuru --clean",
 		"prepare": "husky install",
-		"clean:build": "rimraf ./packages/**/es ./packages/**/lib",
+		"clean:build": "rimraf ./packages/**/es ./packages/**/lib ./packages/**/tsconfig.tsbuildinfo",
 		"clean:docs": "rimraf ./docs",
 		"docs": "typedoc"
 	},
