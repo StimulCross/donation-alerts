@@ -3,7 +3,7 @@
 		"packages/*"
 	],
 	"version": "0.0.2",
-	"name": "donation-alerts-workspace",
+	"name": "donation-alerts",
 	"repository": "git+https://github.com/StimulCross/donation-alerts.git",
 	"author": "Stimul Cross <stimulcross@gmail.com>",
 	"license": "MIT",
