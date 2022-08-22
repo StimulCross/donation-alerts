@@ -21,7 +21,6 @@
 		"donations",
 		"tips"
 	],
-	"sideEffects": false,
 	"license": "MIT",
 	"main": "lib",
 	"types": "lib",
