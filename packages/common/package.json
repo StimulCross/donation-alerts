@@ -28,8 +28,7 @@
 	"exports": {
 		".": {
 			"require": "./lib/index.js",
-			"import": "./es/index.mjs",
-			"types": "./lib/index.d.ts"
+			"import": "./es/index.mjs"
 		}
 	},
 	"files": [],
