@@ -20,4 +20,4 @@ yarn add @donation-alerts/common
 
 ---
 
-For more information check the [documentation](../../docs/modules/common.html).
+For more information check the [documentation](https://stimulcross.github.io/donation-alerts/modules/common.html).

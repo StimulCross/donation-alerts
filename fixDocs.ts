@@ -6,8 +6,8 @@ import parse from 'node-html-parser';
 
 const DOCS_PATH = './docs';
 const PACKAGES_PATH = './packages';
-const CURRENT_HOST = 'BASE_URL';
-const TARGET_HOST = 'file:///C:/YandexDisk/Development/donation-alerts/docs';
+const CURRENT_HOST = '../../docs';
+const TARGET_HOST = 'https://stimulcross.github.io/donation-alerts';
 
 const HTML_REGEX = /[A-z-._0-9]*.html$/iu;
 

@@ -4,7 +4,7 @@ A basic Donation Alerts API call wrapper.
 
 This package contains simple utils that allow you to send requests to different Donation Alerts API endpoints with given credentials.
 
-If you need to use the Donation Alerts API, consider using the [@donation-alerts/api](../../docs/modules/api.html) package, which allows for more flexibility and convenience in requesting data from the Donation Alerts API. The [@donation-alerts/api](../../docs/modules/api.html) package already uses this package internally, so you don't need to install it separately.
+If you need to use the Donation Alerts API, consider using the [@donation-alerts/api](https://stimulcross.github.io/donation-alerts/modules/api.html) package, which allows for more flexibility and convenience in requesting data from the Donation Alerts API. The [@donation-alerts/api](https://stimulcross.github.io/donation-alerts/modules/api.html) package already uses this package internally, so you don't need to install it separately.
 
 But if you still need it:
 
@@ -31,9 +31,9 @@ You can call Donation Alerts API in one of two ways:
 
 The both functions accepts the same arguments:
 
--   `options`: [DonationAlertsApiCallOptions](../../docs/interfaces/api_call.DonationAlertsApiCallOptions.html)
+-   `options`: [DonationAlertsApiCallOptions](https://stimulcross.github.io/donation-alerts/interfaces/api_call.DonationAlertsApiCallOptions.html)
 -   `accessToken`?: string
--   `fetchOptions`?: [DonationAlertsCallFetchOptions](../../docs/types/api_call.DonationAlertsCallFetchOptions.html)
+-   `fetchOptions`?: [DonationAlertsCallFetchOptions](https://stimulcross.github.io/donation-alerts/types/api_call.DonationAlertsCallFetchOptions.html)
 
 You can do the following to request raw data, for example, from `alerts/donations` endpoint:
 
@@ -71,8 +71,8 @@ const response = await callDonationAlertsApi<PayloadData>(
 
 The `response` will be mapped to the `PayloadData` interface that we passed as a type parameter.
 
-The function above can throw the [HttpError](../../docs/classes/api_call.HttpError.html) which you can catch and use.
+The function above can throw the [HttpError](https://stimulcross.github.io/donation-alerts/classes/api_call.HttpError.html) which you can catch and use.
 
 ---
 
-For more information check the [documentation](../../docs/modules/api_call.html).
+For more information check the [documentation](https://stimulcross.github.io/donation-alerts/modules/api_call.html).
