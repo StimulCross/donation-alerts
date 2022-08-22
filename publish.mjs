@@ -50,7 +50,6 @@ await runYarn([
 	'version',
 	'--no-push',
 	'--no-commit-hooks',
-	'--sign-git-tag',
 	'--force-publish',
 	'--preid',
 	'pre',
