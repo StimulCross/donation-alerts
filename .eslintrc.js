@@ -1,4 +1,3 @@
-/** eslint-disable */
 const path = require('path');
 const baseStyleRules = require('@stimulcross/eslint-config-typescript/style');
 
@@ -79,7 +78,6 @@ module.exports = {
 	parserOptions: {
 		project: './tsconfig.base.json'
 	},
-	ignorePatterns: ['./docs/*', './node_modules'],
 	rules: {
 		'@typescript-eslint/naming-convention': namingConvention
 	},
