@@ -36,6 +36,7 @@
 	},
 	"files": [
 		"lib",
+		"es",
 		"LICENSE",
 		"README.md",
 		"!lib/**/*.d.ts.map",

@@ -27,10 +27,19 @@
 	"exports": {
 		".": {
 			"require": "./lib/index.js",
-			"import": "./es/index.mjs"
+			"import": "./es/index.mjs",
+			"types": "./lib/index.d.ts"
 		}
 	},
-	"files": [],
+	"files": [
+		"lib",
+		"es",
+		"LICENSE",
+		"README.md",
+		"!lib/**/*.d.ts.map",
+		"!es/**/*.d.ts",
+		"!es/**/*.d.ts.map"
+	],
 	"dependencies": {
 		"@stimulcross/shared-utils": "^0.1.3",
 		"detect-node": "^2.1.0",

@@ -27,15 +27,16 @@
 	"exports": {
 		".": {
 			"require": "./lib/index.js",
-			"import": "./es/index.mjs"
+			"import": "./es/index.mjs",
+			"types": "./lib/index.d.ts"
 		}
 	},
 	"files": [
 		"lib",
+		"es",
 		"LICENSE",
 		"README.md",
 		"!lib/**/*.d.ts.map",
-		"es",
 		"!es/**/*.d.ts",
 		"!es/**/*.d.ts.map"
 	],
