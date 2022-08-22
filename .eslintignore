@@ -2,5 +2,5 @@
 /packages/*/es
 /packages/*/lib
 *.tsbuildinfo
-.eslintrc.js
+#.eslintrc.js
 docs
