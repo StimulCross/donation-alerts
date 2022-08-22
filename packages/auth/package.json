@@ -1,6 +1,9 @@
 {
 	"name": "@donation-alerts/auth",
 	"version": "1.0.0-pre.0",
+	"publishConfig": {
+		"access": "public"
+	},
 	"author": "StimulCross <stimulcross@gmail.com>",
 	"description": "> TODO: description",
 	"homepage": "https://github.com/StimulCross/donation-alerts/tree/main/packages/auth#readme",
