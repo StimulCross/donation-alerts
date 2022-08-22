@@ -78,6 +78,7 @@ module.exports = {
 	parserOptions: {
 		project: './tsconfig.base.json'
 	},
+	ignorePatterns: ['./docs', './node_modules'],
 	rules: {
 		'@typescript-eslint/naming-convention': namingConvention
 	},
