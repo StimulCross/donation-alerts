@@ -5,7 +5,7 @@
 		"access": "public"
 	},
 	"author": "StimulCross <stimulcross@gmail.com>",
-	"description": "> TODO: description",
+	"description": "Authentication provider for Donation Alerts API with ability to automatically refresh user tokens.",
 	"homepage": "https://github.com/StimulCross/donation-alerts/tree/main/packages/auth#readme",
 	"repository": {
 		"type": "git",
