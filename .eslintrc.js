@@ -76,7 +76,7 @@ module.exports = {
 		'@stimulcross/eslint-config-typescript/style'
 	],
 	parserOptions: {
-		project: 'tsconfig.eslint.json'
+		project: 'tsconfig.base.json'
 	},
 	rules: {
 		'@typescript-eslint/naming-convention': namingConvention
