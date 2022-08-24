@@ -12,7 +12,6 @@
 		"strict": true,
 		"noUnusedLocals": true,
 		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true,
 		"downlevelIteration": true,
 		"isolatedModules": true,
 		"declarationMap": true
