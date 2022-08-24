@@ -41,7 +41,7 @@ if (localRev !== remoteRev && remoteRev !== baseRev) {
 
 await runYarn(['rebuild']);
 await runYarn(['lint']);
-await runYarn(['prettier:fix']);
+await runYarn(['prettier:check']);
 
 const versionType = process.argv[2] ?? 'patch';
 
