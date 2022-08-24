@@ -1,8 +1,8 @@
 import { nonenumerable } from '@stimulcross/shared-utils';
 import type { PublicationContext } from 'centrifuge';
 import { EventEmitter } from '@d-fischer/typed-event-emitter';
-import type { LoggerOptions } from '@stimulcross/logger';
-import { createLogger, LogLevel, Logger } from '@stimulcross/logger';
+import type { LoggerOptions, Logger } from '@stimulcross/logger';
+import { createLogger, LogLevel } from '@stimulcross/logger';
 import type { CentrifugoChannel, UserIdResolvable } from '@donation-alerts/common';
 import { extractUserId, ReadDocumentation } from '@donation-alerts/common';
 import type { ApiClient } from '@donation-alerts/api';

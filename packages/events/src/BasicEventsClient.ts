@@ -1,10 +1,11 @@
 import { nonenumerable } from '@stimulcross/shared-utils';
 import * as isNode from 'detect-node';
 import { EventEmitter } from '@d-fischer/typed-event-emitter';
-import { createLogger, Logger, LogLevel } from '@stimulcross/logger';
+import type { Logger } from '@stimulcross/logger';
+import { createLogger, LogLevel } from '@stimulcross/logger';
 import type { CentrifugoChannel, UserIdResolvable } from '@donation-alerts/common';
 import { extractUserId } from '@donation-alerts/common';
-import { ApiClient } from '@donation-alerts/api';
+import type { ApiClient } from '@donation-alerts/api';
 import type {
 	JoinLeaveContext,
 	SubscribeErrorContext,

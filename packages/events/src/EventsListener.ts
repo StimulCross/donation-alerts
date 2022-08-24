@@ -1,6 +1,7 @@
-import { Subscription } from 'centrifuge';
-import { ReadDocumentation, CentrifugoChannel } from '@donation-alerts/common';
-import { UserEventsClient } from './UserEventsClient';
+import type { Subscription } from 'centrifuge';
+import type { CentrifugoChannel } from '@donation-alerts/common';
+import { ReadDocumentation } from '@donation-alerts/common';
+import type { UserEventsClient } from './UserEventsClient';
 
 @ReadDocumentation('events')
 export class EventsListener {

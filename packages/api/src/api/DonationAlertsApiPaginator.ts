@@ -1,7 +1,8 @@
-import { RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
-import { DonationAlertsApiCallOptions } from '@donation-alerts/api-call';
-import { ReadDocumentation, UserIdResolvable } from '@donation-alerts/common';
-import { ApiClient } from '../ApiClient';
+import type { RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
+import type { DonationAlertsApiCallOptions } from '@donation-alerts/api-call';
+import type { UserIdResolvable } from '@donation-alerts/common';
+import { ReadDocumentation } from '@donation-alerts/common';
+import type { ApiClient } from '../ApiClient';
 import type { DonationAlertsResponseWithMeta } from './DonationAlertsResponse';
 
 /**

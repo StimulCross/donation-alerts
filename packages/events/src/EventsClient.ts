@@ -2,7 +2,7 @@ import { nonenumerable } from '@stimulcross/shared-utils';
 import type { LoggerOptions } from '@stimulcross/logger';
 import type { UserIdResolvable } from '@donation-alerts/common';
 import { extractUserId, ReadDocumentation } from '@donation-alerts/common';
-import { ApiClient } from '@donation-alerts/api';
+import type { ApiClient } from '@donation-alerts/api';
 import { UserEventsClient } from './UserEventsClient';
 import type { DonationAlertsDonationEvent } from './events/donations/DonationAlertsDonationEvent';
 import type { EventsListener } from './EventsListener';
