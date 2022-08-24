@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-const BASE_URL = 'https://example.com';
+const BASE_URL = 'https://stimulcross.github.io/donation-alerts';
 
 const PACKAGE_MAP: Record<DocumentationPackage, string> = {
 	api: 'api',
