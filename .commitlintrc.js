@@ -1,3 +1,3 @@
 module.exports = {
-	extends: ['@stimulcross/commitlint-config/lerna']
+	extends: ['@stimulcross/commitlint-config']
 };
