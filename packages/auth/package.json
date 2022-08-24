@@ -1,6 +1,6 @@
 {
 	"name": "@donation-alerts/auth",
-	"version": "1.0.0-pre.8",
+	"version": "1.0.0-pre.9",
 	"publishConfig": {
 		"access": "public"
 	},
@@ -41,8 +41,8 @@
 		"!es/**/*.d.ts.map"
 	],
 	"dependencies": {
-		"@donation-alerts/api-call": "^1.0.0-pre.8",
-		"@donation-alerts/common": "^1.0.0-pre.8",
+		"@donation-alerts/api-call": "^1.0.0-pre.9",
+		"@donation-alerts/common": "^1.0.0-pre.9",
 		"@stimulcross/shared-utils": "^0.1.3"
 	},
 	"typedoc": {
