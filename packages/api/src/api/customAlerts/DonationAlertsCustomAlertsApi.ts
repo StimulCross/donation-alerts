@@ -77,7 +77,7 @@ export class DonationAlertsCustomAlertsApi extends BaseApi {
 					external_id: data.externalId,
 					header: data.header,
 					message: data.message,
-					is_shown: data.shouldShow ? '1' : '0',
+					is_shown: data.shouldShow ? '0' : '1',
 					image_url: data.imageUrl,
 					sound_url: data.soundUrl
 				},
