@@ -177,7 +177,6 @@ If the user you are trying to get the client for is not registered in [EventsCli
 If you don't want to listen for user events anymore, you can remove the user from [EventsClient](https://stimulcross.github.io/donation-alerts/classes/events.EventsClient.html) by calling [removeUser](https://stimulcross.github.io/donation-alerts/classes/events.EventsClient.html#removeUser) method:
 
 ```ts
-// WE ARE IN ASYNC FUNCTION OR WITH TOP LEVEL AWAIT ENEABLED
 const userId = 123456789;
 const userEventsClient = eventsClient.removeUser(userId);
 ```

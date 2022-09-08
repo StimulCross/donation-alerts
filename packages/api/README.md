@@ -102,7 +102,6 @@ After creating the paginator, you can use its methods to navigate pages:
 -   [getPrev](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#getPrev) - Gets the previous page. If you already on the first page, this method returns it back.
 -   [getPage](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#getPage) - Gets the specified page. If page does not exist, this method returns an empty array.
 -   [getAll](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#getAll) - Gets all available donations.
--
 
 ```ts
 const nextPage = await paginator.getNext();
@@ -217,8 +216,6 @@ These methods also accept [DonationAlertsCentrifugoSubscribeOptions](https://sti
 > **WARNING:** [Merchandise API](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsMerchandiseApi.html) wasn't tested because of access to these API endpoints is given as per request. Check the official [documentation](https://www.donationalerts.com/apidoc#advertisement__merchandises) to read more.
 
 Donation Alerts allow the merchant to sell their merchandise and provides the API methods to create and update merchandise, and send sale notifications.
-
-> **WARNING:** All [Merchandise API](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsMerchandiseApi.html) endpoints require your Donation Alerts application client secret. They SHOULD NOT be used on the front-end, because you will leak your client secret.
 
 #### Creating merchandise
 
