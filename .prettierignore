@@ -1,4 +1,5 @@
-/docs
+/docs/*
 /packages/*/es
 /packages/*/lib
 /packages/*/LICENSE
+lerna.json
