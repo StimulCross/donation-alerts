@@ -2,8 +2,6 @@
 
 Authentication provider with ability to automatically refresh user tokens.
 
-This package is already used by [@donation-alerts/api](https://stimulcross.github.io/donation-alerts/modules/api.html) and [@donation-alerts/events](https://stimulcross.github.io/donation-alerts/modules/events.html) packages, so you, probably, don't need to install it separately.
-
 ## Installation
 
 Using `npm`:
@@ -47,7 +45,7 @@ const authProvider = new StaticAuthUser(clientId, [
 ]);
 ```
 
-It's also recommended to set the scopes the token has. In this case, the library will compare the requested scope against the scopes the token has.
+It's also recommended to set the scopes the token has. In this case, the library will compare the requested scope against the token scopes.
 
 ```ts
 const authProvider = new StaticAuthUser(clientId, [

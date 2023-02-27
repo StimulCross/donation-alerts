@@ -7,13 +7,13 @@ A client that makes it very easy to listen to various Donation Alerts events.
 Using `npm`:
 
 ```
-npm i @donation-alerts/events
+npm i @donation-alerts/events @donation-alerts/api
 ```
 
 Using `yarn`:
 
 ```
-yarn add @donation-alerts/events
+yarn add @donation-alerts/events @donation-alerts/api
 ```
 
 ## Usage
@@ -51,15 +51,15 @@ import {
 	DonationAlertsPollUpdateEvent
 } from '@donation-alerts/events';
 
-const donationsListener = userEventsClient.listenToDonationEvents((evt: DonationAlertsDonationEvent) => {
+const donationsListener = userEventsClient.onDonation((evt: DonationAlertsDonationEvent) => {
 	console.log(evt);
 });
 
-const goalUpdatesListener = userEventsClient.listenToGoalUpdateEvents((evt: DonationAlertsGoalUpdateEvent) => {
+const goalUpdatesListener = userEventsClient.onGoalUpdate((evt: DonationAlertsGoalUpdateEvent) => {
 	console.log(evt);
 });
 
-const pollUpdatesListener = userEventsClient.listenToPollUpdateEvents((evt: DonationAlertsPollUpdateEvent) => {
+const pollUpdatesListener = userEventsClient.onPollUpdate((evt: DonationAlertsPollUpdateEvent) => {
 	console.log(evt);
 });
 ```
@@ -150,15 +150,15 @@ import {
 
 const userId = 123456789;
 
-const donationsListener = eventsClient.listenToDonationEvents(userId, (evt: DonationAlertsDonationEvent) => {
+const donationsListener = eventsClient.onDonation(userId, (evt: DonationAlertsDonationEvent) => {
 	console.log(evt);
 });
 
-const goalUpdatesListener = eventsClient.listenToGoalUpdateEvents(userId, (evt: DonationAlertsGoalUpdateEvent) => {
+const goalUpdatesListener = eventsClient.onGoalUpdate(userId, (evt: DonationAlertsGoalUpdateEvent) => {
 	console.log(evt);
 });
 
-const pollUpdatesListener = eventsClient.listenToPollUpdateEvents(userId, (evt: DonationAlertsPollUpdateEvent) => {
+const pollUpdatesListener = eventsClient.onPollUpdate(userId, (evt: DonationAlertsPollUpdateEvent) => {
 	console.log(evt);
 });
 ```

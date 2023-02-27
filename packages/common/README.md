@@ -1,8 +1,6 @@
 # Donation Alerts - Common
 
-Some common utils and types that are used in other packages, so there is no point in installing this package separately.
-
-But if you still need it:
+Some common utils and types that are used in other [@donation-alerts](https://github.com/StimulCross/donation-alerts) packages.
 
 ## Installation
 

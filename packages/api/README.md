@@ -7,13 +7,13 @@ API client that allows fetching data from Donation Alerts API. The library cover
 Using `npm`:
 
 ```
-npm i @donation-alerts/api
+npm i @donation-alerts/api @donation-alerts/auth
 ```
 
 Using `yarn`:
 
 ```
-yarn add @donation-alerts/api
+yarn add @donation-alerts/api @donation-alerts/auth
 ```
 
 ## Usage
@@ -128,8 +128,6 @@ You can reset the state at any time with [reset](https://stimulcross.github.io/d
 paginator.reset();
 ```
 
-The paginator is the recommended way to fetch donations.
-
 ---
 
 #### [Custom Alerts API](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsCustomAlertsApi.html)
@@ -141,8 +139,7 @@ Donation Alerts supports custom alerts. If a broadcaster creates a variation wit
 ```ts
 await apiClient.customAlerts.sendCustomAlert(123456789, {
 	header: 'Custom Alert',
-	message: 'Hello!',
-	shouldShow: true
+	message: 'Hello!'
 });
 ```
 
@@ -156,7 +153,7 @@ Donation Alerts supports real-time notifications over WebSocket protocol. To be 
 
 > **NOTE:** You must obtain an UUIDv4 client ID to subscribe users. This client ID is **NOT** the same as your Donation Alerts application client ID. Read more in the official Donation Alerts [documentation](https://www.donationalerts.com/apidoc#advertisement).
 
-> If you need to listen to real-time Donation Alerts notifications, consider using the [@donation-alerts/events](https://stimulcross.github.io/donation-alerts/modules/events.html) package. This library makes it very straightforward to listen to supported Donation Alerts channels without any extra actions.
+> **TIP:** If you need to listen to real-time Donation Alerts notifications, consider using the [@donation-alerts/events](https://stimulcross.github.io/donation-alerts/modules/events.html) package. This library makes it very straightforward to listen to supported Donation Alerts channels without any extra actions.
 
 To subscribe to private channels you can use [subscribeUserToPrivateChannels](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsCentrifugoApi.html#subscribeUserToPrivateChannels) method:
 
@@ -173,7 +170,7 @@ const channels = await apiClient.centrifugo.subscribeUserToPrivateChannels(userI
 
 The `channels` will be an array of [DonationAlertsCentrifugoChannel](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsCentrifugoChannel.html) objects, that contain channel name and connection token.
 
-To subscribe to a private channel, the channel name must be the following form: `<channel>_<userId>`. If you need subscribe user `123456789` to channel `$alerts:donation`, you don't usually need to transform channel name yourself, the library transforms channel names itself. The result will be joined channel name and user ID: `$alerts:donation_123456789`.
+To subscribe to a private channel, the channel name must be the following form: `<channel>_<userId>`. If you need subscribe user `123456789` to channel `$alerts:donation`, you don't usually need to transform channel name yourself, the library takes on this task. The result will be joined channel name and user ID: `$alerts:donation_123456789`.
 
 But if for some reason you are passing already transformed channel names, then you can disable this behavior by passing [DonationAlertsCentrifugoSubscribeOptions]() as the fourth argument with property `transformChannel: false`:
 

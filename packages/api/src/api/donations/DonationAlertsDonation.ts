@@ -31,8 +31,6 @@ export interface DonationAlertsDonationData {
 }
 /**
  * Represents Donation Alerts donation.
- *
- * Note: The object contains undocumented fields
  */
 @ReadDocumentation('api')
 export class DonationAlertsDonation extends DataObject<DonationAlertsDonationData> {
