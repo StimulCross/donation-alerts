@@ -15,8 +15,8 @@
 	"scripts": {
 		"lint": "eslint --ext js,ts packages",
 		"lint:fix": "eslint --ext js,ts packages --fix",
-		"format:check": "prettier --config \".prettierrc.js\" --check . ",
-		"format:fix": "prettier --config \".prettierrc.js\" --write .",
+		"format:check": "prettier --config \".prettierrc.js\" --check packages",
+		"format:fix": "prettier --config \".prettierrc.js\" --write packages",
 		"build": "tsukuru",
 		"rebuild": "tsukuru --clean",
 		"prepare": "husky install",
