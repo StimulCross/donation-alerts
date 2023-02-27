@@ -14,8 +14,8 @@
 	},
 	"scripts": {
 		"lint": "eslint --ext js,ts packages",
-		"prettier:check": "prettier --config \".prettierrc.js\" --check . ",
-		"prettier:fix": "prettier --config \".prettierrc.js\" --write .",
+		"format:check": "prettier --config \".prettierrc.js\" --check . ",
+		"format:fix": "prettier --config \".prettierrc.js\" --write .",
 		"build": "tsukuru",
 		"rebuild": "tsukuru --clean",
 		"prepare": "husky install",
