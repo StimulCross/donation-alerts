@@ -1,9 +1,8 @@
-import type { RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
-import type { DonationAlertsApiCallOptions } from '@donation-alerts/api-call';
-import type { UserIdResolvable } from '@donation-alerts/common';
-import { ReadDocumentation } from '@donation-alerts/common';
-import type { ApiClient } from '../ApiClient';
-import type { DonationAlertsResponseWithMeta } from './DonationAlertsResponse';
+import { type RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
+import { type DonationAlertsApiCallOptions } from '@donation-alerts/api-call';
+import { ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
+import { type DonationAlertsResponseWithMeta } from './DonationAlertsResponse';
+import { type ApiClient } from '../ApiClient';
 
 /**
  * Donation Alerts API paginator.

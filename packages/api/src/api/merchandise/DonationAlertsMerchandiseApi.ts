@@ -1,14 +1,16 @@
+import { type RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
+import {
+	ReadDocumentation,
+	type DonationAlertsInputCurrency,
+	type DonationAlertsLocaleCode,
+	type UserIdResolvable
+} from '@donation-alerts/common';
 import { mapOptional } from '@stimulcross/shared-utils';
-import type { RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
-import type { DonationAlertsInputCurrency, DonationAlertsLocaleCode, UserIdResolvable } from '@donation-alerts/common';
-import { ReadDocumentation } from '@donation-alerts/common';
-import { BaseApi } from '../BaseApi';
-import type { DonationAlertsResponseSingleData } from '../DonationAlertsResponse';
+import { DonationAlertsMerchandise, type DonationAlertsMerchandiseData } from './DonationAlertsMerchandise';
+import { DonationAlertsMerchandiseSale, type DonationAlertsMerchandiseSaleData } from './DonationAlertsMerchandiseSale';
 import { createSha256SignatureFromParams } from '../../utils/createSha256SignatureFromParams';
-import type { DonationAlertsMerchandiseData } from './DonationAlertsMerchandise';
-import { DonationAlertsMerchandise } from './DonationAlertsMerchandise';
-import type { DonationAlertsMerchandiseSaleData } from './DonationAlertsMerchandiseSale';
-import { DonationAlertsMerchandiseSale } from './DonationAlertsMerchandiseSale';
+import { BaseApi } from '../BaseApi';
+import { type DonationAlertsResponseSingleData } from '../DonationAlertsResponse';
 
 /**
  * Title of the merchandise in different locales. At minimum, a title for the `en_US` locale is required.

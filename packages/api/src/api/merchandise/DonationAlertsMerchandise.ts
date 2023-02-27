@@ -1,9 +1,16 @@
+import {
+	DataObject,
+	rawDataSymbol,
+	ReadDocumentation,
+	type DonationAlertsLocaleCode,
+	type DonationAlertsOutputCurrency
+} from '@donation-alerts/common';
 import { mapNullable } from '@stimulcross/shared-utils';
-import type { DonationAlertsLocaleCode, DonationAlertsOutputCurrency } from '@donation-alerts/common';
-import { DataObject, rawDataSymbol, ReadDocumentation } from '@donation-alerts/common';
 import { Memoize } from 'typescript-memoize';
-import type { DonationAlertsMerchandiseMerchantData } from './DonationAlertsMerchandiseMerchant';
-import { DonationAlertsMerchandiseMerchant } from './DonationAlertsMerchandiseMerchant';
+import {
+	DonationAlertsMerchandiseMerchant,
+	type DonationAlertsMerchandiseMerchantData
+} from './DonationAlertsMerchandiseMerchant';
 
 /** @internal */
 export interface DonationAlertsMerchandiseTitleData extends Partial<Record<DonationAlertsLocaleCode, string>> {

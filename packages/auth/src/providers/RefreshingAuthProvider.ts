@@ -1,13 +1,11 @@
+import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { nonenumerable } from '@stimulcross/shared-utils';
-import type { UserIdResolvable } from '@donation-alerts/common';
-import { extractUserId, ReadDocumentation } from '@donation-alerts/common';
-import type { AccessToken } from '../AccessToken';
-import { isAccessTokenExpired } from '../AccessToken';
-import { compareScopes, refreshAccessToken } from '../helpers';
-import type { AuthUser } from '../AuthUser';
-import { UnregisteredUserError } from '../errors/UnregisteredUserError';
-import type { AuthProvider } from './AuthProvider';
+import { type AuthProvider } from './AuthProvider';
 import { BaseAuthProvider } from './BaseAuthProvider';
+import { isAccessTokenExpired, type AccessToken } from '../AccessToken';
+import { type AuthUser } from '../AuthUser';
+import { UnregisteredUserError } from '../errors/UnregisteredUserError';
+import { compareScopes, refreshAccessToken } from '../helpers';
 
 /**
  * Configuration for {@link RefreshingAuthProvider}.

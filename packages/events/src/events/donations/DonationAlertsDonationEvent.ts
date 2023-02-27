@@ -1,6 +1,10 @@
+import {
+	DataObject,
+	rawDataSymbol,
+	ReadDocumentation,
+	type DonationAlertsOutputCurrency
+} from '@donation-alerts/common';
 import { mapNullable } from '@stimulcross/shared-utils';
-import type { DonationAlertsOutputCurrency } from '@donation-alerts/common';
-import { DataObject, rawDataSymbol, ReadDocumentation } from '@donation-alerts/common';
 
 /**
  * Type of the alert. Always `Donations` in this case.

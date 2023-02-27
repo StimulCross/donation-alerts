@@ -1,9 +1,16 @@
-import type { RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
-import type { CentrifugoChannel, DonationAlertsApiScope, UserIdResolvable } from '@donation-alerts/common';
-import { extractUserId, ReadDocumentation } from '@donation-alerts/common';
+import { type RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
+import {
+	extractUserId,
+	ReadDocumentation,
+	type CentrifugoChannel,
+	type DonationAlertsApiScope,
+	type UserIdResolvable
+} from '@donation-alerts/common';
+import {
+	DonationAlertsCentrifugoChannel,
+	type DonationAlertsCentrifugoChannelsResponseData
+} from './DonationAlertsCentrifugoChannel';
 import { BaseApi } from '../BaseApi';
-import type { DonationAlertsCentrifugoChannelsResponseData } from './DonationAlertsCentrifugoChannel';
-import { DonationAlertsCentrifugoChannel } from './DonationAlertsCentrifugoChannel';
 
 /**
  * Additional subscribe options.

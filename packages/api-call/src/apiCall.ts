@@ -3,9 +3,9 @@
 // eslint-disable-next-line @typescript-eslint/no-shadow
 import fetch, { Headers } from 'cross-fetch';
 import { stringify } from 'qs';
-import type { DonationAlertsApiCallOptions, DonationAlertsCallFetchOptions } from './DonationAlertsApiCallOptions';
-import { getDonationAlertsApiUrl } from './helpers/url';
+import { type DonationAlertsApiCallOptions, type DonationAlertsCallFetchOptions } from './DonationAlertsApiCallOptions';
 import { handleDonationAlertsApiResponseError, transformDonationAlertsResponse } from './helpers/transform';
+import { getDonationAlertsApiUrl } from './helpers/url';
 
 /**
  * Makes a call to the Donation Alerts API with the given options. Returns raw Response object.

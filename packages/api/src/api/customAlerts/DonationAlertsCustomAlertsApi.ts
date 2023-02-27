@@ -1,10 +1,8 @@
-import type { RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
-import type { UserIdResolvable } from '@donation-alerts/common';
-import { ReadDocumentation } from '@donation-alerts/common';
+import { type RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
+import { ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
+import { DonationAlertsCustomAlert, type DonationAlertsCustomAlertData } from './DonationAlertsCustomAlert';
 import { BaseApi } from '../BaseApi';
-import type { DonationAlertsResponseSingleData } from '../DonationAlertsResponse';
-import type { DonationAlertsCustomAlertData } from './DonationAlertsCustomAlert';
-import { DonationAlertsCustomAlert } from './DonationAlertsCustomAlert';
+import { type DonationAlertsResponseSingleData } from '../DonationAlertsResponse';
 
 /**
  * Data to send with a custom alert.

@@ -1,12 +1,11 @@
-import type { UserIdResolvable } from '@donation-alerts/common';
-import { extractUserId, ReadDocumentation } from '@donation-alerts/common';
-import type { AuthUser } from '../AuthUser';
-import type { AccessToken } from '../AccessToken';
-import { compareScopes } from '../helpers';
-import { UnregisteredUserError } from '../errors/UnregisteredUserError';
-import type { StaticAuthUser } from '../StaticAuthUser';
-import type { AuthProvider } from './AuthProvider';
+import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
+import { type AuthProvider } from './AuthProvider';
 import { BaseAuthProvider } from './BaseAuthProvider';
+import { type AccessToken } from '../AccessToken';
+import { type AuthUser } from '../AuthUser';
+import { UnregisteredUserError } from '../errors/UnregisteredUserError';
+import { compareScopes } from '../helpers';
+import { type StaticAuthUser } from '../StaticAuthUser';
 
 /**
  * Static non-self-refreshing authentication provider, that always returns the same initially given credentials.

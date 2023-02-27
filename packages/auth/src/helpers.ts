@@ -1,6 +1,6 @@
 import { callDonationAlertsApi } from '@donation-alerts/api-call';
+import { type AccessToken } from './AccessToken';
 import { MissingScopeError } from './errors/MissingScopeError';
-import type { AccessToken } from './AccessToken';
 
 /** @internal */
 interface AccessTokenData {

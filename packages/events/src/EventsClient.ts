@@ -1,13 +1,12 @@
+import { type ApiClient } from '@donation-alerts/api';
+import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
+import { type LoggerOptions } from '@stimulcross/logger';
 import { nonenumerable } from '@stimulcross/shared-utils';
-import type { LoggerOptions } from '@stimulcross/logger';
-import type { UserIdResolvable } from '@donation-alerts/common';
-import { extractUserId, ReadDocumentation } from '@donation-alerts/common';
-import type { ApiClient } from '@donation-alerts/api';
+import { type DonationAlertsDonationEvent } from './events/donations/DonationAlertsDonationEvent';
+import { type DonationAlertsGoalUpdateEvent } from './events/goals/DonationAlertsGoalUpdateEvent';
+import { type DonationAlertsPollUpdateEvent } from './events/polls/DonationAlertsPollUpdateEvent';
+import { type EventsListener } from './EventsListener';
 import { UserEventsClient } from './UserEventsClient';
-import type { DonationAlertsDonationEvent } from './events/donations/DonationAlertsDonationEvent';
-import type { EventsListener } from './EventsListener';
-import type { DonationAlertsGoalUpdateEvent } from './events/goals/DonationAlertsGoalUpdateEvent';
-import type { DonationAlertsPollUpdateEvent } from './events/polls/DonationAlertsPollUpdateEvent';
 
 /**
  * Configuration for {@link EventsClient}.

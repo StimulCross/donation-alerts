@@ -1,10 +1,9 @@
+import { extractUserId, type UserIdResolvable } from '@donation-alerts/common';
 import { nonenumerable } from '@stimulcross/shared-utils';
-import type { UserIdResolvable } from '@donation-alerts/common';
-import { extractUserId } from '@donation-alerts/common';
-import type { AccessToken } from '../AccessToken';
-import type { AuthUser } from '../AuthUser';
+import { type AuthProvider } from './AuthProvider';
+import { type AccessToken } from '../AccessToken';
+import { type AuthUser } from '../AuthUser';
 import { UnregisteredUserError } from '../errors/UnregisteredUserError';
-import type { AuthProvider } from './AuthProvider';
 
 /** @internal */
 export abstract class BaseAuthProvider implements AuthProvider {

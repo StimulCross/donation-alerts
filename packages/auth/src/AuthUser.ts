@@ -1,5 +1,5 @@
-import type { UserIdResolvable } from '@donation-alerts/common';
-import type { AccessToken } from './AccessToken';
+import { type UserIdResolvable } from '@donation-alerts/common';
+import { type AccessToken } from './AccessToken';
 
 /**
  * The user data to register in the auth provider.

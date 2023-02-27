@@ -1,5 +1,5 @@
-import { klona } from 'klona';
 import { nonenumerable } from '@stimulcross/shared-utils';
+import { klona } from 'klona';
 
 /** @internal */
 export const rawDataSymbol: unique symbol = Symbol('donationAlertsRawData');

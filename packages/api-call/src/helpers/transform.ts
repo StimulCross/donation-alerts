@@ -1,5 +1,5 @@
 import { stringify } from 'qs';
-import type { DonationAlertsApiCallOptions } from '../DonationAlertsApiCallOptions';
+import { type DonationAlertsApiCallOptions } from '../DonationAlertsApiCallOptions';
 import { HttpError } from '../errors/HttpError';
 
 /** @internal */

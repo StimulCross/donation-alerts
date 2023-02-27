@@ -1,6 +1,6 @@
-import type { Optional } from '@stimulcross/shared-utils';
-import type { UserIdResolvable } from '@donation-alerts/common';
-import type { AccessToken } from './AccessToken';
+import { type UserIdResolvable } from '@donation-alerts/common';
+import { type Optional } from '@stimulcross/shared-utils';
+import { type AccessToken } from './AccessToken';
 
 /**
  * The user data to register in the auth provider.

@@ -1,21 +1,19 @@
-import { nonenumerable } from '@stimulcross/shared-utils';
-import * as isNode from 'detect-node';
 import { EventEmitter } from '@d-fischer/typed-event-emitter';
-import type { Logger } from '@stimulcross/logger';
-import { createLogger, LogLevel } from '@stimulcross/logger';
-import type { CentrifugoChannel, UserIdResolvable } from '@donation-alerts/common';
-import { extractUserId } from '@donation-alerts/common';
-import type { ApiClient } from '@donation-alerts/api';
-import type {
-	JoinLeaveContext,
-	SubscribeErrorContext,
-	SubscribePrivateContext,
-	SubscribePrivateResponse,
-	SubscribeSuccessContext,
-	Subscription,
-	UnsubscribeContext
+import { type ApiClient } from '@donation-alerts/api';
+import { extractUserId, type CentrifugoChannel, type UserIdResolvable } from '@donation-alerts/common';
+import { createLogger, LogLevel, type Logger } from '@stimulcross/logger';
+import { nonenumerable } from '@stimulcross/shared-utils';
+import {
+	type JoinLeaveContext,
+	type SubscribeErrorContext,
+	type SubscribePrivateContext,
+	type SubscribePrivateResponse,
+	type SubscribeSuccessContext,
+	type Subscription,
+	type UnsubscribeContext
 } from 'centrifuge';
 import * as Centrifuge from 'centrifuge';
+import * as isNode from 'detect-node';
 // eslint-disable-next-line @typescript-eslint/no-shadow
 import { WebSocket } from 'ws';
 

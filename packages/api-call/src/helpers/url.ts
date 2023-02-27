@@ -1,4 +1,4 @@
-import type { DonationAlertsCallType } from '../DonationAlertsApiCallOptions';
+import { type DonationAlertsCallType } from '../DonationAlertsApiCallOptions';
 
 /** @internal */
 export function getDonationAlertsApiUrl(url: string, type: DonationAlertsCallType): string {
