@@ -43,7 +43,6 @@
 	"dependencies": {
 		"@d-fischer/rate-limiter": "^0.7.2",
 		"@donation-alerts/api-call": "^1.0.2",
-		"@donation-alerts/auth": "^1.0.2",
 		"@donation-alerts/common": "^1.0.2",
 		"@stimulcross/logger": "^6.0.0",
 		"@stimulcross/shared-utils": "^0.2.3",
@@ -51,12 +50,16 @@
 		"qs": "^6.11.0",
 		"typescript-memoize": "^1.1.0"
 	},
+	"peerDependencies": {
+		"@donation-alerts/auth": "1.0.2"
+	},
+	"devDependencies": {
+		"@donation-alerts/auth": "^1.0.2",
+		"@types/qs": "^6.9.7"
+	},
 	"typedoc": {
 		"entryPoint": "./src/index.ts",
 		"readmeFile": "./README.md",
 		"displayName": "api"
-	},
-	"devDependencies": {
-		"@types/qs": "^6.9.7"
 	}
 }
