@@ -101,11 +101,11 @@ export class EventsClient {
 	 * @param user The ID of the user to listen donation events to.
 	 * @param callback A function to be called when donation event is sent to the user.
 	 */
-	async listenToDonationEvents(
+	async onDonation(
 		user: UserIdResolvable,
 		callback: (event: DonationAlertsDonationEvent) => void
 	): Promise<EventsListener> {
-		return await this.getUserClient(user).listenToDonationEvents(callback);
+		return await this.getUserClient(user).onDonation(callback);
 	}
 
 	/**
@@ -114,11 +114,11 @@ export class EventsClient {
 	 * @param user The ID of the user to listen goal update events to.
 	 * @param callback A function to be called when goal update is sent to the user.
 	 */
-	async listenToGoalUpdateEvents(
+	async onGoalUpdate(
 		user: UserIdResolvable,
 		callback: (event: DonationAlertsGoalUpdateEvent) => void
 	): Promise<EventsListener> {
-		return await this.getUserClient(user).listenToGoalUpdateEvents(callback);
+		return await this.getUserClient(user).onGoalUpdate(callback);
 	}
 
 	/**
@@ -127,10 +127,10 @@ export class EventsClient {
 	 * @param user The ID of the user to listen poll update events to.
 	 * @param callback A function to be called when poll update is sent to the user.
 	 */
-	async listenToPollUpdateEvents(
+	async onPollUpdate(
 		user: UserIdResolvable,
 		callback: (event: DonationAlertsPollUpdateEvent) => void
 	): Promise<EventsListener> {
-		return await this.getUserClient(user).listenToPollUpdateEvents(callback);
+		return await this.getUserClient(user).onPollUpdate(callback);
 	}
 }

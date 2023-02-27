@@ -151,7 +151,7 @@ export class UserEventsClient extends EventEmitter {
 	 *
 	 * @param callback A function to be called when a donation event is sent to the user.
 	 */
-	async listenToDonationEvents(callback: (event: DonationAlertsDonationEvent) => void): Promise<EventsListener> {
+	async onDonation(callback: (event: DonationAlertsDonationEvent) => void): Promise<EventsListener> {
 		return await this._createListener<DonationAlertsDonationEventData, DonationAlertsDonationEvent>(
 			'$alerts:donation',
 			DonationAlertsDonationEvent,
@@ -164,7 +164,7 @@ export class UserEventsClient extends EventEmitter {
 	 *
 	 * @param callback A function to be called when a goal update event is sent to the user.
 	 */
-	async listenToGoalUpdateEvents(callback: (event: DonationAlertsGoalUpdateEvent) => void): Promise<EventsListener> {
+	async onGoalUpdate(callback: (event: DonationAlertsGoalUpdateEvent) => void): Promise<EventsListener> {
 		return await this._createListener<DonationAlertsGoalUpdateEventData, DonationAlertsGoalUpdateEvent>(
 			'$goals:goal',
 			DonationAlertsGoalUpdateEvent,
@@ -177,7 +177,7 @@ export class UserEventsClient extends EventEmitter {
 	 *
 	 * @param callback A function to be called when a poll update event is sent to the user.
 	 */
-	async listenToPollUpdateEvents(callback: (event: DonationAlertsPollUpdateEvent) => void): Promise<EventsListener> {
+	async onPollUpdate(callback: (event: DonationAlertsPollUpdateEvent) => void): Promise<EventsListener> {
 		return await this._createListener<DonationAlertsPollUpdateEventData, DonationAlertsPollUpdateEvent>(
 			'$polls:poll',
 			DonationAlertsPollUpdateEvent,
