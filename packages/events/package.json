@@ -45,7 +45,6 @@
 	],
 	"dependencies": {
 		"@d-fischer/typed-event-emitter": "^3.3.0",
-		"@donation-alerts/api": "^1.0.2",
 		"@donation-alerts/common": "^1.0.2",
 		"@stimulcross/logger": "^6.0.0",
 		"@stimulcross/shared-utils": "^0.2.3",
@@ -55,7 +54,11 @@
 		"typescript-memoize": "^1.1.1",
 		"ws": "8.12.1"
 	},
+	"peerDependencies": {
+		"@donation-alerts/api": "1.0.2"
+	},
 	"devDependencies": {
+		"@donation-alerts/api": "1.0.2",
 		"@types/detect-node": "^2.0.0",
 		"@types/ws": "^8.5.4"
 	},
