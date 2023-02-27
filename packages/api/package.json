@@ -42,8 +42,8 @@
 	],
 	"dependencies": {
 		"@d-fischer/rate-limiter": "^0.7.2",
-		"@donation-alerts/api-call": "^1.0.2",
-		"@donation-alerts/common": "^1.0.2",
+		"@donation-alerts/api-call": "1.0.2",
+		"@donation-alerts/common": "1.0.2",
 		"@stimulcross/logger": "^6.0.0",
 		"@stimulcross/shared-utils": "^0.2.3",
 		"cross-sha256": "^1.2.0",
@@ -54,7 +54,7 @@
 		"@donation-alerts/auth": "1.0.2"
 	},
 	"devDependencies": {
-		"@donation-alerts/auth": "^1.0.2",
+		"@donation-alerts/auth": "1.0.2",
 		"@types/qs": "^6.9.7"
 	},
 	"typedoc": {
