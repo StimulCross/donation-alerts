@@ -44,18 +44,17 @@
 		"!es/**/*.d.ts.map"
 	],
 	"dependencies": {
-		"@d-fischer/typed-event-emitter": "^3.3.0",
+		"@d-fischer/typed-event-emitter": "^3.3.1",
 		"@donation-alerts/common": "^2.0.0",
 		"@stimulcross/logger": "^6.0.0",
 		"@stimulcross/shared-utils": "^0.2.3",
 		"centrifuge": "2.8.5",
 		"detect-node": "^2.1.0",
-		"typed-event-emitter": "^3.0.0",
 		"typescript-memoize": "^1.1.1",
-		"ws": "8.12.1"
+		"ws": "8.13.0"
 	},
 	"peerDependencies": {
-		"@donation-alerts/api": "1.0.2"
+		"@donation-alerts/api": "2.0.0"
 	},
 	"devDependencies": {
 		"@donation-alerts/api": "^2.0.0",

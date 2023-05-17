@@ -16,7 +16,6 @@
 	"cleanOutputDir": true,
 	"excludeProtected": true,
 	"excludeInternal": true,
-	"plugin": ["typedoc-plugin-resolve-crossmodule-references"],
 	"sort": ["source-order"],
 	"includeVersion": true
 }

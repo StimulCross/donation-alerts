@@ -41,17 +41,17 @@
 		"!es/**/*.d.ts.map"
 	],
 	"dependencies": {
-		"@d-fischer/rate-limiter": "^0.7.2",
+		"@d-fischer/rate-limiter": "^0.7.4",
 		"@donation-alerts/api-call": "^2.0.0",
 		"@donation-alerts/common": "^2.0.0",
 		"@stimulcross/logger": "^6.0.0",
 		"@stimulcross/shared-utils": "^0.2.3",
 		"cross-sha256": "^1.2.0",
-		"qs": "^6.11.0",
-		"typescript-memoize": "^1.1.0"
+		"qs": "^6.11.2",
+		"typescript-memoize": "^1.1.1"
 	},
 	"peerDependencies": {
-		"@donation-alerts/auth": "1.0.2"
+		"@donation-alerts/auth": "2.0.0"
 	},
 	"devDependencies": {
 		"@donation-alerts/auth": "^2.0.0",
