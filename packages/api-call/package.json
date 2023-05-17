@@ -1,6 +1,6 @@
 {
 	"name": "@donation-alerts/api-call",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"publishConfig": {
 		"access": "public"
 	},
@@ -41,7 +41,7 @@
 		"!es/**/*.d.ts.map"
 	],
 	"dependencies": {
-		"@donation-alerts/common": "^2.0.0",
+		"@donation-alerts/common": "^2.0.1",
 		"@stimulcross/shared-utils": "^0.2.3",
 		"cross-fetch": "^3.1.6",
 		"qs": "^6.11.2"
