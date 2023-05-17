@@ -44,10 +44,5 @@
 		"@donation-alerts/api-call": "^2.0.0",
 		"@donation-alerts/common": "^2.0.0",
 		"@stimulcross/shared-utils": "^0.2.3"
-	},
-	"typedoc": {
-		"entryPoint": "./src/index.ts",
-		"readmeFile": "./README.md",
-		"displayName": "auth"
 	}
 }

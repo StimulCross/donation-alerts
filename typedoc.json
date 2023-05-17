@@ -10,12 +10,9 @@
 		"packages/**/lib/*",
 		"packages/**/es/*"
 	],
-	"excludePrivate": true,
-	"entryPoints": ["packages/events", "packages/api", "packages/auth", "packages/api-call", "packages/common"],
+	"entryPoints": ["packages/*"],
 	"entryPointStrategy": "packages",
 	"cleanOutputDir": true,
-	"excludeProtected": true,
-	"excludeInternal": true,
 	"sort": ["source-order"],
 	"includeVersion": true
 }

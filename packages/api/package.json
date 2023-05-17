@@ -56,10 +56,5 @@
 	"devDependencies": {
 		"@donation-alerts/auth": "^2.0.0",
 		"@types/qs": "^6.9.7"
-	},
-	"typedoc": {
-		"entryPoint": "./src/index.ts",
-		"readmeFile": "./README.md",
-		"displayName": "api"
 	}
 }

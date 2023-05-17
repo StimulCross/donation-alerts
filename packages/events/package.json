@@ -60,10 +60,5 @@
 		"@donation-alerts/api": "^2.0.0",
 		"@types/detect-node": "^2.0.0",
 		"@types/ws": "^8.5.4"
-	},
-	"typedoc": {
-		"entryPoint": "./src/index.ts",
-		"readmeFile": "./README.md",
-		"displayName": "events"
 	}
 }

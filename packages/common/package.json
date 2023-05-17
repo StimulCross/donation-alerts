@@ -47,10 +47,5 @@
 	},
 	"devDependencies": {
 		"@types/detect-node": "^2.0.0"
-	},
-	"typedoc": {
-		"entryPoint": "./src/index.ts",
-		"readmeFile": "./README.md",
-		"displayName": "common"
 	}
 }

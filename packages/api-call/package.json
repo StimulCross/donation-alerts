@@ -48,10 +48,5 @@
 	},
 	"devDependencies": {
 		"@types/qs": "^6.9.7"
-	},
-	"typedoc": {
-		"entryPoint": "./src/index.ts",
-		"readmeFile": "./README.md",
-		"displayName": "api-call"
 	}
 }
