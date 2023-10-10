@@ -10,7 +10,7 @@ import { compareScopes, refreshAccessToken } from '../helpers';
 /**
  * Configuration for {@link RefreshingAuthProvider}.
  */
-export interface RefreshConfig {
+export interface RefreshingAuthProviderConfig {
 	/**
 	 * The Donation Alerts client ID.
 	 */
@@ -50,14 +50,14 @@ export class RefreshingAuthProvider extends BaseAuthProvider implements AuthProv
 	/**
 	 * Creates a new auth provider based on the given one that can automatically refresh access tokens.
 	 *
-	 * @param refreshConfig The information necessary to automatically refresh an access token.
+	 * @param config The information necessary to automatically refresh an access token.
 	 * @param users The initial users to register on instance creation.
 	 */
-	constructor(refreshConfig: RefreshConfig, users: AuthUser[] = []) {
-		super(refreshConfig.clientId, users);
+	constructor(config: RefreshingAuthProviderConfig, users: AuthUser[] = []) {
+		super(config.clientId, users);
 
-		this._clientSecret = refreshConfig.clientSecret;
-		this._onRefresh = refreshConfig.onRefresh;
+		this._clientSecret = config.clientSecret;
+		this._onRefresh = config.onRefresh;
 	}
 
 	async refreshAccessTokenForUser(user: UserIdResolvable): Promise<AccessToken> {

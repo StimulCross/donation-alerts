@@ -7,5 +7,5 @@ export { compareScopes, getAccessToken, refreshAccessToken } from './helpers';
 export { type AuthProvider } from './providers/AuthProvider';
 export { StaticAuthProvider } from './providers/StaticAuthProvider';
 export { RefreshingAuthProvider } from './providers/RefreshingAuthProvider';
-export { type RefreshConfig } from './providers/RefreshingAuthProvider';
+export { type RefreshingAuthProviderConfig } from './providers/RefreshingAuthProvider';
 export { type StaticAuthUser } from './StaticAuthUser';
