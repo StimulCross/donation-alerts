@@ -27,7 +27,7 @@ export interface AuthProvider {
 	/**
 	 * Gets the access token data for the given user.
 	 *
-	 * @param userId The ID of the user to get the access token of.
+	 * @param user The ID of the user to get the access token of.
 	 * @param scopes The list of required scopes that will be compared against the existing token scopes.
 	 *
 	 * @throws {@link UnregisteredUserError} if user is not registered in the provider.
@@ -38,7 +38,7 @@ export interface AuthProvider {
 	/**
 	 * Force refresh of the access token.
 	 *
-	 * @param userId The ID of the user to refresh the access token of.
+	 * @param user The ID of the user to refresh the access token of.
 	 */
 	refreshAccessTokenForUser?(user: UserIdResolvable): Promise<AccessToken>;
 }
