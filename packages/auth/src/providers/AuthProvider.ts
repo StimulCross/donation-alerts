@@ -16,21 +16,6 @@ export interface AuthProvider {
 	clientId: string;
 
 	/**
-	 * Adds a user to the auth provider registry.
-	 *
-	 * @param userId The ID of the user.
-	 * @param initialToken The initial token data.
-	 */
-	addUser: (user: UserIdResolvable, initialToken: AccessToken) => void;
-
-	/**
-	 * Removes a user from the auth provider registry.
-	 *
-	 * @param userId The ID of the suer to add.
-	 */
-	removeUser: (user: UserIdResolvable) => void;
-
-	/**
 	 * Gets the scopes for a user that are currently available using the access token.
 	 *
 	 * If scopes were not set on user registration then it returns an empty array.
