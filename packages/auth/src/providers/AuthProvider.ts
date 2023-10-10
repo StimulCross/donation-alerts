@@ -22,7 +22,7 @@ export interface AuthProvider {
 	 *
 	 * @throws {@link UnregisteredUserError} if user is not registered in the provider.
 	 */
-	getScopesForUser: (user: UserIdResolvable) => string[];
+	getScopesForUser(user: UserIdResolvable): string[];
 
 	/**
 	 * Gets the access token data for the given user.
@@ -33,12 +33,12 @@ export interface AuthProvider {
 	 * @throws {@link UnregisteredUserError} if user is not registered in the provider.
 	 * @throws {@link MissingScopeError} if user is not registered in the provider.
 	 */
-	getAccessTokenForUser: (user: UserIdResolvable, scopes?: string[]) => Promise<AccessToken>;
+	getAccessTokenForUser(user: UserIdResolvable, scopes?: string[]): Promise<AccessToken>;
 
 	/**
 	 * Force refresh of the access token.
 	 *
 	 * @param userId The ID of the user to refresh the access token of.
 	 */
-	refreshAccessTokenForUser?: (user: UserIdResolvable) => Promise<AccessToken>;
+	refreshAccessTokenForUser?(user: UserIdResolvable): Promise<AccessToken>;
 }
