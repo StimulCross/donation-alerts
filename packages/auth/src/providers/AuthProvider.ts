@@ -13,7 +13,7 @@ export interface AuthProvider {
 	/**
 	 * The client ID.
 	 */
-	clientId: string;
+	readonly clientId: string;
 
 	/**
 	 * Gets the scopes for a user that are currently available using the access token.
