@@ -1,8 +1,7 @@
 export { isAccessTokenExpired, getTokenExpiryDate } from './AccessToken';
 export { type AccessToken } from './AccessToken';
 export { type AuthUser } from './AuthUser';
-export { MissingScopeError } from './errors/MissingScopeError';
-export { UnregisteredUserError } from './errors/UnregisteredUserError';
+export { MissingScopeError, UnregisteredUserError, InvalidTokenError } from './errors';
 export { compareScopes, getAccessToken, refreshAccessToken } from './helpers';
 export { type AuthProvider } from './providers/AuthProvider';
 export { StaticAuthProvider } from './providers/StaticAuthProvider';
