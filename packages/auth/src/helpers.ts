@@ -1,6 +1,6 @@
 import { callDonationAlertsApi } from '@donation-alerts/api-call';
 import { type AccessToken } from './AccessToken';
-import { MissingScopeError } from './errors/MissingScopeError';
+import { MissingScopeError } from './errors';
 
 /** @internal */
 interface AccessTokenData {
@@ -9,7 +9,7 @@ interface AccessTokenData {
 	expires_in: number;
 }
 
-export function createAccessTokenFromData(data: AccessTokenData): AccessToken {
+function createAccessTokenFromData(data: AccessTokenData): AccessToken {
 	return {
 		accessToken: data.access_token,
 		refreshToken: data.refresh_token,
