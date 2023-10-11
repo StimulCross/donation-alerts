@@ -4,7 +4,7 @@ import { type AuthProvider } from './AuthProvider';
 import { BaseAuthProvider } from './BaseAuthProvider';
 import { isAccessTokenExpired, type AccessToken } from '../AccessToken';
 import { type AuthUser } from '../AuthUser';
-import { UnregisteredUserError } from '../errors/UnregisteredUserError';
+import { InvalidTokenError, UnregisteredUserError } from '../errors';
 import { compareScopes, refreshAccessToken } from '../helpers';
 
 /**
@@ -63,23 +63,28 @@ export class RefreshingAuthProvider extends BaseAuthProvider implements AuthProv
 	async refreshAccessTokenForUser(user: UserIdResolvable): Promise<AccessToken> {
 		const userId = extractUserId(user);
 
-		if (this._registry.has(userId)) {
-			const token = this._registry.get(userId)!;
-			const newTokenPromise = refreshAccessToken(this._clientId, this._clientSecret, token.refreshToken);
-			this._newTokenPromises.set(userId, newTokenPromise);
-
-			const newToken = await newTokenPromise;
-			this._newTokenPromises.delete(userId);
-			this._registry.set(userId, newToken);
-
-			this._onRefresh?.(userId, newToken);
-
-			return newToken;
+		if (!this._registry.has(userId)) {
+			throw new UnregisteredUserError(
+				`User ${userId} not found in the auth provider registry. Use {RefreshingAuthProvider#addUser} method to add the user first.`
+			);
 		}
 
-		throw new UnregisteredUserError(
-			`User ${userId} not found in the auth provider registry. Use {RefreshingAuthProvider#addUser} method to add the user first.`
-		);
+		const currentToken = this._registry.get(userId)!;
+
+		if (!currentToken.refreshToken) {
+			throw new InvalidTokenError(`Unable to refresh access token for user ${userId}. Refresh token is not set`);
+		}
+
+		const newTokenPromise = refreshAccessToken(this._clientId, this._clientSecret, currentToken.refreshToken);
+		this._newTokenPromises.set(userId, newTokenPromise);
+
+		const token = await newTokenPromise;
+		this._newTokenPromises.delete(userId);
+		this._registry.set(userId, token);
+
+		this._onRefresh?.(userId, token);
+
+		return token;
 	}
 
 	protected async _doGetAccessToken(user: UserIdResolvable, scopes?: string[]): Promise<AccessToken> {
