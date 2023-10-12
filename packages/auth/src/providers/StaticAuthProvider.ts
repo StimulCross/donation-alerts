@@ -11,10 +11,12 @@ import { compareScopes } from '../helpers';
 @ReadDocumentation('events')
 export class StaticAuthProvider implements AuthProvider {
 	@nonenumerable private readonly _clientId: string;
+	@nonenumerable private readonly _scopes?: string[];
 	@nonenumerable private readonly _registry = new Map<number, AccessToken>();
 
-	constructor(clientId: string) {
+	constructor(clientId: string, scopes?: string[]) {
 		this._clientId = clientId;
+		this._scopes = scopes;
 	}
 
 	get clientId(): string {
@@ -37,6 +39,10 @@ export class StaticAuthProvider implements AuthProvider {
 	 * @param token The initial token data.
 	 */
 	addUser(user: UserIdResolvable, token: AccessToken): void {
+		if (token.scope) {
+			compareScopes(token.scope, this._scopes);
+		}
+
 		this._registry.set(extractUserId(user), token);
 	}
 

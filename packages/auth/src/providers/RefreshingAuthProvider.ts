@@ -91,6 +91,10 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	 * @param token The initial token data.
 	 */
 	addUser(user: UserIdResolvable, token: AccessToken): void {
+		if (token.scope) {
+			compareScopes(token.scope, this._config.scopes);
+		}
+
 		this._registry.set(extractUserId(user), token);
 	}
 
