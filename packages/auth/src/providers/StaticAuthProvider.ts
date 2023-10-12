@@ -2,7 +2,7 @@ import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donati
 import { nonenumerable } from '@stimulcross/shared-utils';
 import { type AuthProvider } from './AuthProvider';
 import { type AccessToken } from '../AccessToken';
-import { UnregisteredUserError } from '../errors';
+import { InvalidTokenError, UnregisteredUserError } from '../errors';
 import { compareScopes } from '../helpers';
 
 /**
@@ -39,9 +39,8 @@ export class StaticAuthProvider implements AuthProvider {
 	 * @param token The initial token data.
 	 */
 	addUser(user: UserIdResolvable, token: Pick<AccessToken, 'accessToken' | 'scopes'>): void {
-		if (token.scopes) {
-			compareScopes(token.scopes, this._scopes);
-		}
+		this._validateAccessToken(token);
+		this._compareScopes(token);
 
 		this._registry.set(extractUserId(user), {
 			accessToken: token.accessToken,
@@ -92,5 +91,17 @@ export class StaticAuthProvider implements AuthProvider {
 		}
 
 		return token;
+	}
+
+	private _validateAccessToken(token: Pick<AccessToken, 'accessToken' | 'scopes'>): void {
+		if (!token.accessToken) {
+			throw new InvalidTokenError("The access token is invalid. Make sure it's a non-empty string");
+		}
+	}
+
+	private _compareScopes(token: Pick<AccessToken, 'accessToken' | 'scopes'>): void {
+		if (token.scopes) {
+			compareScopes(token.scopes, this._scopes);
+		}
 	}
 }

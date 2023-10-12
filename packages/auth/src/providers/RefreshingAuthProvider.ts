@@ -91,9 +91,8 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	 * @param token The initial token data.
 	 */
 	addUser(user: UserIdResolvable, token: AccessToken): void {
-		if (token.scopes) {
-			compareScopes(token.scopes, this._config.scopes);
-		}
+		this._validateToken(token);
+		this._compareScopes(token);
 
 		this._registry.set(extractUserId(user), token);
 	}
@@ -104,22 +103,24 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	 * If you already know the ID of the user you are adding,
 	 * consider using {@link RefreshingAuthProvider#addUser} instead.
 	 *
-	 * @param initialToken The initial token data.
+	 * @param token The initial token data.
 	 */
-	async addUserForToken(initialToken: AccessToken): Promise<void> {
-		let token = initialToken;
+	async addUserForToken(token: AccessToken): Promise<void> {
+		this._validateToken(token);
+
+		let accessToken = token;
 		let isTokenRefreshed = false;
 		let userId: number;
 
-		if (token.scopes) {
-			compareScopes(token.scopes, this._config.scopes);
+		if (accessToken.scopes) {
+			compareScopes(accessToken.scopes, this._config.scopes);
 		}
 
-		if (initialToken.refreshToken && !isAccessTokenExpired(token)) {
-			token = await refreshAccessToken(
+		if (!isAccessTokenExpired(accessToken)) {
+			accessToken = await refreshAccessToken(
 				this._config.clientId,
 				this._config.clientSecret,
-				token.refreshToken!,
+				accessToken.refreshToken!,
 				this._config.scopes
 			);
 			isTokenRefreshed = true;
@@ -128,7 +129,7 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 		try {
 			const user = await callDonationAlertsApi<{ data: { id: number } }>(
 				{ type: 'api', url: 'user/oauth' },
-				token.accessToken
+				accessToken.accessToken
 			);
 
 			userId = user.data.id;
@@ -136,10 +137,10 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 			throw new InvalidTokenError('The token is invalid');
 		}
 
-		this.addUser(userId, token);
+		this.addUser(userId, accessToken);
 
 		if (isTokenRefreshed) {
-			this.emit(this.onRefresh, userId, token);
+			this.emit(this.onRefresh, userId, accessToken);
 		}
 	}
 
@@ -252,5 +253,21 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 		this.emit(this.onRefresh, userId, token);
 
 		return token;
+	}
+
+	private _validateToken(token: AccessToken): void {
+		if (!token.accessToken) {
+			throw new InvalidTokenError("The access token is invalid. Make sure it's a non-empty string");
+		}
+
+		if (!token.refreshToken) {
+			throw new InvalidTokenError("The refresh token is invalid. Make sure it's a non-empty string");
+		}
+	}
+
+	private _compareScopes(token: AccessToken): void {
+		if (token.scopes) {
+			compareScopes(token.scopes, this._config.scopes);
+		}
 	}
 }
