@@ -1,10 +1,10 @@
-import { callDonationAlertsApi } from '@donation-alerts/api-call';
+import { callDonationAlertsApi, HttpError } from '@donation-alerts/api-call';
 import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { nonenumerable } from '@stimulcross/shared-utils';
 import { EventEmitter } from 'typed-event-emitter';
 import { type AuthProvider } from './AuthProvider';
 import { type AccessToken, isAccessTokenExpired } from '../AccessToken';
-import { InvalidTokenError, UnregisteredUserError } from '../errors';
+import { InvalidTokenError, MissingScopeError, UnregisteredUserError } from '../errors';
 import { compareScopes, exchangeCode, refreshAccessToken } from '../helpers';
 
 /**
@@ -134,7 +134,15 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 
 			userId = user.data.id;
 		} catch (e) {
-			throw new InvalidTokenError('The token is invalid');
+			if (e instanceof HttpError && e.statusCode === 401) {
+				throw new MissingScopeError(
+					`Failed to query the user associated with the token.
+Received 401 error: "${e.message}".
+The access token must include "oauth-user-show" scope to query the user associated with the token.`
+				);
+			}
+
+			throw e;
 		}
 
 		this.addUser(userId, accessToken);
