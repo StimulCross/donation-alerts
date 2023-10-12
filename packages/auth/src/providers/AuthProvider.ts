@@ -5,9 +5,12 @@ import { type AccessToken } from '../AccessToken';
  * Authentication provider that manages access tokens for users.
  *
  * @remarks
- * There are two ways to use authentication provider:
+ * There are two build-in authentication provider implementations:
  * - {@link StaticAuthProvider} - Accepts a user with the access token, but cannot refresh it.
  * - {@link RefreshingAuthProvider} - Automatically refreshes access tokens on expiration whether necessary.
+ *
+ * If these implementations do not meet your needs, you can create your own provider, for example, a Redis-based one,
+ * that can share auth data between separate processes.
  */
 export interface AuthProvider {
 	/**
