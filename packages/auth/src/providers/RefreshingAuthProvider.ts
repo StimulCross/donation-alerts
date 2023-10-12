@@ -1,10 +1,11 @@
+import { callDonationAlertsApi } from '@donation-alerts/api-call';
 import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { nonenumerable } from '@stimulcross/shared-utils';
 import { EventEmitter } from 'typed-event-emitter';
 import { type AuthProvider } from './AuthProvider';
 import { type AccessToken, isAccessTokenExpired } from '../AccessToken';
 import { InvalidTokenError, UnregisteredUserError } from '../errors';
-import { compareScopes, refreshAccessToken } from '../helpers';
+import { compareScopes, exchangeCode, refreshAccessToken } from '../helpers';
 
 /**
  * Configuration for {@link RefreshingAuthProvider}.
@@ -25,6 +26,21 @@ export interface RefreshingAuthProviderConfig {
 	 * client secret.
 	 */
 	clientSecret: string;
+
+	/**
+	 * A valid redirect URI for your application.
+	 *
+	 * Only required if you intend to use {@link AuthProvider#addUserForCode}.
+	 */
+	redirectUri?: string;
+
+	/**
+	 * The list of scopes that all registering tokens must include.
+	 *
+	 * If scopes are specified for the token being registered, it will be compared against the scopes from this option.
+	 * If the token misses any scope from this list then {@link MissingScopeError} exception will be thrown.
+	 */
+	scopes?: string[];
 }
 
 /**
@@ -76,6 +92,77 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	 */
 	addUser(user: UserIdResolvable, token: AccessToken): void {
 		this._registry.set(extractUserId(user), token);
+	}
+
+	/**
+	 * Finds out the user associated to the given access token and adds them to the provider.
+	 *
+	 * If you already know the ID of the user you are adding,
+	 * consider using {@link RefreshingAuthProvider#addUser} instead.
+	 *
+	 * @param initialToken The initial token data.
+	 */
+	async addUserForToken(initialToken: AccessToken): Promise<void> {
+		let token = initialToken;
+		let isTokenRefreshed = false;
+		let userId: number;
+
+		if (token.scope) {
+			compareScopes(token.scope, this._config.scopes);
+		}
+
+		if (initialToken.refreshToken && !isAccessTokenExpired(token)) {
+			token = await refreshAccessToken(
+				this._config.clientId,
+				this._config.clientSecret,
+				token.refreshToken!,
+				this._config.scopes
+			);
+			isTokenRefreshed = true;
+		}
+
+		try {
+			const user = await callDonationAlertsApi<{ data: { id: number } }>(
+				{ type: 'api', url: 'user/oauth' },
+				token.accessToken
+			);
+
+			userId = user.data.id;
+		} catch (e) {
+			throw new InvalidTokenError('The token is invalid');
+		}
+
+		this.addUser(userId, token);
+
+		if (isTokenRefreshed) {
+			this.emit(this.onRefresh, userId, token);
+		}
+	}
+
+	/**
+	 * Exchanges an authorization code for an access token and adds the user to the provider.
+	 *
+	 * @param code The authorization code.
+	 */
+	async addUserForCode(code: string): Promise<void> {
+		if (!this._config.redirectUri) {
+			throw new Error('Exchanging authorization code requires "redirectUri" option to be specified');
+		}
+
+		const token = await exchangeCode(
+			this._config.clientId,
+			this._config.clientSecret,
+			this._config.redirectUri,
+			code
+		);
+
+		const user = await callDonationAlertsApi<{ data: { id: number } }>(
+			{ type: 'api', url: 'user/oauth' },
+			token.accessToken
+		);
+
+		this.addUser(user.data.id, token);
+		this.emit(this.onRefresh, user.data.id, token);
 	}
 
 	/**
