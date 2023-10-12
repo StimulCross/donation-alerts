@@ -39,8 +39,8 @@ export class StaticAuthProvider implements AuthProvider {
 	 * @param token The initial token data.
 	 */
 	addUser(user: UserIdResolvable, token: AccessToken): void {
-		if (token.scope) {
-			compareScopes(token.scope, this._scopes);
+		if (token.scopes) {
+			compareScopes(token.scopes, this._scopes);
 		}
 
 		this._registry.set(extractUserId(user), token);
@@ -64,7 +64,7 @@ export class StaticAuthProvider implements AuthProvider {
 			);
 		}
 
-		return this._registry.get(userId)!.scope ?? [];
+		return this._registry.get(userId)!.scopes ?? [];
 	}
 
 	async getAccessTokenForUser(user: UserIdResolvable, scopes?: string[]): Promise<AccessToken> {
@@ -78,14 +78,14 @@ export class StaticAuthProvider implements AuthProvider {
 
 		const token = this._registry.get(userId)!;
 
-		if (token.accessToken) {
-			if (token.scope) {
-				compareScopes(token.scope, scopes);
-			}
-
-			return token;
+		if (!token.accessToken) {
+			throw new Error(`No token found for user ${userId}`);
 		}
 
-		throw new Error(`No token found for user ${userId}`);
+		if (token.scopes) {
+			compareScopes(token.scopes, scopes);
+		}
+
+		return token;
 	}
 }

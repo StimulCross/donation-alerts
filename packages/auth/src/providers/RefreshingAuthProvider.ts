@@ -91,8 +91,8 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	 * @param token The initial token data.
 	 */
 	addUser(user: UserIdResolvable, token: AccessToken): void {
-		if (token.scope) {
-			compareScopes(token.scope, this._config.scopes);
+		if (token.scopes) {
+			compareScopes(token.scopes, this._config.scopes);
 		}
 
 		this._registry.set(extractUserId(user), token);
@@ -111,8 +111,8 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 		let isTokenRefreshed = false;
 		let userId: number;
 
-		if (token.scope) {
-			compareScopes(token.scope, this._config.scopes);
+		if (token.scopes) {
+			compareScopes(token.scopes, this._config.scopes);
 		}
 
 		if (initialToken.refreshToken && !isAccessTokenExpired(token)) {
@@ -187,7 +187,7 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 			);
 		}
 
-		return this._registry.get(userId)!.scope ?? [];
+		return this._registry.get(userId)!.scopes ?? [];
 	}
 
 	async getAccessTokenForUser(user: UserIdResolvable, scopes?: string[]): Promise<AccessToken> {
@@ -204,21 +204,21 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 		}
 
 		const currentToken = this._registry.get(userId)!;
-		const existingScopes = currentToken.scope;
+		const existingScopes = currentToken.scopes;
 
 		if (currentToken.accessToken && !isAccessTokenExpired(currentToken)) {
-			if (currentToken.scope) {
-				compareScopes(currentToken.scope, scopes);
+			if (currentToken.scopes) {
+				compareScopes(currentToken.scopes, scopes);
 			}
 
 			return currentToken;
 		}
 
 		const token = await this.refreshAccessTokenForUser(userId);
-		token.scope = existingScopes;
+		token.scopes = existingScopes;
 
-		if (token.scope) {
-			compareScopes(token.scope, scopes);
+		if (token.scopes) {
+			compareScopes(token.scopes, scopes);
 		}
 
 		return token;

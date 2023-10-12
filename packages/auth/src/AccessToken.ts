@@ -17,7 +17,7 @@ export interface AccessToken {
 	/**
 	 * The scope the access token is valid for, i.e. what the token enables you to do.
 	 */
-	scope?: string[];
+	scopes?: string[];
 
 	/**
 	 * The time, in seconds from the obtainment date, when the access token expires.
