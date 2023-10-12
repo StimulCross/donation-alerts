@@ -19,14 +19,14 @@ function createAccessTokenFromData(data: AccessTokenData): AccessToken {
 }
 
 /**
- * Retrieves an access token with your client credentials and an authorization code.
+ * Gets an access token with your client credentials and an authorization code.
  *
  * @param clientId The client ID of the application.
  * @param clientSecret The client secret of the application.
  * @param redirectUri The redirect URI.
  * @param code The authorization code.
  */
-export async function getAccessToken(
+export async function exchangeCode(
 	clientId: string,
 	clientSecret: string,
 	redirectUri: string,
