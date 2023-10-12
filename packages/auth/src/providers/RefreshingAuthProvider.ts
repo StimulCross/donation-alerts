@@ -1,5 +1,6 @@
 import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { nonenumerable } from '@stimulcross/shared-utils';
+import { EventEmitter } from 'typed-event-emitter';
 import { type AuthProvider } from './AuthProvider';
 import { type AccessToken, isAccessTokenExpired } from '../AccessToken';
 import { InvalidTokenError, UnregisteredUserError } from '../errors';
@@ -24,14 +25,6 @@ export interface RefreshingAuthProviderConfig {
 	 * client secret.
 	 */
 	clientSecret: string;
-
-	/**
-	 * A function that is called when the token is refreshed.
-	 *
-	 * @param userId The Donation Alerts user ID the access token refreshed of.
-	 * @param token The refreshed {@link AccessToken} data.
-	 */
-	onRefresh?: (userId: number, token: AccessToken) => void;
 }
 
 /**
@@ -39,11 +32,18 @@ export interface RefreshingAuthProviderConfig {
  * whenever necessary.
  */
 @ReadDocumentation('events')
-export class RefreshingAuthProvider implements AuthProvider {
+export class RefreshingAuthProvider extends EventEmitter implements AuthProvider {
 	@nonenumerable private readonly _config: RefreshingAuthProviderConfig;
 	@nonenumerable private readonly _registry = new Map<number, AccessToken>();
 	@nonenumerable private readonly _newTokenPromises = new Map<number, Promise<AccessToken>>();
-	private readonly _onRefresh?: (userId: number, token: AccessToken) => void;
+
+	/**
+	 * Fires when a user's token is successfully refreshed.
+	 *
+	 * @param userId The ID of the user the token belongs to.
+	 * @param token The refreshed {@link AccessToken} object.
+	 */
+	readonly onRefresh = this.registerEvent<[userId: number, token: AccessToken]>();
 
 	/**
 	 * Creates a new authentication provider that can automatically refresh tokens.
@@ -51,6 +51,7 @@ export class RefreshingAuthProvider implements AuthProvider {
 	 * @param config The configuration object.
 	 */
 	constructor(config: RefreshingAuthProviderConfig) {
+		super();
 		this._config = config;
 	}
 
@@ -149,7 +150,7 @@ export class RefreshingAuthProvider implements AuthProvider {
 		this._newTokenPromises.delete(userId);
 		this._registry.set(userId, token);
 
-		this._onRefresh?.(userId, token);
+		this.emit(this.onRefresh, userId, token);
 
 		return token;
 	}
