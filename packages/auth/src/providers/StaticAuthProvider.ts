@@ -22,6 +22,15 @@ export class StaticAuthProvider implements AuthProvider {
 	}
 
 	/**
+	 * Checks whether a user was added to the provider.
+	 *
+	 * @param user The user to check.
+	 */
+	hasUser(user: UserIdResolvable): boolean {
+		return this._registry.has(extractUserId(user));
+	}
+
+	/**
 	 * Adds a user to the auth provider registry.
 	 *
 	 * @param user The ID of the user.
