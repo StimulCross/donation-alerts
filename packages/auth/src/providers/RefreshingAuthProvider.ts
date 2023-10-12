@@ -30,7 +30,7 @@ export interface RefreshingAuthProviderConfig {
 	/**
 	 * A valid redirect URI for your application.
 	 *
-	 * Only required if you intend to use {@link AuthProvider#addUserForCode}.
+	 * Only required if you intend to use {@link RefreshingAuthProvider#addUserForCode}.
 	 */
 	redirectUri?: string;
 
