@@ -38,12 +38,17 @@ export class StaticAuthProvider implements AuthProvider {
 	 * @param user The ID of the user.
 	 * @param token The initial token data.
 	 */
-	addUser(user: UserIdResolvable, token: AccessToken): void {
+	addUser(user: UserIdResolvable, token: Pick<AccessToken, 'accessToken' | 'scopes'>): void {
 		if (token.scopes) {
 			compareScopes(token.scopes, this._scopes);
 		}
 
-		this._registry.set(extractUserId(user), token);
+		this._registry.set(extractUserId(user), {
+			accessToken: token.accessToken,
+			refreshToken: null,
+			expiresIn: null,
+			obtainmentTimestamp: Date.now()
+		});
 	}
 
 	/**
