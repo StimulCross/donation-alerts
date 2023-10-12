@@ -204,7 +204,6 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 		}
 
 		const currentToken = this._registry.get(userId)!;
-		const existingScopes = currentToken.scopes;
 
 		if (currentToken.accessToken && !isAccessTokenExpired(currentToken)) {
 			if (currentToken.scopes) {
@@ -215,7 +214,7 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 		}
 
 		const token = await this.refreshAccessTokenForUser(userId);
-		token.scopes = existingScopes;
+		token.scopes = currentToken.scopes;
 
 		if (token.scopes) {
 			compareScopes(token.scopes, scopes);

@@ -7,27 +7,27 @@ export interface AccessToken {
 	/**
 	 * The access token which is necessary for every request to the Donation Alerts API.
 	 */
-	accessToken: string;
+	readonly accessToken: string;
 
 	/**
 	 * The refresh token which is necessary to refresh the access token once it expires.
 	 */
-	refreshToken: string | null;
+	readonly refreshToken: string | null;
+
+	/**
+	 * The time, in seconds from the obtainment date, when the access token expires.
+	 */
+	readonly expiresIn: number | null;
+
+	/**
+	 * The date when the token was obtained, in epoch milliseconds.
+	 */
+	readonly obtainmentTimestamp: number;
 
 	/**
 	 * The scope the access token is valid for, i.e. what the token enables you to do.
 	 */
 	scopes?: string[];
-
-	/**
-	 * The time, in seconds from the obtainment date, when the access token expires.
-	 */
-	expiresIn: number | null;
-
-	/**
-	 * The date when the token was obtained, in epoch milliseconds.
-	 */
-	obtainmentTimestamp: number;
 }
 
 /**
