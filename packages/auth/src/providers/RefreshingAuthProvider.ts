@@ -158,8 +158,9 @@ The access token must include "oauth-user-show" scope to query the user associat
 	 * Exchanges an authorization code for an access token and adds the user to the provider.
 	 *
 	 * @param code The authorization code.
+	 * @param scopes The authorization code.
 	 */
-	async addUserForCode(code: string): Promise<AccessTokenWithUserId> {
+	async addUserForCode(code: string, scopes?: string[]): Promise<AccessTokenWithUserId> {
 		if (!this._config.redirectUri) {
 			throw new Error('Exchanging authorization code requires "redirectUri" option to be specified');
 		}
@@ -170,6 +171,12 @@ The access token must include "oauth-user-show" scope to query the user associat
 			this._config.redirectUri,
 			code
 		);
+
+		token.scopes = scopes;
+
+		if (token.scopes) {
+			compareScopes(token.scopes, this._config.scopes);
+		}
 
 		const user = await callDonationAlertsApi<{ data: { id: number } }>(
 			{ type: 'api', url: 'user/oauth' },
