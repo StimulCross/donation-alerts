@@ -1,5 +1,5 @@
 import { type UserIdResolvable } from '@donation-alerts/common';
-import { type AccessToken } from '../AccessToken';
+import { type AccessTokenWithUserId } from '../AccessToken';
 
 /**
  * Authentication provider that manages access tokens for users.
@@ -36,12 +36,14 @@ export interface AuthProvider {
 	 * @throws {@link UnregisteredUserError} if user is not registered in the provider.
 	 * @throws {@link MissingScopeError} if user is not registered in the provider.
 	 */
-	getAccessTokenForUser(user: UserIdResolvable, scopes?: string[]): Promise<AccessToken>;
+	getAccessTokenForUser(user: UserIdResolvable, scopes?: string[]): Promise<AccessTokenWithUserId>;
 
 	/**
-	 * Force refresh of the access token.
+	 * Refreshes the access token.
+	 *
+	 * This method is optional to implement.
 	 *
 	 * @param user The ID of the user to refresh the access token of.
 	 */
-	refreshAccessTokenForUser?(user: UserIdResolvable): Promise<AccessToken>;
+	refreshAccessTokenForUser?(user: UserIdResolvable): Promise<AccessTokenWithUserId>;
 }

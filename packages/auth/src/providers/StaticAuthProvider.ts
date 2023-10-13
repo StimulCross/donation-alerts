@@ -1,7 +1,7 @@
 import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { nonenumerable } from '@stimulcross/shared-utils';
 import { type AuthProvider } from './AuthProvider';
-import { type AccessToken } from '../AccessToken';
+import { type AccessToken, type AccessTokenWithUserId } from '../AccessToken';
 import { InvalidTokenError, UnregisteredUserError } from '../errors';
 import { compareScopes } from '../helpers';
 
@@ -71,7 +71,7 @@ export class StaticAuthProvider implements AuthProvider {
 		return this._registry.get(userId)!.scopes ?? [];
 	}
 
-	async getAccessTokenForUser(user: UserIdResolvable, scopes?: string[]): Promise<AccessToken> {
+	async getAccessTokenForUser(user: UserIdResolvable, scopes?: string[]): Promise<AccessTokenWithUserId> {
 		const userId = extractUserId(user);
 
 		if (!this._registry.has(userId)) {
@@ -90,7 +90,7 @@ export class StaticAuthProvider implements AuthProvider {
 			compareScopes(token.scopes, scopes);
 		}
 
-		return token;
+		return { ...token, userId };
 	}
 
 	private _validateAccessToken(token: Pick<AccessToken, 'accessToken' | 'scopes'>): void {

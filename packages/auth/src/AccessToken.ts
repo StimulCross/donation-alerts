@@ -31,6 +31,13 @@ export interface AccessToken {
 }
 
 /**
+ * Represents the data of an OAuth access token returned by Donation Alerts with user ID.
+ */
+export interface AccessTokenWithUserId extends AccessToken {
+	readonly userId: number;
+}
+
+/**
  * Calculates milliseconds since UNIX epoch when the access token will expire.
  *
  * @param token The access token.

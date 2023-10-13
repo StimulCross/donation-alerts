@@ -3,7 +3,7 @@ import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donati
 import { nonenumerable } from '@stimulcross/shared-utils';
 import { EventEmitter } from 'typed-event-emitter';
 import { type AuthProvider } from './AuthProvider';
-import { type AccessToken, isAccessTokenExpired } from '../AccessToken';
+import { type AccessToken, type AccessTokenWithUserId, isAccessTokenExpired } from '../AccessToken';
 import { InvalidTokenError, MissingScopeError, UnregisteredUserError } from '../errors';
 import { compareScopes, exchangeCode, refreshAccessToken } from '../helpers';
 
@@ -105,7 +105,7 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	 *
 	 * @param token The initial token data.
 	 */
-	async addUserForToken(token: AccessToken): Promise<void> {
+	async addUserForToken(token: AccessToken): Promise<AccessTokenWithUserId> {
 		this._validateToken(token);
 
 		let accessToken = token;
@@ -150,6 +150,8 @@ The access token must include "oauth-user-show" scope to query the user associat
 		if (isTokenRefreshed) {
 			this.emit(this.onRefresh, userId, accessToken);
 		}
+
+		return { ...accessToken, userId };
 	}
 
 	/**
@@ -157,7 +159,7 @@ The access token must include "oauth-user-show" scope to query the user associat
 	 *
 	 * @param code The authorization code.
 	 */
-	async addUserForCode(code: string): Promise<void> {
+	async addUserForCode(code: string): Promise<AccessTokenWithUserId> {
 		if (!this._config.redirectUri) {
 			throw new Error('Exchanging authorization code requires "redirectUri" option to be specified');
 		}
@@ -176,6 +178,8 @@ The access token must include "oauth-user-show" scope to query the user associat
 
 		this.addUser(user.data.id, token);
 		this.emit(this.onRefresh, user.data.id, token);
+
+		return { ...token, userId: user.data.id };
 	}
 
 	/**
@@ -199,11 +203,12 @@ The access token must include "oauth-user-show" scope to query the user associat
 		return this._registry.get(userId)!.scopes ?? [];
 	}
 
-	async getAccessTokenForUser(user: UserIdResolvable, scopes?: string[]): Promise<AccessToken> {
+	async getAccessTokenForUser(user: UserIdResolvable, scopes?: string[]): Promise<AccessTokenWithUserId> {
 		const userId = extractUserId(user);
 
 		if (this._newTokenPromises.has(userId)) {
-			return (await this._newTokenPromises.get(userId))!;
+			const token = (await this._newTokenPromises.get(userId))!;
+			return { ...token, userId };
 		}
 
 		if (!this._registry.has(userId)) {
@@ -219,7 +224,7 @@ The access token must include "oauth-user-show" scope to query the user associat
 				compareScopes(currentToken.scopes, scopes);
 			}
 
-			return currentToken;
+			return { ...currentToken, userId };
 		}
 
 		const token = await this.refreshAccessTokenForUser(userId);
@@ -229,10 +234,10 @@ The access token must include "oauth-user-show" scope to query the user associat
 			compareScopes(token.scopes, scopes);
 		}
 
-		return token;
+		return { ...token, userId };
 	}
 
-	async refreshAccessTokenForUser(user: UserIdResolvable): Promise<AccessToken> {
+	async refreshAccessTokenForUser(user: UserIdResolvable): Promise<AccessTokenWithUserId> {
 		const userId = extractUserId(user);
 
 		if (!this._registry.has(userId)) {
@@ -260,7 +265,7 @@ The access token must include "oauth-user-show" scope to query the user associat
 
 		this.emit(this.onRefresh, userId, token);
 
-		return token;
+		return { ...token, userId };
 	}
 
 	private _validateToken(token: AccessToken): void {
