@@ -29,7 +29,7 @@ To instantiate the [StaticAuthProvider](https://stimulcross.github.io/donation-a
 ```ts
 import { StaticAuthProvider } from '@donation-alerts/auth';
 
-const clientId = 'YOUR_CLIENT_ID';
+const clientId = 'CLIENT_ID';
 
 const authProvider = new StaticAuthProvider(clientId);
 ```
