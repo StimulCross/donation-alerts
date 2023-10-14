@@ -88,10 +88,7 @@ export async function refreshAccessToken(
  */
 export function compareScopes(scopesToCompare: string[], requestedScopes?: string[]): void {
 	if (requestedScopes) {
-		const scopes = new Set<string>();
-		for (const scope of scopesToCompare) {
-			scopes.add(scope);
-		}
+		const scopes = new Set<string>(scopesToCompare);
 
 		if (requestedScopes.some(scope => !scopes.has(scope))) {
 			throw new MissingScopeError(`The token does not have the requested scopes: ${requestedScopes.join(', ')}`);
