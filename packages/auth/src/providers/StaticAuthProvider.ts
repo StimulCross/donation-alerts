@@ -46,7 +46,8 @@ export class StaticAuthProvider implements AuthProvider {
 			accessToken: token.accessToken,
 			refreshToken: null,
 			expiresIn: null,
-			obtainmentTimestamp: Date.now()
+			obtainmentTimestamp: Date.now(),
+			scopes: token.scopes
 		});
 	}
 
