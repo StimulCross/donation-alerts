@@ -12,7 +12,7 @@ import {
 	type DonationAlertsApiCallOptions,
 	type DonationAlertsCallFetchOptions
 } from '@donation-alerts/api-call';
-import { type AccessToken, type AuthProvider } from '@donation-alerts/auth';
+import { type AccessTokenWithUserId, type AuthProvider } from '@donation-alerts/auth';
 import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { createLogger, type LoggerOptions, type Logger } from '@stimulcross/logger';
 import { nonenumerable } from '@stimulcross/shared-utils';
@@ -206,7 +206,7 @@ export class ApiClient {
 
 		const { authProvider } = this._config;
 		const shouldAuth = options.auth ?? true;
-		let accessToken: AccessToken | null = shouldAuth
+		let accessToken: AccessTokenWithUserId | null = shouldAuth
 			? await authProvider.getAccessTokenForUser(userId, options.scope ? [options.scope] : undefined)
 			: null;
 
