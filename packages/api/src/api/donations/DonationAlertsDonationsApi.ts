@@ -14,9 +14,11 @@ import { type DonationAlertsResponseWithMeta } from '../DonationAlertsResponse';
 @ReadDocumentation('api')
 export class DonationAlertsDonationsApi extends BaseApi {
 	/**
-	 * Retrieves donations.
+	 * Gets donations.
 	 *
 	 * Allows to specify the number of page to return. Otherwise, retrieves the first page.
+	 *
+	 * Requires `oauth-donation-index` scope.
 	 *
 	 * @param user The ID of the user to get donations for.
 	 * @param pagination Pagination options.
@@ -50,10 +52,12 @@ export class DonationAlertsDonationsApi extends BaseApi {
 	}
 
 	/**
-	 * Retrieves all donations.
+	 * gets all donations.
 	 *
 	 * Note: This method can take a long time and return a large amount of data. Consider using
 	 * {@link DonationAlertsDonationsApi#createDonationsPaginator} instead to get data partially.
+	 *
+	 * Requires `oauth-donation-index` scope.
 	 *
 	 * @param user The ID of the user to get donations for.
 	 * @param rateLimiterOptions The rate limiter options.
@@ -71,6 +75,8 @@ export class DonationAlertsDonationsApi extends BaseApi {
 
 	/**
 	 * Creates the flexible donations API paginator that allows retrieve donations.
+	 *
+	 * Requires `oauth-donation-index` scope.
 	 *
 	 * @param user The ID of the user to get donations for.
 	 * @param rateLimiterOptions The rate limiter options.

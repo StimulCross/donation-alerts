@@ -208,7 +208,7 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	 * @param clientSecret The application client secret. Keep in mind that the secret must be associated with the
 	 * application that the user has authorized.
 	 * @param data The merchandise data to create.
-	 * @param rateLimiterOptions? Rate limiter options.
+	 * @param rateLimiterOptions Rate limiter options.
 	 *
 	 * @throws {@link HttpError} if response status code is out of 200-299 range.
 	 * @throws {@link UnregisteredUserError} if the user you are trying to get is not registered in authentication provider.
@@ -253,11 +253,13 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	 * Updates merchandise.
 	 *
 	 * @param user The ID of the user to use the access token of.
-	 * @param clientSecret The application client secret. Keep in mind that the secret must be associated with the
+	 * @param clientSecret The application client secret.
+	 *
+	 * Keep in mind that the secret must be associated with the
 	 * application that the user has authorized.
 	 * @param merchandiseId The ID of the merchandise.
 	 * @param data The merchandise data to create.
-	 * @param rateLimiterOptions?? Rate limiter options.
+	 * @param rateLimiterOptions Rate limiter options.
 	 *
 	 * @throws {@link HttpError} if response status code is out of 200-299 range.
 	 * @throws {@link UnregisteredUserError} if the user you are trying to get is not registered in authentication provider.
@@ -303,10 +305,12 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	 * Creates new merchandise sale alert.
 	 *
 	 * @param user DonationAlerts' user ID to which this merchandise sale referenced.
-	 * @param clientSecret The application client secret. Keep in mind that the secret must be associated with the
+	 * @param clientSecret The application client secret.
+	 *
+	 * Keep in mind that the secret must be associated with the
 	 * application that the user has authorized.
 	 * @param data DonationAlerts' sale alert data.
-	 * @param rateLimiterOptions? Rate limiter options.
+	 * @param rateLimiterOptions Rate limiter options.
 	 *
 	 * @throws {@link HttpError} if response status code is out of 200-299 range.
 	 * @throws {@link UnregisteredUserError} if the user you are trying to get is not registered in authentication provider.

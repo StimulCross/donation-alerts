@@ -49,7 +49,9 @@ export interface DonationAlertsSendCustomAlertData {
 @ReadDocumentation('api')
 export class DonationAlertsCustomAlertsApi extends BaseApi {
 	/**
-	 * Sends custom alert to the authorized user. Requires user authorization with the `oauth-custom_alert-store` scope.
+	 * Sends custom alert to the authorized user.
+	 *
+	 * Requires `oauth-custom_alert-store` scope.
 	 *
 	 * @param user The ID of the user to send a custom alert to.
 	 * @param data The data to send.

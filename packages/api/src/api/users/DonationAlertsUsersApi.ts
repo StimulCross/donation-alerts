@@ -12,7 +12,7 @@ import { type DonationAlertsResponseSingleData } from '../DonationAlertsResponse
 @ReadDocumentation('api')
 export class DonationAlertsUsersApi extends BaseApi {
 	/**
-	 * Retrieves user profile information.
+	 * Gets the user profile.
 	 *
 	 * Requires the `oauth-user-show` scope.
 	 *
@@ -40,9 +40,9 @@ export class DonationAlertsUsersApi extends BaseApi {
 	}
 
 	/**
-	 * Retrieves socket connection token related to the authorized user.
+	 * Gets the socket connection token of the specified user.
 	 *
-	 * Requires user authorization with the `oauth-user-show` scope.
+	 * Requires `oauth-user-show` scope.
 	 *
 	 * @param user The ID of the user to get profile for.
 	 * @param rateLimiterOptions The rate limiter options.

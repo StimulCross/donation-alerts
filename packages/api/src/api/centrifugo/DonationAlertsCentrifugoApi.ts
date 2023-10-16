@@ -38,6 +38,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 	 *
 	 * See the complete subscription flow in the official documentation:
 	 * {@link https://www.donationalerts.com/apidoc#introduction__centrifugo}
+	 *
 	 * Also, consider using the "@donation-alerts/events" library which makes it very easy to subscribe and listen
 	 * to events.
 	 *
@@ -74,6 +75,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 	 *
 	 * See the complete subscription flow in the official documentation:
 	 * {@link https://www.donationalerts.com/apidoc#introduction__centrifugo}
+	 *
 	 * Also, consider using the `@donation-alerts/events` library which makes it very easy to subscribe and listen
 	 * to events.
 	 *
@@ -108,6 +110,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 	 *
 	 * See the complete subscription flow in the official documentation:
 	 * {@link https://www.donationalerts.com/apidoc#introduction__centrifugo}
+	 *
 	 * Also, consider using the "@donation-alerts/events" library which makes it very easy to subscribe and listen
 	 * to events.
 	 *
@@ -142,6 +145,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 	 *
 	 * See the complete subscription flow in the official documentation:
 	 * {@link https://www.donationalerts.com/apidoc#introduction__centrifugo}
+	 *
 	 * Also, consider using the "@donation-alerts/events" library which makes it very easy to subscribe and listen
 	 * to events.
 	 *
