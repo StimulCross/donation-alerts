@@ -1,4 +1,4 @@
-import { EventEmitter } from '@d-fischer/typed-event-emitter';
+import { WebSocket } from '@d-fischer/isomorphic-ws';
 import { type ApiClient } from '@donation-alerts/api';
 import { extractUserId, type CentrifugoChannel, type UserIdResolvable } from '@donation-alerts/common';
 import { createLogger, LogLevel, type Logger } from '@stimulcross/logger';
@@ -12,10 +12,7 @@ import {
 	type Subscription,
 	type UnsubscribeContext
 } from 'centrifuge';
-import * as Centrifuge from 'centrifuge';
-import * as isNode from 'detect-node';
-// eslint-disable-next-line @typescript-eslint/no-shadow
-import { WebSocket } from 'ws';
+import { EventEmitter } from 'typed-event-emitter';
 
 const HOST = 'wss://centrifugo.donationalerts.com/connection/websocket';
 
@@ -92,7 +89,7 @@ export class BasicEventsClient extends EventEmitter {
 		// Something wrong with Centrifuge types.
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
 		this._centrifuge = new Centrifuge.default(HOST, {
-			websocket: isNode ? WebSocket : undefined,
+			websocket: WebSocket,
 			pingInterval: 15000,
 			ping: true,
 			minRetry: 0,

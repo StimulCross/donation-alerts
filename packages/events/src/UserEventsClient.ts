@@ -9,6 +9,7 @@ import {
 import { createLogger, LogLevel, type LoggerOptions, type Logger } from '@stimulcross/logger';
 import { nonenumerable } from '@stimulcross/shared-utils';
 import { type PublicationContext } from 'centrifuge';
+import { EventEmitter } from 'typed-event-emitter';
 import { BasicEventsClient } from './BasicEventsClient';
 import {
 	DonationAlertsDonationEvent,
