@@ -79,7 +79,8 @@ module.exports = {
 		project: 'tsconfig.base.json'
 	},
 	rules: {
-		'@typescript-eslint/naming-convention': namingConvention
+		'@typescript-eslint/naming-convention': namingConvention,
+		'@typescript-eslint/no-shadow': 'off'
 	},
 	settings: {
 		'import/resolver': {
