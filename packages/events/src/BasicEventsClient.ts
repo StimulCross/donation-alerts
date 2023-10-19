@@ -1,8 +1,9 @@
 import { WebSocket } from '@d-fischer/isomorphic-ws';
 import { type ApiClient } from '@donation-alerts/api';
-import { extractUserId, type CentrifugoChannel, type UserIdResolvable } from '@donation-alerts/common';
-import { createLogger, LogLevel, type Logger } from '@stimulcross/logger';
+import { type CentrifugoChannel, extractUserId, type UserIdResolvable } from '@donation-alerts/common';
+import { createLogger, type Logger, LogLevel } from '@stimulcross/logger';
 import { nonenumerable } from '@stimulcross/shared-utils';
+import * as Centrifuge from 'centrifuge';
 import {
 	type JoinLeaveContext,
 	type SubscribeErrorContext,
@@ -10,6 +11,7 @@ import {
 	type SubscribePrivateResponse,
 	type SubscribeSuccessContext,
 	type Subscription,
+	type SubscriptionEvents,
 	type UnsubscribeContext
 } from 'centrifuge';
 import { EventEmitter } from 'typed-event-emitter';
@@ -43,11 +45,9 @@ export class BasicEventsClient extends EventEmitter {
 	@nonenumerable private readonly _apiClient: ApiClient;
 	@nonenumerable private readonly _centrifuge: Centrifuge;
 
-	@nonenumerable private readonly _connectionTimeout = 30;
-
 	@nonenumerable private _client?: string;
 
-	private readonly _listeners: Centrifuge.SubscriptionEvents = {
+	private readonly _listeners: SubscriptionEvents = {
 		subscribe: (ctx: SubscribeSuccessContext) => {
 			this._logger.debug('[SUBSCRIBE SUCCESS]', ctx);
 			this._logger.info(`${ctx.isResubscribe ? 'Resubscribed' : 'Subscribed'} to ${ctx.channel}`);
@@ -133,7 +133,7 @@ export class BasicEventsClient extends EventEmitter {
 	}
 
 	/**
-	 * Gets current UUID of the session.
+	 * Gets current client ID of the session.
 	 */
 	get clientId(): string | undefined {
 		return this._client;
@@ -157,10 +157,7 @@ export class BasicEventsClient extends EventEmitter {
 				try {
 					this._centrifuge.setToken(token);
 
-					const rejectTimer = setTimeout(
-						() => reject(new Error(`Could not connect to ${HOST}`)),
-						this._connectionTimeout * 1000
-					);
+					const rejectTimer = setTimeout(() => reject(new Error(`Could not connect to ${HOST}`)), 10_000);
 
 					this._centrifuge.once('connect', (ctx: ConnectContext) => {
 						clearTimeout(rejectTimer);
@@ -187,7 +184,7 @@ export class BasicEventsClient extends EventEmitter {
 
 					const rejectTimer = setTimeout(
 						() => reject(new Error(`Could not disconnect from ${HOST}`)),
-						this._connectionTimeout * 1000
+						10_000
 					);
 
 					this._centrifuge.once('disconnect', () => {

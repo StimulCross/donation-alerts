@@ -1,4 +1,3 @@
-import { EventEmitter } from '@d-fischer/typed-event-emitter';
 import { type ApiClient } from '@donation-alerts/api';
 import {
 	extractUserId,
@@ -43,7 +42,7 @@ export class UserEventsClient extends EventEmitter {
 	@nonenumerable private readonly _logger: Logger;
 	@nonenumerable private readonly _userId: number;
 	@nonenumerable private readonly _basicEventsClient: BasicEventsClient;
-	@nonenumerable private readonly _listeners = new Map<string, EventsListener>();
+	@nonenumerable private readonly _listeners: Map<string, EventsListener> = new Map();
 
 	/**
 	 * Fires when the client establishes connection with Centrifugo server.
@@ -99,19 +98,13 @@ export class UserEventsClient extends EventEmitter {
 	 * @param restoreExistingListeners Whether to restore previously registered listeners on connect. Default is `true`.
 	 */
 	async connect(restoreExistingListeners: boolean = true): Promise<void> {
-		if (this._listeners.size > 0) {
+		for (const [, listener] of this._listeners) {
 			if (restoreExistingListeners) {
 				this._logger.info(`Restoring previously registered listeners for user ${this._userId}...`);
-
-				for (const [, listener] of this._listeners) {
-					listener._subscription.subscribe();
-				}
+				listener._subscription.subscribe();
 			} else {
 				this._logger.info(`Removing previously registered listeners for user ${this._userId}...`);
-
-				for (const [, listener] of this._listeners) {
-					await listener.remove();
-				}
+				await listener.remove();
 			}
 		}
 
@@ -129,7 +122,7 @@ export class UserEventsClient extends EventEmitter {
 			this._logger.info(`Removing listeners for user ${this._userId}...`);
 
 			for (const [, listener] of this._listeners) {
-				await listener.remove();
+				await this.removeEventsListener(listener);
 			}
 		}
 
@@ -199,7 +192,7 @@ export class UserEventsClient extends EventEmitter {
 			this._listeners.delete(listener.channelName);
 
 			if (this._listeners.size === 0) {
-				await this.disconnect();
+				await this._basicEventsClient.disconnect();
 			}
 		}
 	}
