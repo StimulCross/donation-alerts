@@ -28,6 +28,7 @@ export class EventsClient {
 	/**
 	 * Creates the Donation Alerts events client that allows listen to various events, such as new donations,
 	 * goal updates, and poll updates.
+	 *
 	 * @param config
 	 */
 	constructor(config: EventsClientConfig) {
@@ -38,9 +39,7 @@ export class EventsClient {
 	/**
 	 * Returns a {@link UserEventsClient} by user ID.
 	 *
-	 * @param user The ID of the user.
-	 *
-	 * @throws Error if user unregistered.
+	 * @param user The user to get the {@link UserEventsClient} instance of.
 	 */
 	getUserClient(user: UserIdResolvable): UserEventsClient {
 		const userId = extractUserId(user);
