@@ -1,3 +1,4 @@
+import { EventEmitter } from '@d-fischer/typed-event-emitter';
 import { type ApiClient } from '@donation-alerts/api';
 import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { type LoggerOptions } from '@stimulcross/logger';
@@ -20,10 +21,20 @@ export interface EventsClientConfig {
  * and poll updates.
  */
 @ReadDocumentation('events')
-export class EventsClient {
+export class EventsClient extends EventEmitter {
 	@nonenumerable private readonly _config: EventsClientConfig;
 	@nonenumerable private readonly _apiClient: ApiClient;
 	@nonenumerable private readonly _userClients: Map<number, UserEventsClient> = new Map();
+
+	/**
+	 * Fires when a user's client establishes a connection to a Centrifugo server.
+	 */
+	readonly onConnect = this.registerEvent<[userId: number]>();
+
+	/**
+	 * Fires when a user's client disconnected from a Centrifugo server.
+	 */
+	readonly onDisconnect = this.registerEvent<[userId: number, reason: string, reconnect: boolean]>();
 
 	/**
 	 * Creates the Donation Alerts events client that allows listen to various events, such as new donations,
@@ -32,6 +43,8 @@ export class EventsClient {
 	 * @param config
 	 */
 	constructor(config: EventsClientConfig) {
+		super();
+
 		this._config = config;
 		this._apiClient = config.apiClient;
 	}
@@ -77,6 +90,11 @@ export class EventsClient {
 			apiClient: this._apiClient,
 			logger: this._config.logger
 		});
+
+		userEventsClient.onConnect(() => this.emit(this.onConnect, userId));
+		userEventsClient.onDisconnect((reason: string, reconnect: boolean) =>
+			this.emit(this.onDisconnect, userId, reason, reconnect)
+		);
 
 		this._userClients.set(userId, userEventsClient);
 
