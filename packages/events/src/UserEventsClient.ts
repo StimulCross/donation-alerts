@@ -1,3 +1,4 @@
+import { WebSocket } from '@d-fischer/isomorphic-ws';
 import { type ApiClient } from '@donation-alerts/api';
 import {
 	extractUserId,
@@ -7,9 +8,19 @@ import {
 } from '@donation-alerts/common';
 import { createLogger, LogLevel, type LoggerOptions, type Logger } from '@stimulcross/logger';
 import { nonenumerable } from '@stimulcross/shared-utils';
-import { type PublicationContext } from 'centrifuge';
+import {
+	type JoinLeaveContext,
+	type PublicationContext,
+	type SubscribeErrorContext,
+	type SubscribePrivateContext,
+	type SubscribePrivateResponse,
+	type SubscribeSuccessContext,
+	type Subscription,
+	type SubscriptionEvents,
+	type UnsubscribeContext
+} from 'centrifuge';
+import * as Centrifuge from 'centrifuge';
 import { EventEmitter } from 'typed-event-emitter';
-import { BasicEventsClient } from './BasicEventsClient';
 import {
 	DonationAlertsDonationEvent,
 	type DonationAlertsDonationEventData
@@ -24,6 +35,19 @@ import {
 } from './events/polls/DonationAlertsPollUpdateEvent';
 import { EventsListener } from './EventsListener';
 import { transformChannel } from './helpers/transformChannel';
+
+/** @internal */
+interface ConnectContext {
+	client: string;
+	transport: string;
+	latency: number;
+}
+
+/** @internal */
+interface DisconnectContext {
+	reason: string;
+	reconnect: boolean;
+}
 
 /**
  * Configuration for {@link UserEventsClient}.
@@ -41,8 +65,32 @@ export interface UserEventsClientConfig {
 export class UserEventsClient extends EventEmitter {
 	@nonenumerable private readonly _logger: Logger;
 	@nonenumerable private readonly _userId: number;
-	@nonenumerable private readonly _basicEventsClient: BasicEventsClient;
+	@nonenumerable private readonly _apiClient: ApiClient;
 	@nonenumerable private readonly _listeners: Map<string, EventsListener> = new Map();
+	@nonenumerable private readonly _centrifuge: Centrifuge;
+	@nonenumerable private _client: string | null = null;
+
+	private readonly _subscriptionListeners: SubscriptionEvents = {
+		subscribe: (ctx: SubscribeSuccessContext) => {
+			this._logger.debug(`[SUBSCRIBE] [USER:${this._userId}]`, ctx);
+			this._logger.info(
+				`[USER:${this._userId}] ${ctx.isResubscribe ? 'Resubscribed' : 'Subscribed'} to ${ctx.channel}`
+			);
+		},
+		error: (ctx: SubscribeErrorContext) => {
+			this._logger.debug(`[SUBSCRIBE ERROR] [USER:${this._userId}]`, ctx);
+		},
+		unsubscribe: (ctx: UnsubscribeContext) => {
+			this._logger.debug(`[UNSUBSCRIBE] [USER:${this._userId}]`, ctx);
+			this._logger.info(`[USER:${this._userId}] Unsubscribed from ${ctx.channel}`);
+		},
+		join: (ctx: JoinLeaveContext) => {
+			this._logger.debug(`[JOIN] [USER:${this._userId}]`, ctx);
+		},
+		leave: (ctx: JoinLeaveContext) => {
+			this._logger.debug(`[LEAVE] [USER:${this._userId}]`, ctx);
+		}
+	};
 
 	/**
 	 * Fires when the client establishes connection with Centrifugo server.
@@ -63,19 +111,53 @@ export class UserEventsClient extends EventEmitter {
 		super();
 
 		this._logger = createLogger({ context: 'da:events', minLevel: LogLevel.SUCCESS, ...config.logger });
+		this._userId = extractUserId(config.user);
+		this._apiClient = config.apiClient;
 
-		this._basicEventsClient = new BasicEventsClient({
-			logger: this._logger,
-			user: config.user,
-			apiClient: config.apiClient
+		// Something wrong with Centrifuge types.
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
+		this._centrifuge = new Centrifuge.default('wss://centrifugo.donationalerts.com/connection/websocket', {
+			websocket: WebSocket,
+			pingInterval: 15000,
+			ping: true,
+			minRetry: 0,
+			maxRetry: 30_000,
+			onPrivateSubscribe: (
+				ctx: SubscribePrivateContext,
+				callback: (response: SubscribePrivateResponse) => void
+			): void => {
+				this._apiClient.centrifugo
+					.subscribeUserToPrivateChannels(
+						this._userId,
+						ctx.data.client,
+						ctx.data.channels as CentrifugoChannel[],
+						{ transformChannel: false }
+					)
+					.then(channels => {
+						callback({
+							status: 200,
+							data: {
+								channels: channels.map(channel => {
+									return { channel: channel.channel, token: channel.token };
+								})
+							}
+						});
+					})
+					.catch(e => this._logger.error(e));
+			}
 		});
 
-		this._basicEventsClient.onConnect(() => this.emit(this.onConnect));
-		this._basicEventsClient.onDisconnect((reason: string, reconnect: boolean) =>
-			this.emit(this.onDisconnect, reason, reconnect)
-		);
+		this._centrifuge.on('connect', (ctx: ConnectContext) => {
+			this._client = ctx.client;
+			this._logger.debug(`[CONNECT] [USER:${this._userId}]`, ctx);
+			this._logger.info(`[USER:${this._userId}] Connection established to Centrifugo server`);
+			this.emit(this.onConnect);
+		});
 
-		this._userId = extractUserId(config.user);
+		this._centrifuge.on('disconnect', (ctx: DisconnectContext) => {
+			this._logger.debug(`[DISCONNECT] [USER:${this._userId}]`, ctx);
+			this.emit(this.onDisconnect, ctx.reason, ctx.reconnect);
+		});
 	}
 
 	/**
@@ -86,10 +168,19 @@ export class UserEventsClient extends EventEmitter {
 	}
 
 	/**
+	 * Centrifugo current connection client ID.
+	 *
+	 * Returns `null` if no connection is established.
+	 */
+	get clientId(): string | null {
+		return this._client;
+	}
+
+	/**
 	 * Checks whether the client is currently connected to the server.
 	 */
 	get isConnected(): boolean {
-		return this._basicEventsClient.isConnected;
+		return this._centrifuge.isConnected();
 	}
 
 	/**
@@ -100,15 +191,15 @@ export class UserEventsClient extends EventEmitter {
 	async connect(restoreExistingListeners: boolean = true): Promise<void> {
 		for (const [, listener] of this._listeners) {
 			if (restoreExistingListeners) {
-				this._logger.info(`Restoring previously registered listeners for user ${this._userId}...`);
+				this._logger.info(`[USER:${this._userId}] Restoring previously registered listeners...`);
 				listener._subscription.subscribe();
 			} else {
-				this._logger.info(`Removing previously registered listeners for user ${this._userId}...`);
+				this._logger.info(`[USER:${this._userId}] Removing previously registered listeners...`);
 				await listener.remove();
 			}
 		}
 
-		await this._basicEventsClient.connect();
+		await this._connect();
 	}
 
 	/**
@@ -119,14 +210,14 @@ export class UserEventsClient extends EventEmitter {
 	 */
 	async disconnect(removeListeners: boolean = false): Promise<void> {
 		if (removeListeners) {
-			this._logger.info(`Removing listeners for user ${this._userId}...`);
+			this._logger.info(`[USER:${this._userId}] Removing listeners...`);
 
 			for (const [, listener] of this._listeners) {
 				await this.removeEventsListener(listener);
 			}
 		}
 
-		await this._basicEventsClient.disconnect();
+		await this._disconnect();
 	}
 
 	/**
@@ -187,14 +278,70 @@ export class UserEventsClient extends EventEmitter {
 	async removeEventsListener(listener: EventsListener): Promise<void> {
 		if (this._listeners.has(listener.channelName)) {
 			const existingListener = this._listeners.get(listener.channelName)!;
-			this._basicEventsClient.unsubscribe(existingListener._subscription);
+			this._unsubscribe(existingListener._subscription);
 
 			this._listeners.delete(listener.channelName);
 
 			if (this._listeners.size === 0) {
-				await this._basicEventsClient.disconnect();
+				await this._disconnect();
 			}
 		}
+	}
+
+	private async _connect(): Promise<void> {
+		if (!this.isConnected) {
+			const token = await this._apiClient.users.getSocketConnectionToken(this._userId);
+
+			return await new Promise<void>((resolve, reject) => {
+				try {
+					this._centrifuge.setToken(token);
+
+					const rejectTimer = setTimeout(
+						() => reject(new Error(`[USER:${this._userId}] Could not connect to Centrifugo server`)),
+						10_000
+					);
+
+					this._centrifuge.once('connect', (ctx: ConnectContext) => {
+						clearTimeout(rejectTimer);
+						this._client = ctx.client;
+						return resolve();
+					});
+
+					this._centrifuge.connect();
+				} catch (e) {
+					return reject(e);
+				}
+			});
+		}
+	}
+
+	private async _disconnect(): Promise<void> {
+		return await new Promise<void>((resolve, reject) => {
+			if (this.isConnected) {
+				try {
+					this._logger.debug(`[USER:${this._userId}] Disconnecting...`);
+
+					const rejectTimer = setTimeout(() => {
+						this._logger.warn(
+							`[USER:${this._userId}] Disconnect timeout. But the connection should be already closed anyway.`
+						);
+						resolve();
+					}, 10_000);
+
+					this._centrifuge.once('disconnect', () => {
+						clearTimeout(rejectTimer);
+						this._client = null;
+						return resolve();
+					});
+
+					this._centrifuge.disconnect();
+				} catch (e) {
+					return reject(e);
+				}
+			} else {
+				return resolve();
+			}
+		});
 	}
 
 	private async _createListener<D, T>(
@@ -202,12 +349,12 @@ export class UserEventsClient extends EventEmitter {
 		evt: new (data: D) => T,
 		callback: (event: T) => void
 	): Promise<EventsListener> {
-		await this._basicEventsClient.connect();
+		await this._connect();
 
-		const subscription = this._basicEventsClient.subscribe(transformChannel(channel, this._userId));
+		const subscription = this._subscribe(transformChannel(channel, this._userId));
 
 		subscription.on('publish', (ctx: PublicationContext) => {
-			this._logger.debug(`[PUBLISH] (${channel as string}_${this._userId})`, ctx);
+			this._logger.debug(`[PUBLISH] [USER:${this._userId}] (${channel as string}_${this._userId})`, ctx);
 
 			try {
 				return callback(new evt(ctx.data));
@@ -220,5 +367,13 @@ export class UserEventsClient extends EventEmitter {
 		this._listeners.set(channel, listener);
 
 		return listener;
+	}
+
+	private _subscribe(channel: string): Subscription {
+		return this._centrifuge.subscribe(channel, this._subscriptionListeners);
+	}
+
+	private _unsubscribe(subscription: Subscription): void {
+		subscription.unsubscribe();
 	}
 }
