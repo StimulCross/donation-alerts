@@ -23,7 +23,7 @@ export interface EventsClientConfig {
 export class EventsClient {
 	@nonenumerable private readonly _config: EventsClientConfig;
 	@nonenumerable private readonly _apiClient: ApiClient;
-	@nonenumerable private readonly _userClients = new Map<number, UserEventsClient>();
+	@nonenumerable private readonly _userClients: Map<number, UserEventsClient> = new Map();
 
 	/**
 	 * Creates the Donation Alerts events client that allows listen to various events, such as new donations,
