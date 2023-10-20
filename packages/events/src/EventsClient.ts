@@ -54,6 +54,13 @@ export class EventsClient {
 	}
 
 	/**
+	 * Checks whether a user was added to the client.
+	 */
+	hasUser(user: UserIdResolvable): boolean {
+		return this._userClients.has(extractUserId(user));
+	}
+
+	/**
 	 * Registers a user in the client.
 	 *
 	 * @param user The ID of the user to register.
