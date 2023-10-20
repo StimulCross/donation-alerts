@@ -45,12 +45,12 @@
 	],
 	"dependencies": {
 		"@d-fischer/isomorphic-ws": "^7.0.0",
+		"@d-fischer/typed-event-emitter": "^3.3.2",
 		"@donation-alerts/common": "^2.0.1",
 		"@stimulcross/logger": "^6.0.0",
 		"@stimulcross/shared-utils": "^0.2.3",
 		"centrifuge": "2.8.5",
 		"detect-node": "^2.1.0",
-		"typed-event-emitter": "^3.0.0",
 		"typescript-memoize": "^1.1.1",
 		"ws": "^8.14.2"
 	},

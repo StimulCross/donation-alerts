@@ -1,4 +1,5 @@
 import { WebSocket } from '@d-fischer/isomorphic-ws';
+import { EventEmitter } from '@d-fischer/typed-event-emitter';
 import { type ApiClient } from '@donation-alerts/api';
 import {
 	extractUserId,
@@ -20,7 +21,6 @@ import {
 	type UnsubscribeContext
 } from 'centrifuge';
 import * as Centrifuge from 'centrifuge';
-import { EventEmitter } from 'typed-event-emitter';
 import {
 	DonationAlertsDonationEvent,
 	type DonationAlertsDonationEventData
