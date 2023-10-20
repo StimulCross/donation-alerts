@@ -100,6 +100,8 @@ export class EventsClient {
 		const client = this._userClients.get(userId)!;
 		await client.disconnect(true);
 
+		client.removeListener();
+
 		this._userClients.delete(userId);
 	}
 
