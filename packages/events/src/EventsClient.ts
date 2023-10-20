@@ -86,7 +86,7 @@ export class EventsClient {
 		const userId = extractUserId(user);
 
 		if (!this._userClients.has(userId)) {
-			throw new Error(`User "${userId}" is not registered`);
+			return;
 		}
 
 		const client = this._userClients.get(userId)!;
