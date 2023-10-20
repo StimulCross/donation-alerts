@@ -45,7 +45,9 @@ export class EventsClient {
 		const userId = extractUserId(user);
 
 		if (!this._userClients.has(userId)) {
-			throw new Error(`User "${userId}" is not registered`);
+			throw new Error(
+				`User "${userId}" is not registered. Use "addUser" method to register the user before listening to events.`
+			);
 		}
 
 		return this._userClients.get(userId)!;
