@@ -46,6 +46,6 @@
 		"klona": "^2.0.6"
 	},
 	"devDependencies": {
-		"@types/detect-node": "^2.0.0"
+		"@types/detect-node": "^2.0.1"
 	}
 }
