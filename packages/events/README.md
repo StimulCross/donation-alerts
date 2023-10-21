@@ -1,6 +1,6 @@
 # Donation Alerts - Events
 
-A client that makes it very easy to listen to various Donation Alerts events.
+A client that makes it very straightforward to listen to various Donation Alerts events.
 
 ## Installation
 
@@ -20,17 +20,23 @@ yarn add @donation-alerts/events @donation-alerts/api
 
 You have 2 options to listen to events:
 
-1. [UserEventsClient](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html) - Single user client.
-2. [EventsClient](https://stimulcross.github.io/donation-alerts/classes/events.EventsClient.html) - Multiple users client. This client internally creates a [UserEventsClient](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html) for every user you add.
+1. [UserEventsClient](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html) - Single-user client.
+2. [EventsClient](https://stimulcross.github.io/donation-alerts/classes/events.EventsClient.html) - Multiple-user client. This client internally creates a `UserEventsClient` instance for each user you add.
 
-First of all, in order to be able to listen to Donation Alerts events you must create an [ApiClient](https://stimulcross.github.io/donation-alerts/classes/api.ApiClient.html) instance. Check the [documentation](https://stimulcross.github.io/donation-alerts/modules/api.html) page to read more.
+First of all, in order to be able to listen to Donation Alerts events, you must create an [ApiClient](https://stimulcross.github.io/donation-alerts/classes/api.ApiClient.html) instance. Check the [documentation](https://stimulcross.github.io/donation-alerts/modules/api.html) page to read more.
 
-### Creating single user client
+### Creating a single-user client
+
+To instantiate a `UserEventsClient`, you must provide [UserEventsClientConfig](https://stimulcross.github.io/donation-alerts/interfaces/events.UserEventsClientConfig.html) to the `UserEventsClient` constructor.
 
 ```ts
+import { ApiClient } from '@donation-alerts/api';
 import { UserEventsClient } from '@donation-alerts/events';
 
 const userId = 123456789;
+const apiClient = new ApiClient({
+	//...
+});
 
 const userEventsClient = new UserEventsClient({
 	user: userId,
@@ -38,11 +44,9 @@ const userEventsClient = new UserEventsClient({
 });
 ```
 
-You must provide [UserEventsClientConfig](https://stimulcross.github.io/donation-alerts/interfaces/events.UserEventsClientConfig.html) to the [UserEventsClient](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html) constructor.
+#### Listening to events
 
-### Listening to events
-
-After creating a [UserEventsClient](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html) instance, you can now listen to events of your choice:
+After creating a `UserEventsClient` instance, you can now listen to events of your choice.
 
 ```ts
 import {
@@ -52,15 +56,15 @@ import {
 } from '@donation-alerts/events';
 
 const donationsListener = userEventsClient.onDonation((evt: DonationAlertsDonationEvent) => {
-	console.log(evt);
+	// Handle the event...
 });
 
 const goalUpdatesListener = userEventsClient.onGoalUpdate((evt: DonationAlertsGoalUpdateEvent) => {
-	console.log(evt);
+	// Handle the event...
 });
 
 const pollUpdatesListener = userEventsClient.onPollUpdate((evt: DonationAlertsPollUpdateEvent) => {
-	console.log(evt);
+	// Handle the event...
 });
 ```
 
@@ -68,43 +72,50 @@ It's that simple! These methods return an [EventsListener](https://stimulcross.g
 
 Check the documentation pages of the event objects to explore all data you can use: [DonationAlertsDonationEvent](https://stimulcross.github.io/donation-alerts/classes/events.DonationAlertsDonationEvent.html), [DonationAlertsGoalUpdateEvent](https://stimulcross.github.io/donation-alerts/classes/events.DonationAlertsGoalUpdateEvent.html), [DonationAlertsPollUpdateEvent](https://stimulcross.github.io/donation-alerts/classes/events.DonationAlertsPollUpdateEvent.html)
 
-If you no longer need any listener, you can remove it by calling [remove](https://stimulcross.github.io/donation-alerts/classes/events.EventsListener.html#remove) method of the [EventsListener](https://stimulcross.github.io/donation-alerts/classes/events.EventsListener.html) instance:
+If you no longer need any listeners, you can remove them by calling [remove](https://stimulcross.github.io/donation-alerts/classes/events.EventsListener.html#remove) method of the `EventsListener` instance.
 
 ```ts
-donationsListener.remove();
+await donationsListener.remove();
 ```
 
-Or using [removeEventsListener](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#removeEventsListener) method of the [UserEventsClient](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html) instance:
+Or using [removeEventsListener](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#removeEventsListener) method of the `UserEventsClient` instance:
 
 ```ts
-userEventsClient.removeEventsListener(donationsListener);
+await userEventsClient.removeEventsListener(donationsListener);
 ```
 
-> **NOTE:** The user you want to set up listeners for, must be registered in [AuthProvider](https://stimulcross.github.io/donation-alerts/interfaces/auth.AuthProvider.html) that you passed to the [ApiClient](https://stimulcross.github.io/donation-alerts/classes/api.ApiClient.html) instance. The access token of the user also must have the required scopes to successfully subscribe to the private channels.
+> [!IMPORTANT]
+> The user you want to set up listeners for must be added to the [AuthProvider](https://stimulcross.github.io/donation-alerts/interfaces/auth.AuthProvider.html) that you passed to the [ApiClient](https://stimulcross.github.io/donation-alerts/classes/api.ApiClient.html) instance. The access token of the user also must have the required scopes to successfully subscribe to the private channels.
 
-### Connection
+#### Connection
 
-The client automatically establishes a connection to Donation Alerts Centrifugo server when you are creating any listener as described above. If you remove all listeners, the connection will be automatically closed.
+The client automatically establishes a connection to the Donation Alerts Centrifugo server when you create any listener, as described above. If you remove all listeners, the connection will be automatically closed.
 
-You can also manually manage the connection state by using [connect](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#connect), [disconnect](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#disconnect), or [reconnect](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#reconnect) methods of the [UserEventsClient](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html) instance.
+You can also manually manage the connection state by using [connect](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#connect), [disconnect](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#disconnect), or [reconnect](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#reconnect) methods of the `UserEventsClient` instance.
 
-[disconnect](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#disconnect) method allow you to close the connection. The client will not attempt to reconnect after manually calling [disconnect](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#disconnect) method. This method also accepts an optional boolean argument `removeListeners`. If you pass `true` argument, the client will remove all listeners. By default, it is set to `false`, so the client will keep listeners and will be able to restore them on the next manual connection.
+#### `disconnect`
+
+`disconnect` method closes the connection. The client will not attempt to reconnect after manually calling `disconnect` method. This method also accepts the optional boolean `removeListeners` argument. If you pass `true`, the client will remove all listeners. By default, it is set to `false`, so the client will store listeners and will be able to restore them on the next manual connection.
 
 ```ts
-userEventsClient.disconnect(true);
+await userEventsClient.disconnect(true);
 ```
 
-[connect](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#connect) method establishes a connection to Donation Alerts Centrifugo server. This method accepts an optional boolean argument `restoreExistingListeners`. If you called [disconnect](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#disconnect) method without removing listeners (default behavior), the client will be able to restore all listeners. By default, this is set to `true`.
+#### `connect`
+
+`connect` method establishes a connection to a Donation Alerts Centrifugo server. This method accepts an optional boolean argument `restoreExistingListeners`. If you call `disconnect` method without removing listeners (the default behavior), the client will be able to restore all listeners. By default, this is set to `true`.
 
 ```ts
-userEventsClient.connect(true);
+await userEventsClient.connect(true);
 ```
 
-[reconnect](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#reconnect) internally calls the [disconnect](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#disconnect) method with the following call the [connect](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#connect) method. You can pass an option boolean argument `removeListeners` to remove all existing listeners. By default, this is set to `false`, so the client will restore all listeners after reconnect.
+#### `reconnect`
+
+`reconnect` internally calls `disconnect` method, followed by calling `connect` method. You can pass the optional boolean `removeListeners` argument to remove all existing listeners. By default, this is set to `false`, so the client will restore all listeners after reconnection.
 
 The client establishes a persistent connection, so in most cases, it handles disconnections (such as network problems) and attempts to reconnect with exponential backoff (the first attempt performs immediately, and the maximum interval between attempts is 30 seconds).
 
-To have full control over the connection, you'd better listen to [onConnect](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#onConnect) and [onDisconnect](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#onDisconnect) events:
+If you want to have full control over the connection flow, you can listen to [onConnect](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#onConnect) and [onDisconnect](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#onDisconnect) events:
 
 ```ts
 userEventsClient.onConnect(() => {
@@ -116,30 +127,76 @@ userEventsClient.onDisconnect((reason: string, reconnect: boolean) => {
 });
 ```
 
-The `reconnect` parameter of [onDisconnect](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#onDisconnect) callback indicates whether the client will attempt to reconnect to the server. Handle it according to your needs.
+The `reconnect` parameter of the `onDisconnect` callback indicates whether the client will attempt to reconnect to the server. Handle it according to your needs.
 
-### Creating multiple users client
+### Creating a multiple-user client
 
-If you have multiple users, you can consider using [EventsClient](https://stimulcross.github.io/donation-alerts/classes/events.EventsClient.html), which is designed to work with multiple users. To create an [EventsClient]() instance, you must provide [ApiClient](https://stimulcross.github.io/donation-alerts/classes/api.ApiClient.html) through [EventsClientConfig](https://stimulcross.github.io/donation-alerts/interfaces/events.EventsClientConfig.html).
+If you need to listen to events of multiple users, consider using [EventsClient](https://stimulcross.github.io/donation-alerts/classes/events.EventsClient.html). To create an `EventsClient` instance, you must provide `ApiClient` through [EventsClientConfig](https://stimulcross.github.io/donation-alerts/interfaces/events.EventsClientConfig.html).
 
 ```ts
+import { ApiClient } from '@donation-alerts/api';
 import { EventsClient } from '@donation-alerts/events';
+
+const apiClient = new ApiClient({
+	//...
+});
 
 const eventsClient = new EventsClient({
 	apiClient: apiClient
 });
 ```
 
-After creating an [EventsClient](https://stimulcross.github.io/donation-alerts/classes/events.EventsClient.html) instance, you must register a user in the client using [addUser](https://stimulcross.github.io/donation-alerts/classes/events.EventsClient.html#addUser) method. If the user you are registering already exists, this method will throw an error.
+#### Managing users
+
+After creating an `EventsClient` instance, you should register users to be able to listen to events.
+
+#### `addUser`
+
+Adds a user to the client. If the user already exists, an error will be thrown.
+
+```ts
+import { UserEventsClient } from '@donation-alerts/events';
+
+const userId = 123456789;
+const userEventsClient: UserEventsClient = eventsClient.addUser(userId);
+```
+
+Returns a `UserEventsClient` instance.
+
+#### `hasUser`
+
+Checks whether a user was added to the client.
 
 ```ts
 const userId = 123456789;
-const userEventsClient = eventsClient.addUser(userId);
+const hasUser: boolean = eventsClient.hasUser(userId);
 ```
 
-This method returns a [UserEventsClient](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html) instance described above. You can, for example, set up [onConnect](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#onConnect) and [onDisconnect](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html#onDisconnect) listeners for it.
+Returns `boolean`.
 
-Creating event listeners is almost the as for [UserEventsClient](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html), but you also need provide user ID.
+#### `removeUser`
+
+The client will be unsubscribed from all user channels, and the connection will be closed before actually removing the user from the client.
+
+Does nothing if user is not added to the client.
+
+```ts
+const userId = 123456789;
+eventsClient.removeUser(userId);
+```
+
+#### `getUserClient`
+
+You can get the [UserEventsClientConfig](https://stimulcross.github.io/donation-alerts/interfaces/events.UserEventsClientConfig.html) of the user by using [getUserClient](https://stimulcross.github.io/donation-alerts/classes/events.EventsClient.html#getUserClient) method.
+
+```ts
+const userId = 123456789;
+const userEventsClient = eventsClient.getUserClient(userId);
+```
+
+#### Listening to events
+
+Creating event listeners is almost the same as for `UserEventsClient`, but you also need to provide the ID of the user you want to listen to events from.
 
 ```ts
 import {
@@ -163,25 +220,19 @@ const pollUpdatesListener = eventsClient.onPollUpdate(userId, (evt: DonationAler
 });
 ```
 
-These methods also return an [EventsListener](https://stimulcross.github.io/donation-alerts/classes/events.EventsListener.html) instance. You can remove these listeners by calling [remove](https://stimulcross.github.io/donation-alerts/classes/events.EventsListener.html#remove) method. If you remove all listener for a single user, the connection for this user will be closed. But the user won't be removed from the [EventsClient](https://stimulcross.github.io/donation-alerts/classes/events.EventsClient.html) instance, so you are able to restore connection any time.
+These methods return an `EventsListener` instance. You can remove these listeners by calling [remove](https://stimulcross.github.io/donation-alerts/classes/events.EventsListener.html#remove) method. If you remove all listeners for a single user, the connection for this user will be closed. The user's client won't be removed from the `EventsClient` instance, so you will be able to restore the connection at any time.
 
-To get the [UserEventsClient](https://stimulcross.github.io/donation-alerts/classes/events.UserEventsClient.html) instance for a single user from [EventsClient](https://stimulcross.github.io/donation-alerts/classes/events.EventsClient.html) you can use [getUserClient](https://stimulcross.github.io/donation-alerts/classes/events.EventsClient.html#getUserClient) method:
-
-```ts
-const userId = 123456789;
-const userEventsClient = eventsClient.getUserClient(userId);
-```
-
-If the user you are trying to get the client for is not registered in [EventsClient](https://stimulcross.github.io/donation-alerts/classes/events.EventsClient.html) instance, this method will throw an error.
-
-If you don't want to listen for user events anymore, you can remove the user from [EventsClient](https://stimulcross.github.io/donation-alerts/classes/events.EventsClient.html) by calling [removeUser](https://stimulcross.github.io/donation-alerts/classes/events.EventsClient.html#removeUser) method:
+`EventsClient` also allows you to listen to connection events:
 
 ```ts
-const userId = 123456789;
-const userEventsClient = eventsClient.removeUser(userId);
-```
+eventsClient.onConnect((userId: number) => {
+	console.log(`[${userId}] CONNECTED`);
+});
 
-This method closes connection, removes all listeners, and removes the user from the [EventsClient](https://stimulcross.github.io/donation-alerts/classes/events.EventsClient.html) instance.
+eventsClient.onDisconnect((userId: number, reason: string, reconnect: boolean) => {
+	console.log(`[${userId}] DISCONNECTED`, reason, reconnect);
+});
+```
 
 ---
 
