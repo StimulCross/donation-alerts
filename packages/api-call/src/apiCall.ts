@@ -1,7 +1,4 @@
-/// <reference lib="dom" />
-
-// eslint-disable-next-line @typescript-eslint/no-shadow
-import fetch, { Headers } from 'cross-fetch';
+import fetch from 'cross-fetch';
 import { stringify } from 'qs';
 import { type DonationAlertsApiCallOptions, type DonationAlertsCallFetchOptions } from './DonationAlertsApiCallOptions';
 import { handleDonationAlertsApiResponseError, transformDonationAlertsResponse } from './helpers/transform';
@@ -42,7 +39,7 @@ export async function callDonationAlertsApiRaw(
 		...fetchOptions,
 		method: options.method ?? 'GET',
 		headers,
-		body
+		body: body ?? null
 	};
 
 	return await fetch(`${url}${params}`, requestOptions);

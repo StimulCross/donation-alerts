@@ -43,10 +43,10 @@
 	"dependencies": {
 		"@donation-alerts/common": "^3.0.0",
 		"@stimulcross/shared-utils": "^0.2.3",
-		"cross-fetch": "^3.1.6",
+		"cross-fetch": "^4.0.0",
 		"qs": "^6.11.2"
 	},
 	"devDependencies": {
-		"@types/qs": "^6.9.7"
+		"@types/qs": "^6.9.9"
 	}
 }
