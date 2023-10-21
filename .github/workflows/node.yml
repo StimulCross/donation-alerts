@@ -25,3 +25,34 @@ jobs:
         run: yarn run lint
       - name: Check formatting
         run: yarn run format:check
+      - name: Archive build assets
+        run: tar cvf build-result.tar packages/*/lib
+      - name: Save build assets
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-result
+          path: build-result.tar
+  test:
+    strategy:
+      matrix:
+        node-version: [ 20, 18, 16 ]
+
+    needs: [ build ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install deps
+        run: yarn
+      - name: Load build assets
+        uses: actions/download-artifact@v3
+        with:
+          name: build-result
+      - name: Unarchive build assets
+        run: tar xvf build-result.tar
+      - run: yarn test
