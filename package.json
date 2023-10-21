@@ -10,7 +10,7 @@
 	"description": "",
 	"private": true,
 	"engines": {
-		"node": ">=12"
+		"node": ">=16"
 	},
 	"scripts": {
 		"lint": "eslint --ext js,ts packages",
