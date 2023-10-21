@@ -55,6 +55,6 @@
 	},
 	"devDependencies": {
 		"@donation-alerts/auth": "^3.0.0",
-		"@types/qs": "^6.9.7"
+		"@types/qs": "^6.9.9"
 	}
 }
