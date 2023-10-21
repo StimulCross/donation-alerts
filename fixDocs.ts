@@ -121,22 +121,22 @@ export async function fixDocs(): Promise<void> {
 					// @ts-ignore BLA BLA
 					// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 					docFile = docFile.replaceAll(
-						'<h3>Throws</h3><p>HttpError',
-						'<h3>Throws</h3><p><a href="../classes/api_call.HttpError.html" class="tsd-signature-type" data-tsd-kind="Class">HttpError</a>'
+						'<h4>Throws</h4><p>HttpError',
+						'<h4>Throws</h4><p><a href="../classes/api_call.HttpError.html" class="tsd-kind-class">HttpError</a>'
 					) as string;
 
 					// @ts-ignore BLA BLA
 					// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 					docFile = docFile.replaceAll(
-						'<h3>Throws</h3><p>MissingScopeError',
-						'<h3>Throws</h3><p><a href="../classes/auth.MissingScopeError.html" class="tsd-signature-type" data-tsd-kind="Class">MissingScopeError</a>'
+						'<h4>Throws</h4><p>MissingScopeError',
+						'<h4>Throws</h4><p><a href="../classes/auth.MissingScopeError.html" class="tsd-kind-class">MissingScopeError</a>'
 					) as string;
 
 					// @ts-ignore BLA BLA
 					// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 					docFile = docFile.replaceAll(
-						'<h3>Throws</h3><p>UnregisteredUserError',
-						'<h3>Throws</h3><p><a href="../classes/auth.UnregisteredUserError.html" class="tsd-signature-type" data-tsd-kind="Class">UnregisteredUserError</a>'
+						'<h4>Throws</h4><p>UnregisteredUserError',
+						'<h4>Throws</h4><p><a href="../classes/auth.UnregisteredUserError.html" class="tsd-kind-class">UnregisteredUserError</a>'
 					) as string;
 
 					await fs.promises.writeFile(join(DOCS_PATH, el, file), docFile);
