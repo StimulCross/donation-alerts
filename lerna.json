@@ -1,16 +1,16 @@
 {
-	"packages": [
-		"packages/*"
-	],
-	"version": "2.0.1",
-	"npmClient": "yarn",
-	"command": {
-		"publish": {
-			"npmClient": "npm",
-			"ignoreChanges": [
-				"docs"
-			]
-		}
-	},
-	"$schema": "node_modules/lerna/schemas/lerna-schema.json"
+  "packages": [
+    "packages/*"
+  ],
+  "version": "3.0.0",
+  "npmClient": "yarn",
+  "command": {
+    "publish": {
+      "npmClient": "npm",
+      "ignoreChanges": [
+        "docs"
+      ]
+    }
+  },
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json"
 }
