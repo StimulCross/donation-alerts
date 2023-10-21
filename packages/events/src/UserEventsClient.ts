@@ -72,23 +72,23 @@ export class UserEventsClient extends EventEmitter {
 
 	private readonly _subscriptionListeners: SubscriptionEvents = {
 		subscribe: (ctx: SubscribeSuccessContext) => {
-			this._logger.debug(`[SUBSCRIBE] [USER:${this._userId}]`, ctx);
+			this._logger.debug(`[USER:${this._userId}] [SUBSCRIBE]`, ctx);
 			this._logger.info(
 				`[USER:${this._userId}] ${ctx.isResubscribe ? 'Resubscribed' : 'Subscribed'} to ${ctx.channel}`
 			);
 		},
 		error: (ctx: SubscribeErrorContext) => {
-			this._logger.debug(`[SUBSCRIBE ERROR] [USER:${this._userId}]`, ctx);
+			this._logger.debug(`[USER:${this._userId}] [SUBSCRIBE ERROR]`, ctx);
 		},
 		unsubscribe: (ctx: UnsubscribeContext) => {
 			this._logger.debug(`[UNSUBSCRIBE] [USER:${this._userId}]`, ctx);
 			this._logger.info(`[USER:${this._userId}] Unsubscribed from ${ctx.channel}`);
 		},
 		join: (ctx: JoinLeaveContext) => {
-			this._logger.debug(`[JOIN] [USER:${this._userId}]`, ctx);
+			this._logger.debug(`[USER:${this._userId}] [JOIN]`, ctx);
 		},
 		leave: (ctx: JoinLeaveContext) => {
-			this._logger.debug(`[LEAVE] [USER:${this._userId}]`, ctx);
+			this._logger.debug(`[USER:${this._userId}] [LEAVE]`, ctx);
 		}
 	};
 
@@ -149,13 +149,13 @@ export class UserEventsClient extends EventEmitter {
 
 		this._centrifuge.on('connect', (ctx: ConnectContext) => {
 			this._client = ctx.client;
-			this._logger.debug(`[CONNECT] [USER:${this._userId}]`, ctx);
+			this._logger.debug(`[USER:${this._userId}] [CONNECT]`, ctx);
 			this._logger.info(`[USER:${this._userId}] Connection established to Centrifugo server`);
 			this.emit(this.onConnect);
 		});
 
 		this._centrifuge.on('disconnect', (ctx: DisconnectContext) => {
-			this._logger.debug(`[DISCONNECT] [USER:${this._userId}]`, ctx);
+			this._logger.debug(`[USER:${this._userId}] [DISCONNECT]`, ctx);
 			this.emit(this.onDisconnect, ctx.reason, ctx.reconnect);
 		});
 	}
@@ -354,7 +354,7 @@ export class UserEventsClient extends EventEmitter {
 		const subscription = this._subscribe(transformChannel(channel, this._userId));
 
 		subscription.on('publish', (ctx: PublicationContext) => {
-			this._logger.debug(`[PUBLISH] [USER:${this._userId}] (${channel as string}_${this._userId})`, ctx);
+			this._logger.debug(`[USER:${this._userId}] [PUBLISH] (${channel as string}_${this._userId})`, ctx);
 
 			try {
 				return callback(new evt(ctx.data));
