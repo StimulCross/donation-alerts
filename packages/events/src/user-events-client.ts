@@ -5,7 +5,7 @@ import {
 	extractUserId,
 	ReadDocumentation,
 	type CentrifugoChannel,
-	type UserIdResolvable
+	type UserIdResolvable,
 } from '@donation-alerts/common';
 import { createLogger, LogLevel, type LoggerOptions, type Logger } from '@stimulcross/logger';
 import { nonenumerable } from '@stimulcross/shared-utils';
@@ -18,23 +18,23 @@ import {
 	type SubscribeSuccessContext,
 	type Subscription,
 	type SubscriptionEvents,
-	type UnsubscribeContext
+	type UnsubscribeContext,
 } from 'centrifuge';
 import * as Centrifuge from 'centrifuge';
 import {
 	DonationAlertsDonationEvent,
-	type DonationAlertsDonationEventData
-} from './events/donations/DonationAlertsDonationEvent';
+	type DonationAlertsDonationEventData,
+} from './events/donations/donation-alerts-donation-event';
 import {
 	DonationAlertsGoalUpdateEvent,
-	type DonationAlertsGoalUpdateEventData
-} from './events/goals/DonationAlertsGoalUpdateEvent';
+	type DonationAlertsGoalUpdateEventData,
+} from './events/goals/donation-alerts-goal-update-event';
 import {
 	DonationAlertsPollUpdateEvent,
-	type DonationAlertsPollUpdateEventData
-} from './events/polls/DonationAlertsPollUpdateEvent';
-import { EventsListener } from './EventsListener';
-import { transformChannel } from './helpers/transformChannel';
+	type DonationAlertsPollUpdateEventData,
+} from './events/polls/donation-alerts-poll-update-event';
+import { EventsListener } from './events-listener';
+import { transformChannel } from './helpers/transform-channel';
 
 /** @internal */
 interface ConnectContext {
@@ -74,7 +74,7 @@ export class UserEventsClient extends EventEmitter {
 		subscribe: (ctx: SubscribeSuccessContext) => {
 			this._logger.debug(`[USER:${this._userId}] [SUBSCRIBE]`, ctx);
 			this._logger.info(
-				`[USER:${this._userId}] ${ctx.isResubscribe ? 'Resubscribed' : 'Subscribed'} to ${ctx.channel}`
+				`[USER:${this._userId}] ${ctx.isResubscribe ? 'Resubscribed' : 'Subscribed'} to ${ctx.channel}`,
 			);
 		},
 		error: (ctx: SubscribeErrorContext) => {
@@ -89,7 +89,7 @@ export class UserEventsClient extends EventEmitter {
 		},
 		leave: (ctx: JoinLeaveContext) => {
 			this._logger.debug(`[USER:${this._userId}] [LEAVE]`, ctx);
-		}
+		},
 	};
 
 	/**
@@ -115,36 +115,34 @@ export class UserEventsClient extends EventEmitter {
 		this._apiClient = config.apiClient;
 
 		// Something wrong with Centrifuge types.
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
+
 		this._centrifuge = new Centrifuge.default('wss://centrifugo.donationalerts.com/connection/websocket', {
 			websocket: WebSocket,
-			pingInterval: 15000,
+			pingInterval: 15_000,
 			ping: true,
 			minRetry: 0,
 			maxRetry: 30_000,
 			onPrivateSubscribe: (
 				ctx: SubscribePrivateContext,
-				callback: (response: SubscribePrivateResponse) => void
+				callback: (response: SubscribePrivateResponse) => void,
 			): void => {
 				this._apiClient.centrifugo
 					.subscribeUserToPrivateChannels(
 						this._userId,
 						ctx.data.client,
 						ctx.data.channels as CentrifugoChannel[],
-						{ transformChannel: false }
+						{ transformChannel: false },
 					)
 					.then(channels => {
 						callback({
 							status: 200,
 							data: {
-								channels: channels.map(channel => {
-									return { channel: channel.channel, token: channel.token };
-								})
-							}
+								channels: channels.map(channel => ({ channel: channel.channel, token: channel.token })),
+							},
 						});
 					})
 					.catch(e => this._logger.error(e));
-			}
+			},
 		});
 
 		this._centrifuge.on('connect', (ctx: ConnectContext) => {
@@ -240,7 +238,7 @@ export class UserEventsClient extends EventEmitter {
 		return await this._createListener<DonationAlertsDonationEventData, DonationAlertsDonationEvent>(
 			'$alerts:donation',
 			DonationAlertsDonationEvent,
-			callback
+			callback,
 		);
 	}
 
@@ -253,7 +251,7 @@ export class UserEventsClient extends EventEmitter {
 		return await this._createListener<DonationAlertsGoalUpdateEventData, DonationAlertsGoalUpdateEvent>(
 			'$goals:goal',
 			DonationAlertsGoalUpdateEvent,
-			callback
+			callback,
 		);
 	}
 
@@ -266,7 +264,7 @@ export class UserEventsClient extends EventEmitter {
 		return await this._createListener<DonationAlertsPollUpdateEventData, DonationAlertsPollUpdateEvent>(
 			'$polls:poll',
 			DonationAlertsPollUpdateEvent,
-			callback
+			callback,
 		);
 	}
 
@@ -298,7 +296,7 @@ export class UserEventsClient extends EventEmitter {
 
 					const rejectTimer = setTimeout(
 						() => reject(new Error(`[USER:${this._userId}] Could not connect to Centrifugo server`)),
-						10_000
+						10_000,
 					);
 
 					this._centrifuge.once('connect', (ctx: ConnectContext) => {
@@ -323,7 +321,7 @@ export class UserEventsClient extends EventEmitter {
 
 					const rejectTimer = setTimeout(() => {
 						this._logger.warn(
-							`[USER:${this._userId}] Disconnect timeout. But the connection should be already closed anyway.`
+							`[USER:${this._userId}] Disconnect timeout. But the connection should be already closed anyway.`,
 						);
 						resolve();
 					}, 10_000);
@@ -347,7 +345,7 @@ export class UserEventsClient extends EventEmitter {
 	private async _createListener<D, T>(
 		channel: CentrifugoChannel,
 		evt: new (data: D) => T,
-		callback: (event: T) => void
+		callback: (event: T) => void,
 	): Promise<EventsListener> {
 		await this._connect();
 

@@ -3,11 +3,11 @@ import { type ApiClient } from '@donation-alerts/api';
 import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { type LoggerOptions } from '@stimulcross/logger';
 import { nonenumerable } from '@stimulcross/shared-utils';
-import { type DonationAlertsDonationEvent } from './events/donations/DonationAlertsDonationEvent';
-import { type DonationAlertsGoalUpdateEvent } from './events/goals/DonationAlertsGoalUpdateEvent';
-import { type DonationAlertsPollUpdateEvent } from './events/polls/DonationAlertsPollUpdateEvent';
-import { type EventsListener } from './EventsListener';
-import { UserEventsClient } from './UserEventsClient';
+import { type DonationAlertsDonationEvent } from './events/donations/donation-alerts-donation-event';
+import { type DonationAlertsGoalUpdateEvent } from './events/goals/donation-alerts-goal-update-event';
+import { type DonationAlertsPollUpdateEvent } from './events/polls/donation-alerts-poll-update-event';
+import { type EventsListener } from './events-listener';
+import { UserEventsClient } from './user-events-client';
 
 /**
  * Configuration for {@link EventsClient}.
@@ -59,7 +59,7 @@ export class EventsClient extends EventEmitter {
 
 		if (!this._userClients.has(userId)) {
 			throw new Error(
-				`User "${userId}" is not registered. Use "addUser" method to register the user before listening to events.`
+				`User "${userId}" is not registered. Use "addUser" method to register the user before listening to events.`,
 			);
 		}
 
@@ -88,12 +88,12 @@ export class EventsClient extends EventEmitter {
 		const userEventsClient = new UserEventsClient({
 			user: userId,
 			apiClient: this._apiClient,
-			logger: this._config.logger
+			logger: this._config.logger,
 		});
 
 		userEventsClient.onConnect(() => this.emit(this.onConnect, userId));
 		userEventsClient.onDisconnect((reason: string, reconnect: boolean) =>
-			this.emit(this.onDisconnect, userId, reason, reconnect)
+			this.emit(this.onDisconnect, userId, reason, reconnect),
 		);
 
 		this._userClients.set(userId, userEventsClient);
@@ -131,7 +131,7 @@ export class EventsClient extends EventEmitter {
 	 */
 	async onDonation(
 		user: UserIdResolvable,
-		callback: (event: DonationAlertsDonationEvent) => void
+		callback: (event: DonationAlertsDonationEvent) => void,
 	): Promise<EventsListener> {
 		return await this.getUserClient(user).onDonation(callback);
 	}
@@ -144,7 +144,7 @@ export class EventsClient extends EventEmitter {
 	 */
 	async onGoalUpdate(
 		user: UserIdResolvable,
-		callback: (event: DonationAlertsGoalUpdateEvent) => void
+		callback: (event: DonationAlertsGoalUpdateEvent) => void,
 	): Promise<EventsListener> {
 		return await this.getUserClient(user).onGoalUpdate(callback);
 	}
@@ -157,7 +157,7 @@ export class EventsClient extends EventEmitter {
 	 */
 	async onPollUpdate(
 		user: UserIdResolvable,
-		callback: (event: DonationAlertsPollUpdateEvent) => void
+		callback: (event: DonationAlertsPollUpdateEvent) => void,
 	): Promise<EventsListener> {
 		return await this.getUserClient(user).onPollUpdate(callback);
 	}

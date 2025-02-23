@@ -24,7 +24,7 @@ To create an [ApiClient](https://stimulcross.github.io/donation-alerts/classes/a
 import { ApiClient } from '@donation-alerts/api';
 
 const apiClient = new ApiClient({
-	authProvider: authProvider
+	authProvider: authProvider,
 });
 ```
 
@@ -34,11 +34,11 @@ Check the [ApiConfig](https://stimulcross.github.io/donation-alerts/interfaces/a
 
 After creating `ApiClient`, it's very straightforward to get data from the API. The `ApiClient` includes 5 namespaces:
 
--   [users](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsUsersApi.html)
--   [donations](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsDonationsApi.html)
--   [customAlerts](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsCustomAlertsApi.html)
--   [centrifugo](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsCentrifugoApi.html)
--   [merchandises](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsMerchandiseApi.html)
+- [users](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsUsersApi.html)
+- [donations](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsDonationsApi.html)
+- [customAlerts](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsCustomAlertsApi.html)
+- [centrifugo](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsCentrifugoApi.html)
+- [merchandises](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsMerchandiseApi.html)
 
 > [!NOTE]
 > The user must be registered in the authentication provider instance you passed to the [ApiConfig](https://stimulcross.github.io/donation-alerts/interfaces/api.ApiConfig.html) object. Otherwise, the library won't be able to obtain the user's access token to perform a request and will throw [UnregisteredUserError](https://stimulcross.github.io/donation-alerts/classes/auth.UnregisteredUserError.html).
@@ -113,10 +113,10 @@ const paginator = apiClient.donations.createDonationsPaginator(userId);
 
 After creating a paginator instance, you can use its methods to navigate pages:
 
--   [getNext](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#getNext) - Gets the next page. If you reached the last page, this method returns an empty array.
--   [getPrev](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#getPrev) - Gets the previous page. If you already on the first page, this method returns it back.
--   [getPage](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#getPage) - Gets the specified page. If page does not exist, this method returns an empty array.
--   [getAll](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#getAll) - Gets all available donations. Use it carefully because this can return a huge amount of data and take a lot of time.
+- [getNext](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#getNext) - Gets the next page. If you reached the last page, this method returns an empty array.
+- [getPrev](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#getPrev) - Gets the previous page. If you already on the first page, this method returns it back.
+- [getPage](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#getPage) - Gets the specified page. If page does not exist, this method returns an empty array.
+- [getAll](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#getAll) - Gets all available donations. Use it carefully because this can return a huge amount of data and take a lot of time.
 
 ```ts
 const nextPage = await paginator.getNext();
@@ -155,7 +155,7 @@ Donation Alerts supports custom alerts. When a broadcaster creates a widget with
 ```ts
 await apiClient.customAlerts.sendCustomAlert(123456789, {
 	header: 'Custom Alert',
-	message: 'Hello!'
+	message: 'Hello!',
 });
 ```
 
@@ -182,7 +182,7 @@ const clientId = '<OBTAINED_UUIDV4_CLIENT_ID>';
 const channels = await apiClient.centrifugo.subscribeUserToPrivateChannels(userId, clientId, [
 	'$alerts:donation',
 	'$goals:goal',
-	'$polls:poll'
+	'$polls:poll',
 ]);
 ```
 
@@ -202,7 +202,7 @@ const channels = await apiClient.centrifugo.subscribeUserToPrivateChannels(
 	// You are passing a valid channel here
 	['$alerts:donation_123456789'],
 	// Here you can pass options object and disable transformation
-	{ transformChannel: false }
+	{ transformChannel: false },
 );
 ```
 
@@ -242,7 +242,7 @@ const merchadiseData: DonationAlertsCreateMerchandiseData = {
 	merchandiseIdentifier: '<MERCHANDISE_ID>',
 	title: {
 		en_US: 'English Title',
-		ru_RU: 'Русский заголовок'
+		ru_RU: 'Русский заголовок',
 	},
 	isActive: true,
 	isPercentage: true,
@@ -251,7 +251,7 @@ const merchadiseData: DonationAlertsCreateMerchandiseData = {
 	priceService: 2,
 	url: '<MERCHANDISE_WEB_PAGE_URL>',
 	imgUrl: '<IMAGE_URL>',
-	endTimestamp: 1660632051919
+	endTimestamp: 1660632051919,
 };
 
 const createdMerchandise = await apiClient.merchandise.createMerchandise(userId, clientSecret, merchadiseData);
@@ -273,16 +273,16 @@ const clientSecret = 'SUPER_SECRET_STRING';
 const merchadiseData: DonationAlertsUpdateMerchandiseData = {
 	title: {
 		en_US: 'Updated English Title',
-		ru_RU: 'Обновленный русский заголовок'
+		ru_RU: 'Обновленный русский заголовок',
 	},
-	isActive: false
+	isActive: false,
 };
 
 const createdMerchandise = await apiClient.merchandise.updateMerchandise(
 	userId,
 	clientSecret,
 	merchandiseId,
-	merchadiseData
+	merchadiseData,
 );
 ```
 
@@ -302,7 +302,7 @@ const alertData: DonationAlertsSendMerchandiseSaleAlertData = {
 	merchandiseIdentifier: '<MERCHANDISE_ID>',
 	amount: 10,
 	currency: 'EUR',
-	username: '<USERNAME>'
+	username: '<USERNAME>',
 };
 
 await apiClient.merchandise.sendSaleAlert(userId, clientSecret, alertData);
@@ -325,8 +325,8 @@ const apiClient = new ApiClient({
 	authProvider: authProvider,
 	rateLimiterOptions: {
 		limitToOneRequestPerSecond: true,
-		limitReachedBehavior: 'enqueue'
-	}
+		limitReachedBehavior: 'enqueue',
+	},
 });
 ```
 
@@ -338,7 +338,7 @@ These settings define the default behavior of the rate limiter at the entire API
 
 ```ts
 const user = await apiClient.users.getUser(123456789, {
-	limitReachedBehavior: 'throw'
+	limitReachedBehavior: 'throw',
 });
 ```
 

@@ -4,9 +4,7 @@ export class CustomError extends Error {
 		super(message);
 
 		// restore prototype chain
-		Object.setPrototypeOf(this, new.target.prototype);
-
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+		Reflect.setPrototypeOf(this, new.target.prototype);
 		Error.captureStackTrace?.(this, new.target.constructor);
 	}
 

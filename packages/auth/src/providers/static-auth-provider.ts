@@ -1,7 +1,7 @@
 import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { nonenumerable } from '@stimulcross/shared-utils';
-import { type AuthProvider } from './AuthProvider';
-import { type AccessToken, type AccessTokenWithUserId } from '../AccessToken';
+import { type AuthProvider } from './auth-provider';
+import { type AccessToken, type AccessTokenWithUserId } from '../access-token';
 import { InvalidTokenError, UnregisteredUserError } from '../errors';
 import { compareScopes } from '../helpers';
 
@@ -47,7 +47,7 @@ export class StaticAuthProvider implements AuthProvider {
 			refreshToken: null,
 			expiresIn: null,
 			obtainmentTimestamp: Date.now(),
-			scopes: token.scopes
+			scopes: token.scopes,
 		});
 	}
 
@@ -65,7 +65,7 @@ export class StaticAuthProvider implements AuthProvider {
 
 		if (!this._registry.has(userId)) {
 			throw new UnregisteredUserError(
-				`User ${userId} not found in the auth provider registry. Use {StaticAuthProvider#addUser} method to add the user first.`
+				`User ${userId} not found in the auth provider registry. Use {StaticAuthProvider#addUser} method to add the user first.`,
 			);
 		}
 
@@ -77,7 +77,7 @@ export class StaticAuthProvider implements AuthProvider {
 
 		if (!this._registry.has(userId)) {
 			throw new UnregisteredUserError(
-				`User ${userId} not found in the auth provider registry. Use {StaticAuthProvider#addUser} method to add the user first.`
+				`User ${userId} not found in the auth provider registry. Use {StaticAuthProvider#addUser} method to add the user first.`,
 			);
 		}
 

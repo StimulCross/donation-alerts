@@ -1,10 +1,10 @@
 import { type RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
 import { ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
-import { DonationAlertsDonation, type DonationAlertsDonationData } from './DonationAlertsDonation';
-import { BaseApi } from '../BaseApi';
-import { type DonationAlertsApiPagination } from '../DonationAlertsApiPagination';
-import { DonationAlertsApiPaginator } from '../DonationAlertsApiPaginator';
-import { type DonationAlertsResponseWithMeta } from '../DonationAlertsResponse';
+import { DonationAlertsDonation, type DonationAlertsDonationData } from './donation-alerts-donation';
+import { BaseApi } from '../base-api';
+import { type DonationAlertsApiPagination } from '../donation-alerts-api-pagination';
+import { DonationAlertsApiPaginator } from '../donation-alerts-api-paginator';
+import { type DonationAlertsResponseWithMeta } from '../donation-alerts-response';
 
 /**
  * Donation Alerts Donations API.
@@ -31,7 +31,7 @@ export class DonationAlertsDonationsApi extends BaseApi {
 	async getDonations(
 		user: UserIdResolvable,
 		pagination: DonationAlertsApiPagination = {},
-		rateLimiterOptions?: RateLimiterRequestOptions
+		rateLimiterOptions?: RateLimiterRequestOptions,
 	): Promise<DonationAlertsDonation[]> {
 		const page = typeof pagination.page === 'number' && pagination.page !== 0 ? pagination.page : 1;
 
@@ -43,9 +43,9 @@ export class DonationAlertsDonationsApi extends BaseApi {
 				method: 'GET',
 				scope: 'oauth-donation-index',
 				query: { page },
-				auth: true
+				auth: true,
 			},
-			rateLimiterOptions
+			rateLimiterOptions,
 		);
 
 		return response.data.map(donation => new DonationAlertsDonation(donation));
@@ -68,7 +68,7 @@ export class DonationAlertsDonationsApi extends BaseApi {
 	 */
 	async getAllDonations(
 		user: UserIdResolvable,
-		rateLimiterOptions?: RateLimiterRequestOptions
+		rateLimiterOptions?: RateLimiterRequestOptions,
 	): Promise<DonationAlertsDonation[]> {
 		return await this.createDonationsPaginator(user, rateLimiterOptions).getAll();
 	}
@@ -83,7 +83,7 @@ export class DonationAlertsDonationsApi extends BaseApi {
 	 */
 	createDonationsPaginator(
 		user: UserIdResolvable,
-		rateLimiterOptions?: RateLimiterRequestOptions
+		rateLimiterOptions?: RateLimiterRequestOptions,
 	): DonationAlertsApiPaginator<DonationAlertsDonationData, DonationAlertsDonation> {
 		return new DonationAlertsApiPaginator<DonationAlertsDonationData, DonationAlertsDonation>(
 			this._apiClient,
@@ -93,10 +93,10 @@ export class DonationAlertsDonationsApi extends BaseApi {
 				url: 'alerts/donations',
 				method: 'GET',
 				scope: 'oauth-donation-index',
-				auth: true
+				auth: true,
 			},
 			donation => new DonationAlertsDonation(donation),
-			rateLimiterOptions
+			rateLimiterOptions,
 		);
 	}
 }

@@ -73,7 +73,7 @@ Adds a user to the provider. The first argument is the ID of the user, the secon
 ```ts
 authProvider.addUser(123456789, {
 	accessToken: '<ACCESS_TOKEN>',
-	scopes: ['oauth-user-show', 'oauth-donation-index', 'oauth-custom_alert-store']
+	scopes: ['oauth-user-show', 'oauth-donation-index', 'oauth-custom_alert-store'],
 });
 ```
 
@@ -99,7 +99,7 @@ This method also optionally takes requested scopes as the second `scopes?: strin
 // Add token with 'oauth-user-show' and 'oauth-donation-index' scopes
 authProvider.addUser(123456789, {
 	accessToken: '<ACCESS_TOKEN>',
-	scopes: ['oauth-user-show', 'oauth-donation-index']
+	scopes: ['oauth-user-show', 'oauth-donation-index'],
 });
 
 // Throws 'MissingScopeError' because the token
@@ -115,10 +115,10 @@ Unlike [StaticAuthProvider](https://stimulcross.github.io/donation-alerts/classe
 
 To instantiate a `RefreshingAuthProvider` you must set up [RefreshingAuthProviderConfig](https://stimulcross.github.io/donation-alerts/interfaces/auth.RefreshingAuthProviderConfig.html).
 
--   `clientId` - Donation Alerts application's client ID
--   `clientSecret` - Donation Alerts application's client secret
--   `redirectUri` (optional) - Donation Alerts application's redirect URI. Only used in `addAuthForCode` method to exchange an authorization code for an access token.
--   `scopes` (optional) - an array of scopes that all registering tokens must be valid for.
+- `clientId` - Donation Alerts application's client ID
+- `clientSecret` - Donation Alerts application's client secret
+- `redirectUri` (optional) - Donation Alerts application's redirect URI. Only used in `addAuthForCode` method to exchange an authorization code for an access token.
+- `scopes` (optional) - an array of scopes that all registering tokens must be valid for.
 
 ```ts
 import { RefreshingAuthProvider } from '@donation-alerts/auth';
@@ -127,7 +127,7 @@ const authProvider = new RefreshingAuthProvider({
 	clientId: '<CLIENT_ID>',
 	clientSecret: '<CLIENT_SECRET>',
 	redirectUri: '<REDIRECT_URI>',
-	scopes: ['oauth-user-show', 'oauth-donation-index', 'oauth-custom_alert-store']
+	scopes: ['oauth-user-show', 'oauth-donation-index', 'oauth-custom_alert-store'],
 });
 ```
 
@@ -154,7 +154,7 @@ authProvider.addUser(userId, {
 	refreshToken: '<REFRESH_TOKEN>',
 	expiresIn: 0,
 	obtainmentTimestamp: 0,
-	scopes: ['oauth-user-show', 'oauth-donation-index', 'oauth-custom_alert-store']
+	scopes: ['oauth-user-show', 'oauth-donation-index', 'oauth-custom_alert-store'],
 });
 ```
 
@@ -175,7 +175,7 @@ const tokenWithUserId = await authProvider.addUserForToken({
 	refreshToken: '<REFRESH_TOKEN>',
 	expiresIn: 0,
 	obtainmentTimestamp: 0,
-	scopes: ['oauth-user-show', 'oauth-donation-index', 'oauth-custom_alert-store']
+	scopes: ['oauth-user-show', 'oauth-donation-index', 'oauth-custom_alert-store'],
 });
 ```
 
@@ -194,7 +194,7 @@ Another option to add a user to the provider is using an authorization code rece
 const tokenWithUserId = await authProvider.addUserForCode('<AUTH_CODE>', [
 	'oauth-user-show',
 	'oauth-donation-index',
-	'oauth-custom_alert-store'
+	'oauth-custom_alert-store',
 ]);
 ```
 

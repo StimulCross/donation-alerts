@@ -1,5 +1,5 @@
 import { callDonationAlertsApi } from '@donation-alerts/api-call';
-import { type AccessToken } from './AccessToken';
+import { type AccessToken } from './access-token';
 import { MissingScopeError } from './errors';
 
 /** @internal */
@@ -14,7 +14,7 @@ function createAccessTokenFromData(data: AccessTokenData): AccessToken {
 		accessToken: data.access_token,
 		refreshToken: data.refresh_token,
 		expiresIn: data.expires_in,
-		obtainmentTimestamp: Date.now()
+		obtainmentTimestamp: Date.now(),
 	};
 }
 
@@ -30,7 +30,7 @@ export async function exchangeCode(
 	clientId: string,
 	clientSecret: string,
 	redirectUri: string,
-	code: string
+	code: string,
 ): Promise<AccessToken> {
 	return createAccessTokenFromData(
 		await callDonationAlertsApi<AccessTokenData>({
@@ -42,10 +42,10 @@ export async function exchangeCode(
 				client_id: clientId,
 				client_secret: clientSecret,
 				redirect_uri: redirectUri,
-				code
+				code,
 			},
-			auth: false
-		})
+			auth: false,
+		}),
 	);
 }
 
@@ -61,7 +61,7 @@ export async function refreshAccessToken(
 	clientId: string,
 	clientSecret: string,
 	refreshToken: string,
-	scopes: string[] = []
+	scopes: string[] = [],
 ): Promise<AccessToken> {
 	return createAccessTokenFromData(
 		await callDonationAlertsApi<AccessTokenData>({
@@ -73,10 +73,10 @@ export async function refreshAccessToken(
 				refresh_token: refreshToken,
 				client_id: clientId,
 				client_secret: clientSecret,
-				scope: scopes
+				scope: scopes,
 			},
-			auth: false
-		})
+			auth: false,
+		}),
 	);
 }
 

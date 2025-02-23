@@ -1,6 +1,6 @@
 import { DataObject, rawDataSymbol, ReadDocumentation } from '@donation-alerts/common';
 import { Memoize } from 'typescript-memoize';
-import { DonationAlertsPollOption, type DonationAlertsPollOptionData } from './DonationAlertsPollOption';
+import { DonationAlertsPollOption, type DonationAlertsPollOptionData } from './donation-alerts-poll-option';
 
 /**
  * Type of the poll that defines how poll winner is calculated. `count` - finds winner by the most number of donations;

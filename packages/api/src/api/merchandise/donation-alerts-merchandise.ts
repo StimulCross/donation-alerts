@@ -3,14 +3,14 @@ import {
 	rawDataSymbol,
 	ReadDocumentation,
 	type DonationAlertsLocaleCode,
-	type DonationAlertsOutputCurrency
+	type DonationAlertsOutputCurrency,
 } from '@donation-alerts/common';
 import { mapNullable } from '@stimulcross/shared-utils';
 import { Memoize } from 'typescript-memoize';
 import {
 	DonationAlertsMerchandiseMerchant,
-	type DonationAlertsMerchandiseMerchantData
-} from './DonationAlertsMerchandiseMerchant';
+	type DonationAlertsMerchandiseMerchantData,
+} from './donation-alerts-merchandise-merchant';
 
 /** @internal */
 export interface DonationAlertsMerchandiseTitleData extends Partial<Record<DonationAlertsLocaleCode, string>> {

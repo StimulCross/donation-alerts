@@ -1,11 +1,11 @@
 import { stringify } from 'qs';
-import { type DonationAlertsApiCallOptions } from '../DonationAlertsApiCallOptions';
-import { HttpError } from '../errors/HttpError';
+import { type DonationAlertsApiCallOptions } from '../donation-alerts-api-call-options';
+import { HttpError } from '../errors/http.error';
 
 /** @internal */
 export async function handleDonationAlertsApiResponseError(
 	response: Response,
-	options: DonationAlertsApiCallOptions
+	options: DonationAlertsApiCallOptions,
 ): Promise<void> {
 	if (!response.ok) {
 		const isJson = response.headers.get('Content-Type') === 'application/json';

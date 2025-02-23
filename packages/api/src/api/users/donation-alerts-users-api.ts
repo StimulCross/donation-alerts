@@ -1,8 +1,8 @@
 import { type RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
 import { ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
-import { DonationAlertsUser, type DonationAlertsUserData } from './DonationAlertsUser';
-import { BaseApi } from '../BaseApi';
-import { type DonationAlertsResponseSingleData } from '../DonationAlertsResponse';
+import { DonationAlertsUser, type DonationAlertsUserData } from './donation-alerts-user';
+import { BaseApi } from '../base-api';
+import { type DonationAlertsResponseSingleData } from '../donation-alerts-response';
 
 /**
  * Donation Alerts Users API.
@@ -31,9 +31,9 @@ export class DonationAlertsUsersApi extends BaseApi {
 				url: 'user/oauth',
 				method: 'GET',
 				scope: 'oauth-user-show',
-				auth: true
+				auth: true,
 			},
-			rateLimiterOptions
+			rateLimiterOptions,
 		);
 
 		return new DonationAlertsUser(response.data);
@@ -53,7 +53,7 @@ export class DonationAlertsUsersApi extends BaseApi {
 	 */
 	async getSocketConnectionToken(
 		user: UserIdResolvable,
-		rateLimiterOptions?: RateLimiterRequestOptions
+		rateLimiterOptions?: RateLimiterRequestOptions,
 	): Promise<string> {
 		return (await this.getUser(user, rateLimiterOptions)).socketConnectionToken;
 	}

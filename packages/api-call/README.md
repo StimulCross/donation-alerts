@@ -31,9 +31,9 @@ You can call Donation Alerts API in one of two ways:
 
 The both functions accepts the same arguments:
 
--   `options`: [DonationAlertsApiCallOptions](https://stimulcross.github.io/donation-alerts/interfaces/api_call.DonationAlertsApiCallOptions.html)
--   `accessToken`?: string
--   `fetchOptions`?: [DonationAlertsCallFetchOptions](https://stimulcross.github.io/donation-alerts/types/api_call.DonationAlertsCallFetchOptions.html)
+- `options`: [DonationAlertsApiCallOptions](https://stimulcross.github.io/donation-alerts/interfaces/api_call.DonationAlertsApiCallOptions.html)
+- `accessToken`?: string
+- `fetchOptions`?: [DonationAlertsCallFetchOptions](https://stimulcross.github.io/donation-alerts/types/api_call.DonationAlertsCallFetchOptions.html)
 
 You can do the following to request raw data, for example, from `alerts/donations` endpoint:
 
@@ -43,9 +43,9 @@ import { callDonationAlertsApiRaw } from '@donation-alerts/api-call';
 // Assuming we are inside an async funcation or with top level `await` enabled.
 const response = await callDonationAlertsApiRaw(
 	{
-		url: 'alerts/donations'
+		url: 'alerts/donations',
 	},
-	'<YOUR_ACCESS_TOKEN>'
+	'<YOUR_ACCESS_TOKEN>',
 );
 ```
 
@@ -63,9 +63,9 @@ interface PayloadData {
 
 const response = await callDonationAlertsApi<PayloadData>(
 	{
-		url: '<endpoint>'
+		url: '<endpoint>',
 	},
-	'<your access token>'
+	'<your access token>',
 );
 ```
 

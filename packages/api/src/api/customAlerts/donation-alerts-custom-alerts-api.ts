@@ -1,8 +1,8 @@
 import { type RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
 import { ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
-import { DonationAlertsCustomAlert, type DonationAlertsCustomAlertData } from './DonationAlertsCustomAlert';
-import { BaseApi } from '../BaseApi';
-import { type DonationAlertsResponseSingleData } from '../DonationAlertsResponse';
+import { DonationAlertsCustomAlert, type DonationAlertsCustomAlertData } from './donation-alerts-custom-alert';
+import { BaseApi } from '../base-api';
+import { type DonationAlertsResponseSingleData } from '../donation-alerts-response';
 
 /**
  * Data to send with a custom alert.
@@ -64,7 +64,7 @@ export class DonationAlertsCustomAlertsApi extends BaseApi {
 	async sendCustomAlert(
 		user: UserIdResolvable,
 		data: DonationAlertsSendCustomAlertData,
-		rateLimiterOptions?: RateLimiterRequestOptions
+		rateLimiterOptions?: RateLimiterRequestOptions,
 	): Promise<DonationAlertsCustomAlert> {
 		const response = await this._apiClient.callApi<DonationAlertsResponseSingleData<DonationAlertsCustomAlertData>>(
 			user,
@@ -77,13 +77,13 @@ export class DonationAlertsCustomAlertsApi extends BaseApi {
 					external_id: data.externalId,
 					header: data.header,
 					message: data.message,
-					is_shown: data.shouldShow ?? true ? '0' : '1',
+					is_shown: (data.shouldShow ?? true) ? '0' : '1',
 					image_url: data.imageUrl,
-					sound_url: data.soundUrl
+					sound_url: data.soundUrl,
 				},
-				auth: true
+				auth: true,
 			},
-			rateLimiterOptions
+			rateLimiterOptions,
 		);
 
 		return new DonationAlertsCustomAlert(response.data);

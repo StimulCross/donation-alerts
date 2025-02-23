@@ -1,5 +1,5 @@
 import { type UserIdResolvable } from '@donation-alerts/common';
-import { type AccessTokenWithUserId } from '../AccessToken';
+import { type AccessTokenWithUserId } from '../access-token';
 
 /**
  * Authentication provider that manages access tokens for users.

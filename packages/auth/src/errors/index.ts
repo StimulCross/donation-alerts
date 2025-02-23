@@ -1,3 +1,3 @@
-export { UnregisteredUserError } from './UnregisteredUserError';
-export { MissingScopeError } from './MissingScopeError';
-export { InvalidTokenError } from './InvalidTokenError';
+export { UnregisteredUserError } from './unregistered-user.error';
+export { MissingScopeError } from './missing-scope.error';
+export { InvalidTokenError } from './invalid-token.error';

@@ -2,7 +2,7 @@ import {
 	type QueueEntryLimitReachedBehavior,
 	type RateLimiterRequestOptions,
 	TimeBasedRateLimiter,
-	TimedPassthruRateLimiter
+	TimedPassthruRateLimiter,
 } from '@d-fischer/rate-limiter';
 import {
 	callDonationAlertsApi,
@@ -10,7 +10,7 @@ import {
 	type DonationAlertsApiCallOptions,
 	type DonationAlertsCallFetchOptions,
 	handleDonationAlertsApiResponseError,
-	transformDonationAlertsResponse
+	transformDonationAlertsResponse,
 } from '@donation-alerts/api-call';
 import { type AccessTokenWithUserId, type AuthProvider } from '@donation-alerts/auth';
 import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
@@ -18,11 +18,11 @@ import { createLogger, type Logger, type LoggerOptions } from '@stimulcross/logg
 import { nonenumerable } from '@stimulcross/shared-utils';
 import { stringify } from 'qs';
 import { Memoize } from 'typescript-memoize';
-import { DonationAlertsCentrifugoApi } from './api/centrifugo/DonationAlertsCentrifugoApi';
-import { DonationAlertsCustomAlertsApi } from './api/customAlerts/DonationAlertsCustomAlertsApi';
-import { DonationAlertsDonationsApi } from './api/donations/DonationAlertsDonationsApi';
-import { DonationAlertsMerchandiseApi } from './api/merchandise/DonationAlertsMerchandiseApi';
-import { DonationAlertsUsersApi } from './api/users/DonationAlertsUsersApi';
+import { DonationAlertsCentrifugoApi } from './api/centrifugo/donation-alerts-centrifugo-api';
+import { DonationAlertsCustomAlertsApi } from './api/customAlerts/donation-alerts-custom-alerts-api';
+import { DonationAlertsDonationsApi } from './api/donations/donation-alerts-donations-api';
+import { DonationAlertsMerchandiseApi } from './api/merchandise/donation-alerts-merchandise-api';
+import { DonationAlertsUsersApi } from './api/users/donation-alerts-users-api';
 
 /**
  * Defines the rate limiter options.
@@ -106,6 +106,7 @@ export class ApiClient {
 	@nonenumerable private readonly _rateLimiter:
 		| TimeBasedRateLimiter<DonationAlertsApiCallOptionsInternal, Response>
 		| TimedPassthruRateLimiter<DonationAlertsApiCallOptionsInternal, Response>;
+
 	@nonenumerable private readonly _limitReachedBehavior: QueueEntryLimitReachedBehavior;
 
 	/**
@@ -114,7 +115,6 @@ export class ApiClient {
 	 * @param config The API client configuration.
 	 */
 	constructor(config: ApiConfig) {
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		if (!config.authProvider) {
 			throw new Error('No auth provider given. Please supply the `authProvider` option.');
 		}
@@ -129,17 +129,17 @@ export class ApiClient {
 					bucketSize: 1,
 					doRequest: async (req): Promise<Response> =>
 						await callDonationAlertsApiRaw(req.options, req.accessToken, req.fetchOptions),
-					logger: { minLevel: 'ERROR' }
+					logger: { minLevel: 'ERROR' },
 				}),
-				{ bucketSize: 60, timeFrame: 60000 }
+				{ bucketSize: 60, timeFrame: 60_000 },
 			);
 		} else {
 			this._rateLimiter = new TimeBasedRateLimiter<DonationAlertsApiCallOptionsInternal, Response>({
 				bucketSize: 60,
-				timeFrame: 60000,
+				timeFrame: 60_000,
 				doRequest: async (req): Promise<Response> =>
 					await callDonationAlertsApiRaw(req.options, req.accessToken, req.fetchOptions),
-				logger: { minLevel: 'ERROR' }
+				logger: { minLevel: 'ERROR' },
 			});
 		}
 
@@ -200,7 +200,7 @@ export class ApiClient {
 	async callApi<T = unknown>(
 		user: UserIdResolvable,
 		options: DonationAlertsApiCallOptions,
-		rateLimiterOptions: RateLimiterRequestOptions = {}
+		rateLimiterOptions: RateLimiterRequestOptions = {},
 	): Promise<T> {
 		const userId = extractUserId(user);
 
@@ -228,7 +228,7 @@ export class ApiClient {
 	private async _callApiInternal(
 		options: DonationAlertsApiCallOptions,
 		accessToken?: string,
-		rateLimiterOptions: RateLimiterRequestOptions = {}
+		rateLimiterOptions: RateLimiterRequestOptions = {},
 	): Promise<Response> {
 		const { fetchOptions } = this._config;
 		const type = options.type ?? 'api';
@@ -251,10 +251,10 @@ export class ApiClient {
 						{
 							options,
 							accessToken,
-							fetchOptions
+							fetchOptions,
 						},
-						{ limitReachedBehavior }
-				  )
+						{ limitReachedBehavior },
+					)
 				: await callDonationAlertsApiRaw(options, accessToken, fetchOptions);
 
 		this._logger.debug(`Called API: ${options.method ?? 'GET'} ${options.url} - result: ${response.status}`);

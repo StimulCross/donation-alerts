@@ -4,13 +4,13 @@ import {
 	ReadDocumentation,
 	type CentrifugoChannel,
 	type DonationAlertsApiScope,
-	type UserIdResolvable
+	type UserIdResolvable,
 } from '@donation-alerts/common';
 import {
 	DonationAlertsCentrifugoChannel,
-	type DonationAlertsCentrifugoChannelsResponseData
-} from './DonationAlertsCentrifugoChannel';
-import { BaseApi } from '../BaseApi';
+	type DonationAlertsCentrifugoChannelsResponseData,
+} from './donation-alerts-centrifugo-channel';
+import { BaseApi } from '../base-api';
 
 /**
  * Additional subscribe options.
@@ -57,14 +57,14 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 		clientId: string,
 		channels: Array<CentrifugoChannel | string>,
 		options?: DonationAlertsCentrifugoSubscribeOptions,
-		rateLimiterOptions?: RateLimiterRequestOptions
+		rateLimiterOptions?: RateLimiterRequestOptions,
 	): Promise<DonationAlertsCentrifugoChannel[]> {
 		return await this._genericSubscribeToMultiplePrivateChannels(
 			user,
 			clientId,
 			channels,
 			options,
-			rateLimiterOptions
+			rateLimiterOptions,
 		);
 	}
 
@@ -91,7 +91,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 		user: UserIdResolvable,
 		clientId: string,
 		options?: DonationAlertsCentrifugoSubscribeOptions,
-		rateLimiterOptions?: RateLimiterRequestOptions
+		rateLimiterOptions?: RateLimiterRequestOptions,
 	): Promise<DonationAlertsCentrifugoChannel> {
 		return await this._genericSubscribeToPrivateChannel(
 			user,
@@ -99,7 +99,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 			'$alerts:donation',
 			'oauth-donation-subscribe',
 			options,
-			rateLimiterOptions
+			rateLimiterOptions,
 		);
 	}
 
@@ -126,7 +126,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 		user: UserIdResolvable,
 		clientId: string,
 		options?: DonationAlertsCentrifugoSubscribeOptions,
-		rateLimiterOptions?: RateLimiterRequestOptions
+		rateLimiterOptions?: RateLimiterRequestOptions,
 	): Promise<DonationAlertsCentrifugoChannel> {
 		return await this._genericSubscribeToPrivateChannel(
 			user,
@@ -134,7 +134,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 			'$goals:goal',
 			'oauth-goal-subscribe',
 			options,
-			rateLimiterOptions
+			rateLimiterOptions,
 		);
 	}
 
@@ -161,7 +161,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 		user: UserIdResolvable,
 		clientId: string,
 		options?: DonationAlertsCentrifugoSubscribeOptions,
-		rateLimiterOptions?: RateLimiterRequestOptions
+		rateLimiterOptions?: RateLimiterRequestOptions,
 	): Promise<DonationAlertsCentrifugoChannel> {
 		return await this._genericSubscribeToPrivateChannel(
 			user,
@@ -169,7 +169,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 			'$polls:poll',
 			'oauth-poll-subscribe',
 			options,
-			rateLimiterOptions
+			rateLimiterOptions,
 		);
 	}
 
@@ -178,7 +178,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 		clientId: string,
 		channels: Array<CentrifugoChannel | string>,
 		options?: DonationAlertsCentrifugoSubscribeOptions,
-		rateLimiterOptions?: RateLimiterRequestOptions
+		rateLimiterOptions?: RateLimiterRequestOptions,
 	): Promise<DonationAlertsCentrifugoChannel[]> {
 		const response = await this._apiClient.callApi<DonationAlertsCentrifugoChannelsResponseData>(
 			user,
@@ -189,12 +189,12 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 				jsonBody: {
 					client: clientId,
 					channels:
-						options?.transformChannel ?? true
+						(options?.transformChannel ?? true)
 							? channels.map(channel => `${channel}_${extractUserId(user)}`)
-							: channels
-				}
+							: channels,
+				},
 			},
-			rateLimiterOptions
+			rateLimiterOptions,
 		);
 
 		return response.channels.map(channel => new DonationAlertsCentrifugoChannel(channel));
@@ -206,7 +206,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 		channel: CentrifugoChannel | string,
 		scope?: DonationAlertsApiScope,
 		options?: DonationAlertsCentrifugoSubscribeOptions,
-		rateLimiterOptions?: RateLimiterRequestOptions
+		rateLimiterOptions?: RateLimiterRequestOptions,
 	): Promise<DonationAlertsCentrifugoChannel> {
 		const response = await this._apiClient.callApi<DonationAlertsCentrifugoChannelsResponseData>(
 			user,
@@ -217,10 +217,12 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 				scope: scope as string | undefined,
 				jsonBody: {
 					client: clientId,
-					channels: [`${options?.transformChannel ?? true ? `${channel}_${extractUserId(user)}` : channel}`]
-				}
+					channels: [
+						`${(options?.transformChannel ?? true) ? `${channel}_${extractUserId(user)}` : channel}`,
+					],
+				},
 			},
-			rateLimiterOptions
+			rateLimiterOptions,
 		);
 
 		if (response.channels.length === 0) {

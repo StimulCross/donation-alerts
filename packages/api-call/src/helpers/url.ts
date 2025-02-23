@@ -1,18 +1,22 @@
-import { type DonationAlertsCallType } from '../DonationAlertsApiCallOptions';
+import { type DonationAlertsCallType } from '../donation-alerts-api-call-options';
 
 /** @internal */
 export function getDonationAlertsApiUrl(url: string, type: DonationAlertsCallType): string {
 	switch (type) {
-		case 'api':
+		case 'api': {
 			return `https://www.donationalerts.com/api/v1/${url.replace(/^\//u, '')}`;
+		}
 
-		case 'auth':
+		case 'auth': {
 			return `https://www.donationalerts.com/oauth/${url.replace(/^\//u, '')}`;
+		}
 
-		case 'custom':
+		case 'custom': {
 			return url;
+		}
 
-		default:
+		default: {
 			return url;
+		}
 	}
 }

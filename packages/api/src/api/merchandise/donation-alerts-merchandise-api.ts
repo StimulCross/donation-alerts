@@ -3,14 +3,17 @@ import {
 	ReadDocumentation,
 	type DonationAlertsInputCurrency,
 	type DonationAlertsLocaleCode,
-	type UserIdResolvable
+	type UserIdResolvable,
 } from '@donation-alerts/common';
 import { mapOptional } from '@stimulcross/shared-utils';
-import { DonationAlertsMerchandise, type DonationAlertsMerchandiseData } from './DonationAlertsMerchandise';
-import { DonationAlertsMerchandiseSale, type DonationAlertsMerchandiseSaleData } from './DonationAlertsMerchandiseSale';
-import { createSha256SignatureFromParams } from '../../utils/createSha256SignatureFromParams';
-import { BaseApi } from '../BaseApi';
-import { type DonationAlertsResponseSingleData } from '../DonationAlertsResponse';
+import { DonationAlertsMerchandise, type DonationAlertsMerchandiseData } from './donation-alerts-merchandise';
+import {
+	DonationAlertsMerchandiseSale,
+	type DonationAlertsMerchandiseSaleData,
+} from './donation-alerts-merchandise-sale';
+import { createSha256SignatureFromParams } from '../../utils/create-sha256-signature-from-params';
+import { BaseApi } from '../base-api';
+import { type DonationAlertsResponseSingleData } from '../donation-alerts-response';
 
 /**
  * Title of the merchandise in different locales. At minimum, a title for the `en_US` locale is required.
@@ -217,7 +220,7 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 		user: UserIdResolvable,
 		clientSecret: string,
 		data: DonationAlertsCreateMerchandiseData,
-		rateLimiterOptions?: RateLimiterRequestOptions
+		rateLimiterOptions?: RateLimiterRequestOptions,
 	): Promise<DonationAlertsMerchandise> {
 		const formData = {
 			merchant_identifier: data.merchantIdentifier,
@@ -230,7 +233,7 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 			price_service: data.priceService,
 			url: data.url,
 			img_url: data.imageUrl,
-			end_at_ts: data.endTimestamp
+			end_at_ts: data.endTimestamp,
 		};
 
 		const signature = createSha256SignatureFromParams(formData, clientSecret);
@@ -241,9 +244,9 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 				type: 'api',
 				url: 'merchandise',
 				method: 'POST',
-				formBody: { ...formData, signature }
+				formBody: { ...formData, signature },
 			},
-			rateLimiterOptions
+			rateLimiterOptions,
 		);
 
 		return new DonationAlertsMerchandise(response.data);
@@ -269,7 +272,7 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 		clientSecret: string,
 		merchandiseId: number | string,
 		data: DonationAlertsUpdateMerchandiseData,
-		rateLimiterOptions?: RateLimiterRequestOptions
+		rateLimiterOptions?: RateLimiterRequestOptions,
 	): Promise<DonationAlertsMerchandise> {
 		const formData = {
 			merchant_identifier: data.merchantIdentifier,
@@ -282,7 +285,7 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 			price_service: data.priceService,
 			url: data.url,
 			img_url: data.imageUrl,
-			end_at_ts: data.endTimestamp
+			end_at_ts: data.endTimestamp,
 		};
 
 		const signature = createSha256SignatureFromParams(formData, clientSecret);
@@ -293,9 +296,9 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 				type: 'api',
 				url: `merchandise/${merchandiseId}`,
 				method: 'PUT',
-				formBody: { ...formData, signature }
+				formBody: { ...formData, signature },
 			},
-			rateLimiterOptions
+			rateLimiterOptions,
 		);
 
 		return new DonationAlertsMerchandise(response.data);
@@ -319,7 +322,7 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 		user: UserIdResolvable,
 		clientSecret: string,
 		data: DonationAlertsSendMerchandiseSaleAlertData,
-		rateLimiterOptions?: RateLimiterRequestOptions
+		rateLimiterOptions?: RateLimiterRequestOptions,
 	): Promise<DonationAlertsMerchandiseSale> {
 		const formData = {
 			external_id: data.externalId,
@@ -329,7 +332,7 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 			currency: data.currency,
 			boughtAmount: data.boughtAmount,
 			username: data.username,
-			message: data.message
+			message: data.message,
 		};
 
 		const signature = createSha256SignatureFromParams(formData, clientSecret);
@@ -342,9 +345,9 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 				type: 'api',
 				url: '',
 				method: 'POST',
-				formBody: { ...formData, signature }
+				formBody: { ...formData, signature },
 			},
-			rateLimiterOptions
+			rateLimiterOptions,
 		);
 
 		return new DonationAlertsMerchandiseSale(response.data);

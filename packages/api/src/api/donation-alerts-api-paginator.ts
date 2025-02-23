@@ -1,8 +1,8 @@
 import { type RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
 import { type DonationAlertsApiCallOptions } from '@donation-alerts/api-call';
 import { ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
-import { type DonationAlertsResponseWithMeta } from './DonationAlertsResponse';
-import { type ApiClient } from '../ApiClient';
+import { type DonationAlertsResponseWithMeta } from './donation-alerts-response';
+import { type ApiClient } from '../api-client';
 
 /**
  * Donation Alerts API paginator.
@@ -28,7 +28,7 @@ export class DonationAlertsApiPaginator<D, T> {
 		private readonly _user: UserIdResolvable,
 		private readonly _callOptions: DonationAlertsApiCallOptions,
 		private readonly _mapper: (data: D) => T | T[],
-		private readonly _rateLimiterOptions?: RateLimiterRequestOptions
+		private readonly _rateLimiterOptions?: RateLimiterRequestOptions,
 	) {}
 
 	/**
@@ -190,7 +190,8 @@ export class DonationAlertsApiPaginator<D, T> {
 
 		do {
 			const data = await this.getNext();
-			if (!data.length) {
+
+			if (data.length === 0) {
 				break;
 			}
 
@@ -221,7 +222,8 @@ export class DonationAlertsApiPaginator<D, T> {
 
 		while (!this._isFinished) {
 			const data = await this.getNext();
-			if (!data.length) {
+
+			if (data.length === 0) {
 				break;
 			}
 
@@ -234,9 +236,9 @@ export class DonationAlertsApiPaginator<D, T> {
 			this._user,
 			{
 				query: { page },
-				...this._callOptions
+				...this._callOptions,
 			},
-			this._rateLimiterOptions
+			this._rateLimiterOptions,
 		);
 	}
 

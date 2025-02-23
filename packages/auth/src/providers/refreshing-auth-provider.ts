@@ -2,8 +2,8 @@ import { callDonationAlertsApi, HttpError } from '@donation-alerts/api-call';
 import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { nonenumerable } from '@stimulcross/shared-utils';
 import { EventEmitter } from 'typed-event-emitter';
-import { type AuthProvider } from './AuthProvider';
-import { type AccessToken, type AccessTokenWithUserId, isAccessTokenExpired } from '../AccessToken';
+import { type AuthProvider } from './auth-provider';
+import { type AccessToken, type AccessTokenWithUserId, isAccessTokenExpired } from '../access-token';
 import { InvalidTokenError, MissingScopeError, UnregisteredUserError } from '../errors';
 import { compareScopes, exchangeCode, refreshAccessToken } from '../helpers';
 
@@ -121,7 +121,7 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 				this._config.clientId,
 				this._config.clientSecret,
 				accessToken.refreshToken!,
-				this._config.scopes
+				this._config.scopes,
 			);
 			isTokenRefreshed = true;
 		}
@@ -129,7 +129,7 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 		try {
 			const user = await callDonationAlertsApi<{ data: { id: number } }>(
 				{ type: 'api', url: 'user/oauth' },
-				accessToken.accessToken
+				accessToken.accessToken,
 			);
 
 			userId = user.data.id;
@@ -138,7 +138,7 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 				throw new MissingScopeError(
 					`Failed to query the user associated with the token.
 Received 401 error: "${e.message}".
-The access token must include "oauth-user-show" scope to query the user associated with the token.`
+The access token must include "oauth-user-show" scope to query the user associated with the token.`,
 				);
 			}
 
@@ -169,7 +169,7 @@ The access token must include "oauth-user-show" scope to query the user associat
 			this._config.clientId,
 			this._config.clientSecret,
 			this._config.redirectUri,
-			code
+			code,
 		);
 
 		token.scopes = scopes;
@@ -180,7 +180,7 @@ The access token must include "oauth-user-show" scope to query the user associat
 
 		const user = await callDonationAlertsApi<{ data: { id: number } }>(
 			{ type: 'api', url: 'user/oauth' },
-			token.accessToken
+			token.accessToken,
 		);
 
 		this.addUser(user.data.id, token);
@@ -203,7 +203,7 @@ The access token must include "oauth-user-show" scope to query the user associat
 
 		if (!this._registry.has(userId)) {
 			throw new UnregisteredUserError(
-				`User ${userId} not found in the auth provider registry. Use {StaticAuthProvider#addUser} method to add the user first.`
+				`User ${userId} not found in the auth provider registry. Use {StaticAuthProvider#addUser} method to add the user first.`,
 			);
 		}
 
@@ -220,7 +220,7 @@ The access token must include "oauth-user-show" scope to query the user associat
 
 		if (!this._registry.has(userId)) {
 			throw new UnregisteredUserError(
-				`User ${userId} not found in the auth provider registry. Use {RefreshingAuthProvider#addUser} method to add the user first.`
+				`User ${userId} not found in the auth provider registry. Use {RefreshingAuthProvider#addUser} method to add the user first.`,
 			);
 		}
 
@@ -249,7 +249,7 @@ The access token must include "oauth-user-show" scope to query the user associat
 
 		if (!this._registry.has(userId)) {
 			throw new UnregisteredUserError(
-				`User ${userId} not found in the auth provider registry. Use {RefreshingAuthProvider#addUser} method to add the user first.`
+				`User ${userId} not found in the auth provider registry. Use {RefreshingAuthProvider#addUser} method to add the user first.`,
 			);
 		}
 
@@ -262,7 +262,7 @@ The access token must include "oauth-user-show" scope to query the user associat
 		const newTokenPromise = refreshAccessToken(
 			this._config.clientId,
 			this._config.clientSecret,
-			currentToken.refreshToken
+			currentToken.refreshToken,
 		);
 		this._newTokenPromises.set(userId, newTokenPromise);
 

@@ -2,7 +2,7 @@ import {
 	DataObject,
 	rawDataSymbol,
 	ReadDocumentation,
-	type DonationAlertsOutputCurrency
+	type DonationAlertsOutputCurrency,
 } from '@donation-alerts/common';
 import { mapNullable } from '@stimulcross/shared-utils';
 

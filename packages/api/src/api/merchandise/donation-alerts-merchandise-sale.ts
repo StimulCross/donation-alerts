@@ -2,14 +2,14 @@ import {
 	DataObject,
 	rawDataSymbol,
 	ReadDocumentation,
-	type DonationAlertsOutputCurrency
+	type DonationAlertsOutputCurrency,
 } from '@donation-alerts/common';
 import { mapNullable } from '@stimulcross/shared-utils';
 
 /**
  * The type of the generated alert.
  */
-// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
+
 export type DonationAlertsMerchandiseSaleAlertType = 'merchandise-sale' | string;
 
 /** @internal */

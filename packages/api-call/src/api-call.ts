@@ -1,6 +1,9 @@
 import fetch from 'cross-fetch';
 import { stringify } from 'qs';
-import { type DonationAlertsApiCallOptions, type DonationAlertsCallFetchOptions } from './DonationAlertsApiCallOptions';
+import {
+	type DonationAlertsApiCallOptions,
+	type DonationAlertsCallFetchOptions,
+} from './donation-alerts-api-call-options';
 import { handleDonationAlertsApiResponseError, transformDonationAlertsResponse } from './helpers/transform';
 import { getDonationAlertsApiUrl } from './helpers/url';
 
@@ -14,15 +17,17 @@ import { getDonationAlertsApiUrl } from './helpers/url';
 export async function callDonationAlertsApiRaw(
 	options: DonationAlertsApiCallOptions,
 	accessToken?: string,
-	fetchOptions: DonationAlertsCallFetchOptions = {}
+	fetchOptions: DonationAlertsCallFetchOptions = {},
 ): Promise<Response> {
 	const type = options.type ?? 'api';
 	const url = getDonationAlertsApiUrl(options.url, type);
 	const params = stringify(options.query, { arrayFormat: 'repeat', addQueryPrefix: true });
-	// eslint-disable-next-line @typescript-eslint/naming-convention
-	const headers = new Headers({ Accept: 'application/json' });
+
+	const headers = new Headers();
+	headers.append('Accept', 'application/json');
 
 	let body: string | undefined;
+
 	if (options.jsonBody) {
 		body = JSON.stringify(options.jsonBody);
 		headers.append('Content-Type', 'application/json');
@@ -39,7 +44,7 @@ export async function callDonationAlertsApiRaw(
 		...fetchOptions,
 		method: options.method ?? 'GET',
 		headers,
-		body: body ?? null
+		body: body ?? null,
 	};
 
 	return await fetch(`${url}${params}`, requestOptions);
@@ -57,7 +62,7 @@ export async function callDonationAlertsApiRaw(
 export async function callDonationAlertsApi<T>(
 	options: DonationAlertsApiCallOptions,
 	accessToken?: string,
-	fetchOptions: DonationAlertsCallFetchOptions = {}
+	fetchOptions: DonationAlertsCallFetchOptions = {},
 ): Promise<T> {
 	const response = await callDonationAlertsApiRaw(options, accessToken, fetchOptions);
 

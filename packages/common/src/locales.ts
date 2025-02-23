@@ -37,82 +37,82 @@ export interface DonationAlertsLocale {
 export const locales: DonationAlertsLocale[] = [
 	{
 		code: 'be_BY',
-		name: 'Belarusian'
+		name: 'Belarusian',
 	},
 	{
 		code: 'de_DE',
-		name: 'German'
+		name: 'German',
 	},
 	{
 		code: 'en_US',
-		name: 'English (USA)'
+		name: 'English (USA)',
 	},
 	{
 		code: 'es_ES',
-		name: 'Spanish'
+		name: 'Spanish',
 	},
 	{
 		code: 'es_US',
-		name: 'Spanish (USA)'
+		name: 'Spanish (USA)',
 	},
 	{
 		code: 'et_EE',
-		name: 'Estonian'
+		name: 'Estonian',
 	},
 	{
 		code: 'fr_FR',
-		name: 'French'
+		name: 'French',
 	},
 	{
 		code: 'he_HE',
-		name: 'Hebrew'
+		name: 'Hebrew',
 	},
 	{
 		code: 'it_IT',
-		name: 'Italian'
+		name: 'Italian',
 	},
 	{
 		code: 'ka_GE',
-		name: 'Georgian'
+		name: 'Georgian',
 	},
 	{
 		code: 'kk_KZ',
-		name: 'Kazakh'
+		name: 'Kazakh',
 	},
 	{
 		code: 'ko_KR',
-		name: 'Korean'
+		name: 'Korean',
 	},
 	{
 		code: 'lv_LV',
-		name: 'Latvian'
+		name: 'Latvian',
 	},
 	{
 		code: 'pl_PL',
-		name: 'Polish'
+		name: 'Polish',
 	},
 	{
 		code: 'pt_BR',
-		name: 'Portuguese (Brazil)'
+		name: 'Portuguese (Brazil)',
 	},
 	{
 		code: 'ru_RU',
-		name: 'Russian'
+		name: 'Russian',
 	},
 	{
 		code: 'sv_SE',
-		name: 'Swedish'
+		name: 'Swedish',
 	},
 	{
 		code: 'tr_TR',
-		name: 'Turkish'
+		name: 'Turkish',
 	},
 	{
 		code: 'uk_UA',
-		name: 'Ukrainian'
+		name: 'Ukrainian',
 	},
 	{
 		code: 'zh_CN',
-		name: 'Chinese'
-	}
+		name: 'Chinese',
+	},
 ];

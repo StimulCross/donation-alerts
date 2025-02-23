@@ -40,7 +40,7 @@ const apiClient = new ApiClient({
 
 const userEventsClient = new UserEventsClient({
 	user: userId,
-	apiClient: apiClient
+	apiClient: apiClient,
 });
 ```
 
@@ -52,7 +52,7 @@ After creating a `UserEventsClient` instance, you can now listen to events of yo
 import {
 	DonationAlertsDonationEvent,
 	DonationAlertsGoalUpdateEvent,
-	DonationAlertsPollUpdateEvent
+	DonationAlertsPollUpdateEvent,
 } from '@donation-alerts/events';
 
 const donationsListener = userEventsClient.onDonation((evt: DonationAlertsDonationEvent) => {
@@ -142,7 +142,7 @@ const apiClient = new ApiClient({
 });
 
 const eventsClient = new EventsClient({
-	apiClient: apiClient
+	apiClient: apiClient,
 });
 ```
 
@@ -202,7 +202,7 @@ Creating event listeners is almost the same as for `UserEventsClient`, but you a
 import {
 	DonationAlertsDonationEvent,
 	DonationAlertsGoalUpdateEvent,
-	DonationAlertsPollUpdateEvent
+	DonationAlertsPollUpdateEvent,
 } from '@donation-alerts/events';
 
 const userId = 123456789;
