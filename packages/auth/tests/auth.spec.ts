@@ -1,12 +1,13 @@
-import { InvalidTokenError, MissingScopeError, StaticAuthProvider, UnregisteredUserError } from '@donation-alerts/auth';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { InvalidTokenError, MissingScopeError, StaticAuthProvider, UnregisteredUserError } from '../src';
 
 const CLIENT_ID = 'TEST_CLIENT_ID';
 const SCOPES = ['oauth-user-show', 'oauth-donation-index'];
 const MISSING_SCOPE = 'oauth-custom_alert-store';
-const USER_ID = 12345678;
+const USER_ID = 12_345_678;
 const ACCESS_TOKEN = 'TEST_ACCESS_TOKEN';
 
-describe('Donation Alerts Auth Test Suits', () => {
+describe('auth', () => {
 	describe('Static auth provider', () => {
 		const provider = new StaticAuthProvider(CLIENT_ID, SCOPES);
 
@@ -46,7 +47,7 @@ describe('Donation Alerts Auth Test Suits', () => {
 		});
 
 		it('should throw "UnregisteredUserError" if user was not added', async () => {
-			await expect(provider.getAccessTokenForUser(123456)).rejects.toThrow(UnregisteredUserError);
+			await expect(provider.getAccessTokenForUser(123_456)).rejects.toThrow(UnregisteredUserError);
 		});
 
 		it('should throw "MissingScopeError" if token does not include requested scope', async () => {
