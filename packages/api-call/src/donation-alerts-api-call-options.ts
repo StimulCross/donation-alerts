@@ -46,7 +46,7 @@ export interface DonationAlertsApiCallOptions {
 	/**
 	 * The query parameters to send with the API call.
 	 */
-	query?: Record<string, string | string[] | number | number[] | undefined>;
+	query?: Record<string, string | string[] | number | number[] | undefined | null>;
 
 	/**
 	 * The JSON body to send with the API call.
