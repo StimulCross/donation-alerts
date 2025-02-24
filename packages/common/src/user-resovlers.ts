@@ -1,4 +1,4 @@
-const NUMERIC_STRING_REGEX = /^\d+$/gu;
+const NUMERIC_STRING_REGEX = /^\d+$/u;
 
 /**
  * A type that represents a user and contains a user ID.
