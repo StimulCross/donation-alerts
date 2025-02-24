@@ -10,7 +10,7 @@
 	"description": "",
 	"private": true,
 	"engines": {
-		"node": ">=16"
+		"node": ">=20"
 	},
 	"scripts": {
 		"lint": "eslint .",

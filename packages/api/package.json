@@ -13,7 +13,7 @@
 		"directory": "packages/api"
 	},
 	"engines": {
-		"node": ">=16"
+		"node": ">=20"
 	},
 	"keywords": [
 		"donation-alerts",

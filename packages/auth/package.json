@@ -13,7 +13,7 @@
 		"directory": "packages/auth"
 	},
 	"engines": {
-		"node": ">=16"
+		"node": ">=20"
 	},
 	"keywords": [
 		"donation-alerts",
