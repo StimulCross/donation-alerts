@@ -26,7 +26,7 @@ function createAccessTokenFromData(data: AccessTokenData): AccessToken {
  * @param redirectUri The redirect URI.
  * @param code The authorization code.
  */
-export async function exchangeCode(
+export async function getAccessToken(
 	clientId: string,
 	clientSecret: string,
 	redirectUri: string,

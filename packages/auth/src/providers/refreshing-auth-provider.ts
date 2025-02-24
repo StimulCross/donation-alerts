@@ -5,7 +5,7 @@ import { EventEmitter } from 'typed-event-emitter';
 import { type AuthProvider } from './auth-provider';
 import { type AccessToken, type AccessTokenWithUserId, isAccessTokenExpired } from '../access-token';
 import { InvalidTokenError, MissingScopeError, UnregisteredUserError } from '../errors';
-import { compareScopes, exchangeCode, refreshAccessToken } from '../helpers';
+import { compareScopes, getAccessToken, refreshAccessToken } from '../helpers';
 
 /**
  * Configuration for {@link RefreshingAuthProvider}.
@@ -165,7 +165,7 @@ The access token must include "oauth-user-show" scope to query the user associat
 			throw new Error('Exchanging authorization code requires "redirectUri" option to be specified');
 		}
 
-		const token = await exchangeCode(
+		const token = await getAccessToken(
 			this._config.clientId,
 			this._config.clientSecret,
 			this._config.redirectUri,
