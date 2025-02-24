@@ -134,7 +134,7 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 
 			userId = user.data.id;
 		} catch (e) {
-			if (e instanceof HttpError && e.statusCode === 401) {
+			if (e instanceof HttpError && e.status === 401) {
 				throw new MissingScopeError(
 					`Failed to query the user associated with the token.
 Received 401 error: "${e.message}".
