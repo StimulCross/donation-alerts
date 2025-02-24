@@ -1,7 +1,4 @@
 {
-	"workspaces": [
-		"packages/*"
-	],
 	"version": "3.0.1",
 	"name": "donation-alerts",
 	"repository": "git+https://github.com/StimulCross/donation-alerts.git",
@@ -9,6 +6,7 @@
 	"license": "MIT",
 	"description": "",
 	"private": true,
+	"packageManager": "pnpm@9.15.4",
 	"engines": {
 		"node": ">=20"
 	},
@@ -17,14 +15,19 @@
 		"lint:fix": "eslint . --fix",
 		"format:check": "prettier --config \".prettierrc.js\" --check packages",
 		"format:fix": "prettier --config \".prettierrc.js\" --write packages",
-		"build": "tsukuru",
-		"rebuild": "tsukuru --clean",
+		"build": "pnpm -r run build",
+		"rebuild": "pnpm -r run rebuild",
 		"prepare": "husky",
-		"clean:build": "rimraf ./packages/**/es ./packages/**/lib ./packages/**/tsconfig.tsbuildinfo --glob",
+		"clean": "pnpm -r --parallel run clean",
 		"clean:docs": "rimraf ./docs",
 		"docs": "typedoc",
 		"test": "vitest",
-		"test:cov": "vitest --coverage"
+		"test:cov": "vitest --coverage",
+		"common": "pnpm --filter=@donation-alerts/common",
+		"api-call": "pnpm --filter=@donation-alerts/api-call",
+		"auth": "pnpm --filter=@donation-alerts/auth",
+		"api": "pnpm --filter=@donation-alerts/api",
+		"events": "pnpm --filter=@donation-alerts/events"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^19.7.1",
@@ -44,9 +47,8 @@
 		"prettier": "^3.0.3",
 		"rimraf": "^5.0.5",
 		"ts-node": "^10.9.1",
-		"tsukuru": "^0.8.1",
 		"typedoc": "~0.24.8",
-		"typescript": "^5.0.4",
+		"typescript": "^5.7.3",
 		"vitest": "^3.0.6"
 	}
 }

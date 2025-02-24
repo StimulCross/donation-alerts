@@ -1,9 +1,11 @@
 # npm & yarn
+
 node_modules
 .yarn
 package-lock.json
 yarn.lock
 yalc.lock
+pnpm-lock.yaml
 .yalc
 *.tgz
 .yarn-integrity
@@ -12,8 +14,7 @@ yalc.lock
 /.idea
 /.vscode
 generatedDocs
-packages/*/es
-packages/*/lib
+packages/*/dist
 packages/*/docs.json
 docs*.json
 *.tsbuildinfo

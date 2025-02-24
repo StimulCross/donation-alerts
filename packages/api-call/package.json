@@ -22,31 +22,38 @@
 		"tips"
 	],
 	"license": "MIT",
-	"main": "lib",
-	"types": "lib",
+	"main": "./dist/cjs/index.js",
+	"module": "./dist/esm/index.js",
+	"types": "./dist/cjs/index.d.ts",
 	"exports": {
 		".": {
-			"require": "./lib/index.js",
-			"import": "./es/index.mjs",
-			"types": "./lib/index.d.ts"
+			"types": "./dist/cjs/index.d.ts",
+			"require": "./dist/cjs/index.js",
+			"import": "./dist/esm/index.js",
+			"default": "./dist/cjs/index.js"
 		}
 	},
+	"scripts": {
+		"build:cjs": "tsc -p tsconfig.build.cjs.json",
+		"build:esm": "tsc -p tsconfig.build.esm.json",
+		"build": "pnpm run build:cjs && pnpm run build:esm",
+		"rebuild": "pnpm run clean && pnpm run build",
+		"clean": "rimraf dist"
+	},
 	"files": [
-		"lib",
-		"es",
+		"dist",
 		"LICENSE",
 		"README.md",
-		"!lib/**/*.d.ts.map",
-		"!es/**/*.d.ts",
-		"!es/**/*.d.ts.map"
+		"!dist/**/*.d.ts.map",
+		"!dist/esm/**/*.d.ts"
 	],
 	"dependencies": {
-		"@donation-alerts/common": "^3.0.1",
-		"@stimulcross/shared-utils": "^0.2.3",
+		"@donation-alerts/common": "3.0.1",
 		"cross-fetch": "^4.0.0",
-		"qs": "^6.11.2"
+		"qs": "^6.14.0"
 	},
 	"devDependencies": {
-		"@types/qs": "^6.9.9"
+		"@types/qs": "^6.9.18",
+		"rimraf": "^6.0.1"
 	}
 }

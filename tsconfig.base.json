@@ -2,8 +2,8 @@
 	"compilerOptions": {
 		"composite": true,
 		"module": "commonjs",
-		"target": "es2019",
-		"lib": ["es2019", "es2021.promise", "es2022.error", "dom"],
+		"target": "ES2020",
+		"lib": ["ESNext", "DOM"],
 		"moduleResolution": "node",
 		"declaration": true,
 		"forceConsistentCasingInFileNames": true,
@@ -15,6 +15,5 @@
 		"downlevelIteration": true,
 		"isolatedModules": true,
 		"declarationMap": true
-	},
-	"exclude": ["node_modules", "lib", "es"]
+	}
 }

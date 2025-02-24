@@ -24,29 +24,35 @@
 	],
 	"sideEffects": false,
 	"license": "MIT",
-	"main": "lib",
-	"module": "es",
-	"types": "lib",
+	"main": "./dist/cjs/index.js",
+	"module": "./dist/esm/index.js",
+	"types": "./dist/cjs/index.d.ts",
 	"exports": {
 		".": {
-			"require": "./lib/index.js",
-			"import": "./es/index.mjs",
-			"types": "./lib/index.d.ts"
+			"types": "./dist/cjs/index.d.ts",
+			"require": "./dist/cjs/index.js",
+			"import": "./dist/esm/index.js",
+			"default": "./dist/cjs/index.js"
 		}
 	},
+	"scripts": {
+		"build:cjs": "tsc -p tsconfig.build.cjs.json",
+		"build:esm": "tsc -p tsconfig.build.esm.json",
+		"build": "pnpm run build:cjs && pnpm run build:esm",
+		"rebuild": "pnpm run clean && pnpm run build",
+		"clean": "rimraf dist"
+	},
 	"files": [
-		"lib",
-		"es",
+		"dist",
 		"LICENSE",
 		"README.md",
-		"!lib/**/*.d.ts.map",
-		"!es/**/*.d.ts",
-		"!es/**/*.d.ts.map"
+		"!dist/**/*.d.ts.map",
+		"!dist/esm/**/*.d.ts"
 	],
 	"dependencies": {
 		"@d-fischer/isomorphic-ws": "^7.0.0",
 		"@d-fischer/typed-event-emitter": "^3.3.2",
-		"@donation-alerts/common": "^3.0.1",
+		"@donation-alerts/common": "3.0.1",
 		"@stimulcross/logger": "^6.0.0",
 		"@stimulcross/shared-utils": "^0.2.3",
 		"centrifuge": "2.8.5",
@@ -58,8 +64,10 @@
 		"@donation-alerts/api": "3.0.1"
 	},
 	"devDependencies": {
-		"@donation-alerts/api": "^3.0.1",
+		"@donation-alerts/api": "3.0.1",
 		"@types/detect-node": "^2.0.1",
-		"@types/ws": "^8.5.8"
+		"@types/ws": "^8.5.8",
+		"rimraf": "^6.0.1",
+		"tslib": "^2.8.1"
 	}
 }

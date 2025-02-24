@@ -10,7 +10,7 @@ const globs = {
 	ts: [`${packagesDir}/**/*.ts`, `${packagesDir}/**/*.cts`, `${packagesDir}/**/*.mts`],
 	jsSpec: [`${packagesDir}/**/*.spec.js`, `${packagesDir}/**/*.spec.cjs`, `${packagesDir}/**/*.spec.mjs`],
 	tsSpec: [`${packagesDir}/**/*.spec.ts`, `${packagesDir}/**/*.spec.cts`, `${packagesDir}/**/*.spec.mts`],
-	ignore: ['**/lib', '**/es', '**/node_modules', '.idea', 'coverage', '**/*.d.ts'],
+	ignore: ['**/dist', '**/node_modules', '.idea', 'coverage', '**/*.d.ts'],
 };
 
 const memberNames = [

@@ -1,27 +1,4 @@
 {
 	"extends": "../../tsconfig.base.json",
-	"compilerOptions": {
-		"rootDir": "src",
-		"outDir": "lib",
-		"paths": {
-			"@donation-alerts/api": ["../api/src"],
-			"@donation-alerts/common": ["../common/src"]
-		},
-		"esModuleInterop": true
-	},
-	"references": [
-		{
-			"path": "../api"
-		},
-		{
-			"path": "../auth"
-		},
-		{
-			"path": "../api-call"
-		},
-		{
-			"path": "../common"
-		}
-	],
-	"exclude": ["node_modules", "lib", "es"]
+	"exclude": ["node_modules", "dist"]
 }
