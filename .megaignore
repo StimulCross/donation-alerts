@@ -1,0 +1,9 @@
++sync:.megaignore
+-d:node_modules
+-d:es
+-d:lib
+-f:yarn.lock
+-f:yalc.lock
+-f:package-lock.json
+-f:pnpm-lock.yaml
+
