@@ -5,7 +5,7 @@ export function createSha256SignatureFromParams(params: Record<PropertyKey, unkn
 	const valuesString = Object.values(flattenObject(params))
 		.filter(v => v !== undefined)
 		.map(e => String(e))
-		.sort()
+		.toSorted()
 		.join('');
 
 	return new sha256().update(valuesString + secret).digest('hex');
