@@ -1,7 +1,7 @@
+import { EventEmitter } from '@d-fischer/typed-event-emitter';
 import { callDonationAlertsApi, HttpError } from '@donation-alerts/api-call';
 import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { nonenumerable } from '@stimulcross/shared-utils';
-import { EventEmitter } from 'typed-event-emitter';
 import { type AuthProvider } from './auth-provider';
 import { type AccessToken, type AccessTokenWithUserId, isAccessTokenExpired } from '../access-token';
 import { InvalidTokenError, MissingScopeError, UnregisteredUserError } from '../errors';
