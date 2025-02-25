@@ -114,9 +114,7 @@ export class UserEventsClient extends EventEmitter {
 		this._userId = extractUserId(config.user);
 		this._apiClient = config.apiClient;
 
-		// Something wrong with Centrifuge types.
-
-		this._centrifuge = new Centrifuge.default('wss://centrifugo.donationalerts.com/connection/websocket', {
+		this._centrifuge = new Centrifuge('wss://centrifugo.donationalerts.com/connection/websocket', {
 			websocket: WebSocket,
 			pingInterval: 15_000,
 			ping: true,
