@@ -343,7 +343,7 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 			user,
 			{
 				type: 'api',
-				url: '',
+				url: 'merchandise_sale',
 				method: 'POST',
 				formBody: { ...formData, signature },
 			},
