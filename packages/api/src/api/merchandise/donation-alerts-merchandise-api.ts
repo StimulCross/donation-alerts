@@ -305,6 +305,52 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	}
 
 	/**
+	 * A combined method which allows updating merchandise, or create if it doesn't exist yet.
+	 *
+	 * @param user The ID of the user to use the access token of.
+	 * @param clientSecret The application client secret. Keep in mind that the secret must be associated with the
+	 * application that the user has authorized.
+	 * @param data The merchandise data to create.
+	 * @param rateLimiterOptions Rate limiter options.
+	 *
+	 * @throws {@link HttpError} if response status code is out of 200-299 range.
+	 * @throws {@link UnregisteredUserError} if the user you are trying to get is not registered in authentication provider.
+	 */
+	async createOrUpdateMerchandise(
+		user: UserIdResolvable,
+		clientSecret: string,
+		data: DonationAlertsCreateMerchandiseData,
+		rateLimiterOptions?: RateLimiterRequestOptions,
+	): Promise<DonationAlertsMerchandise> {
+		const formData = {
+			title: data.title,
+			is_active: mapOptional(data.isActive, (v: boolean) => (v ? '1' : '0')),
+			is_percentage: mapOptional(data.isPercentage, (v: boolean) => (v ? '1' : '0')),
+			currency: data.currency,
+			price_user: data.priceUser,
+			price_service: data.priceService,
+			url: data.url,
+			img_url: data.imageUrl,
+			end_at_ts: data.endTimestamp,
+		};
+
+		const signature = createSha256SignatureFromParams(formData, clientSecret);
+
+		const response = await this._apiClient.callApi<DonationAlertsResponseSingleData<DonationAlertsMerchandiseData>>(
+			user,
+			{
+				type: 'api',
+				url: `merchandise/${data.merchantIdentifier}/${data.merchandiseIdentifier}`,
+				method: 'POST',
+				formBody: { ...formData, signature },
+			},
+			rateLimiterOptions,
+		);
+
+		return new DonationAlertsMerchandise(response.data);
+	}
+
+	/**
 	 * Creates new merchandise sale alert.
 	 *
 	 * @param user DonationAlerts' user ID to which this merchandise sale referenced.
