@@ -22,30 +22,29 @@
 		"tips"
 	],
 	"license": "MIT",
-	"main": "./dist/cjs/index.js",
-	"module": "./dist/esm/index.js",
-	"types": "./dist/cjs/index.d.ts",
+	"main": "cjs",
+	"module": "es",
+	"types": "cjs",
 	"exports": {
 		".": {
-			"types": "./dist/cjs/index.d.ts",
-			"require": "./dist/cjs/index.js",
-			"import": "./dist/esm/index.js",
-			"default": "./dist/cjs/index.js"
+			"types": "./cjs/index.d.ts",
+			"require": "./cjs/index.js",
+			"import": "./es/index.mjs",
+			"default": "./cjs/index.js"
 		}
 	},
 	"scripts": {
-		"build:cjs": "tsc -p tsconfig.build.cjs.json",
-		"build:esm": "tsc -p tsconfig.build.esm.json",
-		"build": "pnpm run build:cjs && pnpm run build:esm",
-		"rebuild": "pnpm run clean && pnpm run build",
-		"clean": "rimraf dist"
+		"build": "tsukuru -c tsconfig.build.json",
+		"rebuild": "tsukuru --clean -c tsconfig.build.json",
+		"clean": "rimraf es && rimraf cjs"
 	},
 	"files": [
-		"dist",
+		"cjs",
+		"es",
 		"LICENSE",
 		"README.md",
-		"!dist/**/*.d.ts.map",
-		"!dist/esm/**/*.d.ts"
+		"!cjs/**/*.d.ts.map",
+		"!es/**/*.d.ts.map"
 	],
 	"dependencies": {
 		"@d-fischer/rate-limiter": "^1.0.1",
@@ -64,6 +63,7 @@
 		"@donation-alerts/auth": "3.0.1",
 		"@types/qs": "^6.9.18",
 		"rimraf": "^6.0.1",
-		"tslib": "^2.8.1"
+		"tslib": "^2.8.1",
+		"tsukuru": "^0.8.3"
 	}
 }

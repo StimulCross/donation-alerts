@@ -14,7 +14,8 @@ pnpm-lock.yaml
 /.idea
 /.vscode
 generatedDocs
-packages/*/dist
+packages/*/cjs
+packages/*/es
 packages/*/docs.json
 docs*.json
 *.tsbuildinfo
@@ -25,3 +26,4 @@ yarn-debug.log*
 yarn-error.log*
 .pnp.*
 coverage
+.turbo
