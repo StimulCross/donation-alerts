@@ -371,5 +371,6 @@ export class UserEventsClient extends EventEmitter {
 
 	private _unsubscribe(subscription: Subscription): void {
 		subscription.unsubscribe();
+		subscription.removeAllListeners();
 	}
 }
