@@ -55,7 +55,7 @@ interface DisconnectContext {
 export interface UserEventsClientConfig {
 	user: UserIdResolvable;
 	apiClient: ApiClient;
-	logger?: LoggerOptions;
+	logger?: Partial<LoggerOptions>;
 }
 
 /**

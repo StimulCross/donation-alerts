@@ -14,7 +14,7 @@ import { UserEventsClient } from './user-events-client';
  */
 export interface EventsClientConfig {
 	apiClient: ApiClient;
-	logger?: LoggerOptions;
+	logger?: Partial<LoggerOptions>;
 }
 /**
  * Donation Alerts events client that allows listen to various events, such as new donations, goal updates,
