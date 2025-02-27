@@ -1,4 +1,5 @@
 {
+	"$schema": "https://typedoc.org/schema.json",
 	"name": "Donation Alerts",
 	"out": "docs",
 	"exclude": [
@@ -6,8 +7,8 @@
 		"**/node_modules/**",
 		"**/*.spec.ts",
 		"**/es/**",
-		"**/lib/**",
-		"packages/**/lib/*",
+		"**/cjs/**",
+		"packages/**/cjs/*",
 		"packages/**/es/*"
 	],
 	"entryPoints": ["packages/*"],
