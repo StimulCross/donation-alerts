@@ -90,7 +90,7 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	 * @param user The ID of the user.
 	 * @param token The initial token data.
 	 */
-	addUser(user: UserIdResolvable, token: AccessToken): void {
+	addUser(user: UserIdResolvable, token: AccessToken): AccessTokenWithUserId {
 		const userId = extractUserId(user);
 
 		this._validateToken(token, userId);
@@ -100,6 +100,7 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 		}
 
 		this._registry.set(userId, token);
+		return { userId, ...token };
 	}
 
 	/**
