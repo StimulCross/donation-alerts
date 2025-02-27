@@ -20,7 +20,7 @@ import {
 	type SubscriptionEvents,
 	type UnsubscribeContext,
 } from 'centrifuge';
-import * as Centrifuge from 'centrifuge';
+import Centrifuge from 'centrifuge';
 import {
 	DonationAlertsDonationEvent,
 	type DonationAlertsDonationEventData,

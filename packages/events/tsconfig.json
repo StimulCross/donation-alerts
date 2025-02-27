@@ -1,4 +1,7 @@
 {
 	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"esModuleInterop": true
+	},
 	"exclude": ["node_modules", "dist"]
 }
