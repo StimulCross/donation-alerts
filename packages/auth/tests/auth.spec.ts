@@ -1,5 +1,4 @@
 import * as apiCall from '@donation-alerts/api-call';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
 	AccessToken,
 	AccessTokenWithUserId,
@@ -87,8 +86,8 @@ describe('auth', () => {
 
 		beforeEach(() => {
 			provider = new RefreshingAuthProvider(config);
-			vi.restoreAllMocks();
-			vi.spyOn(apiCall, 'callDonationAlertsApi').mockResolvedValue({ data: { id: 12_345 } });
+			jest.restoreAllMocks();
+			jest.spyOn(apiCall, 'callDonationAlertsApi').mockResolvedValue({ data: { id: 12_345 } });
 		});
 
 		it('should return correct client ID', () => {
@@ -128,10 +127,10 @@ describe('auth', () => {
 			};
 
 			// Подменяем refreshAccessToken из модуля helpers, чтобы избежать реального вызова API
-			const refreshSpy = vi.spyOn(helpers, 'refreshAccessToken').mockResolvedValue(updatedToken);
+			const refreshSpy = jest.spyOn(helpers, 'refreshAccessToken').mockResolvedValue(updatedToken);
 
 			// Подписываемся на событие onRefresh, чтобы отследить его эмиссию
-			const onRefreshSpy = vi.fn();
+			const onRefreshSpy = jest.fn();
 			provider.onRefresh(onRefreshSpy);
 
 			// Вызываем метод addUserForToken, который должен использовать подменённый refreshAccessToken

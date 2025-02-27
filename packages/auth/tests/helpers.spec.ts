@@ -1,11 +1,10 @@
 import { callDonationAlertsApi } from '@donation-alerts/api-call';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AccessToken, compareScopes, getAccessToken, MissingScopeError, refreshAccessToken } from '../src';
 
-vi.mock('@donation-alerts/api-call');
+jest.mock('@donation-alerts/api-call');
 
 beforeEach(() => {
-	vi.clearAllMocks();
+	jest.clearAllMocks();
 });
 
 describe('getAccessToken', () => {

@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest';
 import { DataObject, getRawData, rawDataSymbol } from '../src';
 
 // Создадим минимальный класс-наследник для проверки абстрактного класса DataObject

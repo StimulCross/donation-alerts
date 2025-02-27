@@ -1,4 +1,3 @@
-import { describe, expect, it } from 'vitest';
 import { AccessToken, getExpiryMilliseconds, getTokenExpiryDate, isAccessTokenExpired } from '../src/access-token';
 
 describe('getExpiryMilliseconds', () => {

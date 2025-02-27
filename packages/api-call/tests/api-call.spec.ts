@@ -1,39 +1,23 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { callDonationAlertsApi, callDonationAlertsApiRaw, type DonationAlertsApiCallOptions } from '../src';
-
-vi.mock('./helpers/build-query-string', () => ({
-	buildQueryString: (query: any, addQuestionMark?: boolean) => (addQuestionMark ? '?foo=bar' : 'foo=bar'),
-}));
-vi.mock('./helpers/url', () => ({
-	getDonationAlertsApiUrl: (url: string, type: string) => {
-		if (type === 'api') {
-			return `https://www.donationalerts.com/api/v1/${url.replace(/^\//, '')}`;
-		} else if (type === 'auth') {
-			return `https://www.donationalerts.com/oauth/${url.replace(/^\//, '')}`;
-		}
-
-		return url;
-	},
-}));
 
 const originalFetch = globalThis.fetch;
 
 describe('callDonationAlertsApiRaw', () => {
-	let fetchMock: ReturnType<typeof vi.fn>;
+	let fetchMock: ReturnType<typeof jest.fn>;
 
 	beforeEach(() => {
-		fetchMock = vi.fn().mockResolvedValue({
+		fetchMock = jest.fn().mockResolvedValue({
 			ok: true,
 			status: 200,
 			text: async () => '{"result": "ok"}',
 			headers: new Headers({ 'Content-Type': 'application/json' }),
 		});
-		globalThis.fetch = fetchMock;
+		globalThis.fetch = fetchMock as typeof globalThis.fetch;
 	});
 
 	afterEach(() => {
 		globalThis.fetch = originalFetch;
-		vi.clearAllMocks();
+		jest.clearAllMocks();
 	});
 
 	it('should call fetch with proper options when jsonBody is provided', async () => {
@@ -103,17 +87,17 @@ describe('callDonationAlertsApiRaw', () => {
 });
 
 describe('callDonationAlertsApi', () => {
-	let fetchMock: ReturnType<typeof vi.fn>;
+	let fetchMock: ReturnType<typeof jest.fn>;
 
 	beforeEach(() => {
-		fetchMock = vi.fn().mockResolvedValue({
+		fetchMock = jest.fn().mockResolvedValue({
 			ok: true,
 			status: 200,
 			text: async () => '{"result":"1"}',
 			headers: new Headers({ 'Content-Type': 'application/json' }),
 		});
-		globalThis.fetch = fetchMock;
-		vi.clearAllMocks();
+		globalThis.fetch = fetchMock as typeof globalThis.fetch;
+		jest.clearAllMocks();
 	});
 
 	afterEach(() => {

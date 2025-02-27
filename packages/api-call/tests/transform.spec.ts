@@ -1,4 +1,3 @@
-import { describe, expect, it } from 'vitest';
 import { handleDonationAlertsApiResponseError, HttpError, transformDonationAlertsResponse } from '../src';
 
 class MockResponse {

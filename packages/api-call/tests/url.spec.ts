@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest';
 import { getDonationAlertsApiUrl } from '../src/helpers/url';
 
 describe('getDonationAlertsApiUrl', () => {

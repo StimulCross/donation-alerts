@@ -1,4 +1,3 @@
-import { describe, expect, it } from 'vitest';
 import { extractUserId, extractUserName, UserIdResolvableType, UserNameResolvableType } from '../src';
 
 describe('extractUserId', () => {
