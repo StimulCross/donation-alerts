@@ -194,7 +194,8 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 
 		if (!this._registry.has(userId)) {
 			throw new UnregisteredUserError(
-				`User ${userId} not found in the auth provider registry. Use {StaticAuthProvider#addUser} method to add the user first.`,
+				userId,
+				`User "${userId}" could not be located in the authentication provider registry. Please add the user first by using one of the following methods: addUser, addUserForToken, or addUserForCode`,
 			);
 		}
 
@@ -211,7 +212,9 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 
 		if (!this._registry.has(userId)) {
 			throw new UnregisteredUserError(
-				`User ${userId} not found in the auth provider registry. Use {RefreshingAuthProvider#addUser} method to add the user first.`,
+				userId,
+				`User "${userId}" could not be located in the authentication provider registry. Please add the user first by using one of the following methods: addUser, addUserForToken, or addUserForCode.
+`,
 			);
 		}
 
@@ -240,7 +243,8 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 
 		if (!this._registry.has(userId)) {
 			throw new UnregisteredUserError(
-				`User ${userId} not found in the auth provider registry. Use {RefreshingAuthProvider#addUser} method to add the user first.`,
+				userId,
+				`User "${userId}" could not be located in the authentication provider registry. Please add the user first by using one of the following methods: addUser, addUserForToken, or addUserForCode.`,
 			);
 		}
 

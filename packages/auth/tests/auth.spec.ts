@@ -60,7 +60,15 @@ describe('auth', () => {
 		});
 
 		it('should throw "UnregisteredUserError" if user was not added', async () => {
-			await expect(provider.getAccessTokenForUser(123_456)).rejects.toThrow(UnregisteredUserError);
+			const userId = 1234;
+
+			try {
+				await provider.getAccessTokenForUser(userId);
+				fail('Expected UnregisteredUserError to be thrown');
+			} catch (e) {
+				expect(e).toBeInstanceOf(UnregisteredUserError);
+				expect(e).toHaveProperty('userId', userId);
+			}
 		});
 
 		it('should throw "MissingScopeError" if token does not include requested scope', async () => {
@@ -157,7 +165,15 @@ describe('auth', () => {
 		});
 
 		it('should throw "UnregisteredUserError" when requesting token for a user that was not added', async () => {
-			await expect(provider.getAccessTokenForUser('123456')).rejects.toThrow(UnregisteredUserError);
+			const userId = 123;
+
+			try {
+				await provider.getAccessTokenForUser(userId);
+				fail('Expected UnregisteredUserError to be thrown');
+			} catch (e) {
+				expect(e).toBeInstanceOf(UnregisteredUserError);
+				expect(e).toHaveProperty('userId', userId);
+			}
 		});
 	});
 });
