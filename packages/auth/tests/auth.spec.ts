@@ -38,10 +38,13 @@ describe('auth', () => {
 		});
 
 		it('should throw "InvalidTokenError" if token is empty string', () => {
-			const t = (): void => {
+			try {
 				provider.addUser(USER_ID, { accessToken: '' });
-			};
-			expect(t).toThrow(InvalidTokenError);
+				fail('Expected InvalidTokenError to be thrown');
+			} catch (e) {
+				expect(e).toBeInstanceOf(InvalidTokenError);
+				expect(e as InvalidTokenError).toHaveProperty('userId', USER_ID);
+			}
 		});
 
 		it('should throw "MissingScopeError" if token does not include required scopes', () => {

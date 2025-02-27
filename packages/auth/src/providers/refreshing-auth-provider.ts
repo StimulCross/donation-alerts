@@ -93,7 +93,7 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	addUser(user: UserIdResolvable, token: AccessToken): void {
 		const userId = extractUserId(user);
 
-		this._validateToken(token);
+		this._validateToken(token, userId);
 
 		if (token.scopes) {
 			compareScopes(token.scopes, this._config.scopes, userId);
@@ -247,7 +247,10 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 		const currentToken = this._registry.get(userId)!;
 
 		if (!currentToken.refreshToken) {
-			throw new InvalidTokenError(`Unable to refresh access token for user ${userId}. Refresh token is not set`);
+			throw new InvalidTokenError(
+				userId,
+				`Unable to refresh access token for user "${userId}". Refresh token is not specified.`,
+			);
 		}
 
 		const newTokenPromise = refreshAccessToken(
@@ -266,13 +269,19 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 		return { ...token, userId };
 	}
 
-	private _validateToken(token: AccessToken): void {
+	private _validateToken(token: AccessToken, userId?: number): void {
 		if (!token.accessToken) {
-			throw new InvalidTokenError("The access token is invalid. Make sure it's a non-empty string");
+			throw new InvalidTokenError(
+				userId ?? null,
+				`The access token of user "${userId}" is invalid. Make sure it's a non-empty string.`,
+			);
 		}
 
 		if (!token.refreshToken) {
-			throw new InvalidTokenError("The refresh token is invalid. Make sure it's a non-empty string");
+			throw new InvalidTokenError(
+				userId ?? null,
+				`The refresh token of user "${userId}" is invalid. Make sure it's a non-empty string.`,
+			);
 		}
 	}
 }

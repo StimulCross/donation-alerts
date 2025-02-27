@@ -41,7 +41,12 @@ export class StaticAuthProvider implements AuthProvider {
 	addUser(user: UserIdResolvable, token: Pick<AccessToken, 'accessToken' | 'scopes'>): void {
 		const userId = extractUserId(user);
 
-		this._validateAccessToken(token);
+		if (!token.accessToken) {
+			throw new InvalidTokenError(
+				userId,
+				`The access token of user "${userId}" is invalid. Make sure it's a non-empty string.`,
+			);
+		}
 
 		if (token.scopes) {
 			compareScopes(token.scopes, this._scopes, userId);
@@ -97,11 +102,5 @@ export class StaticAuthProvider implements AuthProvider {
 		}
 
 		return { ...token, userId };
-	}
-
-	private _validateAccessToken(token: Pick<AccessToken, 'accessToken' | 'scopes'>): void {
-		if (!token.accessToken) {
-			throw new InvalidTokenError("The access token is invalid. Make sure it's a non-empty string");
-		}
 	}
 }
