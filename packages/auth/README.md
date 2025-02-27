@@ -1,38 +1,48 @@
 # Donation Alerts - Authentication
 
-Authentication provider with ability to automatically refresh user tokens.
+A robust authentication provider that can automatically refresh user tokens.
 
 ## Installation
 
-Using `npm`:
+#### Using `npm`:
 
 ```
 npm i @donation-alerts/auth
 ```
 
-Using `yarn`:
+#### Using `yarn`:
 
 ```
 yarn add @donation-alerts/auth
 ```
 
+#### Using `pnpm`:
+
+```
+pnpm add @donation-alerts/auth
+```
+
 ## Usage
 
-### Authentication provider
+### Overview
 
-Authentication provider is a class that implements the [AuthProvider](https://stimulcross.github.io/donation-alerts/interfaces/auth.AuthProvider.html) interface. In general, it allows users to register and manage authenticated users and their authentication data (access tokens, refresh tokens, etc.).
+The authentication provider is a class that implements the [AuthProvider](https://stimulcross.github.io/donation-alerts/interfaces/auth.AuthProvider.html) interface, allowing you to register and manage users along with their authentication data (access tokens, refresh tokens, etc.).
 
-There are two built-in authentication providers you can use: [StaticAuthProvider](https://stimulcross.github.io/donation-alerts/classes/auth.StaticAuthProvider.html) and [RefreshingAuthProvider](https://stimulcross.github.io/donation-alerts/classes/auth.RefreshingAuthProvider.html).
+Two built-in providers are available:
 
-If these implementations do not meet your needs, and, for example, you need to share authentication data across multiple processes, you can create your own provider (e.g., based on Redis) that implements the [AuthProvider](https://stimulcross.github.io/donation-alerts/interfaces/auth.AuthProvider.html) interface.
+- [StaticAuthProvider](https://stimulcross.github.io/donation-alerts/classes/auth.StaticAuthProvider.html)
+- [RefreshingAuthProvider](https://stimulcross.github.io/donation-alerts/classes/auth.RefreshingAuthProvider.html)
 
-First of all, you must register your application in Donation Alerts and obtain a client ID and a client secret key. Read more [here](https://www.donationalerts.com/apidoc#authorization__authorization_code) in the `Authorization` section.
+If these implementations do not suit your requirements — such as when you need to share authentication data across multiple processes — you can implement your own provider (e.g., using Redis) that adheres to the [AuthProvider](https://stimulcross.github.io/donation-alerts/interfaces/auth.AuthProvider.html) interface.
 
-### Static authentication provider
+> [!IMPORTANT]
+> Before using the provider, you must register your application in [Donation Alerts OAuth server](https://www.donationalerts.com/application/clients) and obtain a client ID and a client secret. Learn more in the [Authorization section](https://www.donationalerts.com/apidoc#authorization__authorization_code).
 
-The [StaticAuthProvider](https://stimulcross.github.io/donation-alerts/classes/auth.StaticAuthProvider.html) allows to register users with their credentials in the internal registry and allows to get the access tokens of the registered users. However, this provider is not able to refresh user tokens on expiration.
+### Static Authentication Provider
 
-To instantiate the `StaticAuthProvider` you must specify the application client ID.
+The [StaticAuthProvider](https://stimulcross.github.io/donation-alerts/classes/auth.StaticAuthProvider.html) lets you register users and store their credentials in an internal registry, enabling you to retrieve their access tokens when needed. Note that this provider does not support automatic token refresh upon expiration.
+
+To create an instance of `StaticAuthProvider`, provide your application’s client ID:
 
 ```ts
 import { StaticAuthProvider } from '@donation-alerts/auth';
@@ -40,85 +50,85 @@ import { StaticAuthProvider } from '@donation-alerts/auth';
 const authProvider = new StaticAuthProvider('<CLIENT_ID>');
 ```
 
-Optionally, you can provide an array of scopes that all registering tokens must be valid for.
+You can also specify an array of required scopes for the registering tokens:
 
 ```ts
 const authProvider = new StaticAuthUser('<CLIENT_ID>', ['oauth-user-show', 'oauth-donation-index']);
 ```
 
-If the registering token misses any scope from this list, [MissingScopeError](https://stimulcross.github.io/donation-alerts/classes/auth.MissingScopeError.html) exception will be thrown.
+If a token is registered without all the required scopes, a [MissingScopeError](https://stimulcross.github.io/donation-alerts/classes/auth.MissingScopeError.html) will be thrown.
 
-If scopes were not specified for the registering token, scope validation will be skipped.
+If no scopes are specified, scope validation is skipped.
 
-It's also recommended to set scopes for each added token. In this case, the library will compare the requested scopes against the token scopes.
+It is recommended to always set scopes for added tokens so that the library can verify that the token meets the requested scopes.
 
-#### Managing users in static authentication provider
+#### Managing Users
 
-To manage users in the `StaticAuthProvider`, you can use [hasUser](https://stimulcross.github.io/donation-alerts/classes/auth.StaticAuthProvider.html#hasUser), [addUser](https://stimulcross.github.io/donation-alerts/classes/auth.StaticAuthProvider.html#addUser), and [removeUser](https://stimulcross.github.io/donation-alerts/classes/auth.StaticAuthProvider.html#removeUser) methods.
+The `StaticAuthProvider` offers several methods to manage users:
 
-#### `hasUser`
+- **hasUser:** Checks if a user is registered.
 
-Checks whether a user is added to the provider.
+    ```ts
+    const exists = authProvider.hasUser(123456789);
+    // returns a boolean
+    ```
 
-```ts
-const hasUser = authProvider.hasUser(123456789);
-```
+- **addUser:** Registers a user with their authentication data.
 
-Returns `boolean`.
+    ```ts
+    authProvider.addUser(123456789, {
+    	accessToken: '<ACCESS_TOKEN>',
+    	scopes: ['oauth-user-show', 'oauth-donation-index', 'oauth-custom_alert-store'],
+    });
+    ```
 
-#### `addUser`
+- **removeUser:** Unregisters a user.
 
-Adds a user to the provider. The first argument is the ID of the user, the second is authentication data that includes `accessToken` and optional `scopes`.
+    ```ts
+    authProvider.removeUser(123456789);
+    ```
 
-```ts
-authProvider.addUser(123456789, {
-	accessToken: '<ACCESS_TOKEN>',
-	scopes: ['oauth-user-show', 'oauth-donation-index', 'oauth-custom_alert-store'],
-});
-```
+#### Retrieving Access Tokens
 
-#### `removeUser`
-
-Removes a user from the provider.
-
-```ts
-authProvider.removeUser(123456789);
-```
-
-#### Getting tokens from the static authentication provider
-
-After user registration, you can use the [getAccessTokenForUser](https://stimulcross.github.io/donation-alerts/interfaces/auth.AuthProvider.html#getAccessTokenForUser) method to get the access token for the specified user.
+After a user is registered, you can retrieve their access token by using the [getAccessTokenForUser](https://stimulcross.github.io/donation-alerts/interfaces/auth.AuthProvider.html#getAccessTokenForUser) method:
 
 ```ts
 const token = await authProvider.getAccessTokenForUser(123456789);
 ```
 
-This method also optionally takes requested scopes as the second `scopes?: string[]` argument. If scopes are provided, the library checks whether the access token is valid for the requested scopes. If the check fails, the [MissingScopeError](https://stimulcross.github.io/donation-alerts/classes/auth.MissingScopeError.html) will be thrown.
+This method also accepts an optional array of scopes as the second argument. If you provide scopes, the provider verifies that the token is valid for those scopes. If not, a [MissingScopeError](https://stimulcross.github.io/donation-alerts/classes/auth.MissingScopeError.html) will be thrown.
+
+For example:
 
 ```ts
-// Add token with 'oauth-user-show' and 'oauth-donation-index' scopes
+// Register token with 'oauth-user-show' and 'oauth-donation-index' scopes
 authProvider.addUser(123456789, {
 	accessToken: '<ACCESS_TOKEN>',
 	scopes: ['oauth-user-show', 'oauth-donation-index'],
 });
 
-// Throws 'MissingScopeError' because the token
-// is not valid for 'oauth-custom_alert-store' scope
+// Attempting to retrieve the token with an additional required scope
+// will throw a 'MissingScopeError' if the token lacks 'oauth-custom_alert-store'
 const token = await authProvider.getAccessTokenForUser(123456789, ['oauth-custom_alert-store']);
 ```
 
-Returns [AccessTokenWithUserId](https://stimulcross.github.io/donation-alerts/interfaces/auth.AccessTokenWithUserId.html) object.
+The method returns an [AccessTokenWithUserId](https://stimulcross.github.io/donation-alerts/interfaces/auth.AccessTokenWithUserId.html) object.
 
 ### Refreshing authentication provider
 
-Unlike [StaticAuthProvider](https://stimulcross.github.io/donation-alerts/classes/auth.StaticAuthProvider.html), [RefreshingAuthProvider](https://stimulcross.github.io/donation-alerts/classes/auth.RefreshingAuthProvider.html) has an ability to automatically refresh user tokens whether necessary.
+Unlike the [StaticAuthProvider](https://stimulcross.github.io/donation-alerts/classes/auth.StaticAuthProvider.html), the [RefreshingAuthProvider](https://stimulcross.github.io/donation-alerts/classes/auth.RefreshingAuthProvider.html) can automatically refresh user tokens when needed.
 
-To instantiate a `RefreshingAuthProvider` you must set up [RefreshingAuthProviderConfig](https://stimulcross.github.io/donation-alerts/interfaces/auth.RefreshingAuthProviderConfig.html).
+To instantiate a `RefreshingAuthProvider`, configure it with a [RefreshingAuthProviderConfig](https://stimulcross.github.io/donation-alerts/interfaces/auth.RefreshingAuthProviderConfig.html):
 
-- `clientId` - Donation Alerts application's client ID
-- `clientSecret` - Donation Alerts application's client secret
-- `redirectUri` (optional) - Donation Alerts application's redirect URI. Only used in `addAuthForCode` method to exchange an authorization code for an access token.
-- `scopes` (optional) - an array of scopes that all registering tokens must be valid for.
+- **clientId** – Your Donation Alerts application's client ID.
+- **clientSecret** – Your Donation Alerts application's client secret.
+- **redirectUri** (optional) – Your application's redirect URI, used in the `addUserForCode` method to exchange an authorization code for an access token.
+- **scopes** (optional) – An array of scopes that all registering tokens must be valid for.
+
+- **clientId** – Your Donation Alerts application client ID.
+- **clientSecret** – Your Donation Alerts application client secret.
+- **redirectUri** (optional) – The redirect URI set for your application. This is used in the `addUserForCode` method to exchange an authorization code for an access token.
+- **scopes** (optional) – An array of scopes that every registering token must be valid for.
 
 ```ts
 import { RefreshingAuthProvider } from '@donation-alerts/auth';
@@ -131,117 +141,111 @@ const authProvider = new RefreshingAuthProvider({
 });
 ```
 
-#### Managing users in refreshing authentication provider
+#### Managing Users
 
-#### `hasUser`
+- **hasUser:** Checks whether a user is already added to the provider.
 
-Checks whether a user was added to the provider.
+    ```ts
+    const hasUser = authProvider.hasUser(123456789);
+    ```
 
-```ts
-const hasUser = authProvider.hasUser(123456789);
-```
+    Returns a `boolean`.
 
-Returns `boolean`.
+- **addUser:** Registers a user with their token data:
 
-#### `addUser`
+    ```ts
+    const userId = 123456789;
+    authProvider.addUser(userId, {
+    	accessToken: '<ACCESS_TOKEN>',
+    	refreshToken: '<REFRESH_TOKEN>',
+    	expiresIn: 0,
+    	obtainmentTimestamp: 0,
+    	scopes: ['oauth-user-show', 'oauth-donation-index', 'oauth-custom_alert-store'],
+    });
+    ```
 
-Adds a user to the provider:
+    > [!NOTE]
+    > Both `accessToken` and `refreshToken` must be non-empty strings; otherwise, an [InvalidTokenError](https://stimulcross.github.io/donation-alerts/classes/auth.InvalidTokenError.html) will be thrown.
 
-```ts
-const userId = 123456789;
-authProvider.addUser(userId, {
-	accessToken: '<ACCESS_TOKEN>',
-	refreshToken: '<REFRESH_TOKEN>',
-	expiresIn: 0,
-	obtainmentTimestamp: 0,
-	scopes: ['oauth-user-show', 'oauth-donation-index', 'oauth-custom_alert-store'],
-});
-```
+    If `expiresIn` and `obtainmentTimestamp` are unknown, set them to `0` to force a token refresh on first access.
 
-> [!NOTE]
-> Both `aceessToken` and `refreshToken` must be non-empty strings. Otherwise, [InvalidTokenError](https://stimulcross.github.io/donation-alerts/classes/auth.InvalidTokenError.html) will be thrown.
+    Since there is no dynamic way to verify token scopes, if you require scope validation, ensure valid scopes are provided when adding the token. It is recommended to store the token along with its valid scopes and obtainment timestamp in persistent storage (e.g., a database) after the authentication process.
 
-If `expiresIn` and `obtainmentTimestamp` are unknown, you can set them both to `0` to force refresh the token on the first access.
+    This method returns an [AccessTokenWithUserId](https://stimulcross.github.io/donation-alerts/interfaces/auth.AccessTokenWithUserId.html) object.
 
-Also keep in mind that there is actually no way to dynamically figure out scopes the token is valid for, so if you need scope validation, you have to set valid scopes for the token when you are adding it to the provider. The right approach would be to persist the token with its valid scopes and obtainment timestamp in the database (or any other persistent storage) after the authentication flow.
+- **addUserForToken:** You can also add a user using only token data:
 
-#### `addUserForToken`
+    ```ts
+    const tokenWithUserId = await authProvider.addUserForToken({
+    	accessToken: '<ACCESS_TOKEN>',
+    	refreshToken: '<REFRESH_TOKEN>',
+    	expiresIn: 0,
+    	obtainmentTimestamp: 0,
+    	scopes: ['oauth-user-show', 'oauth-donation-index', 'oauth-custom_alert-store'],
+    });
+    ```
 
-You can also add a user to the auth provider with only token data:
+    The user will be fetched internally followed by adding it to the provider with the given token data.
 
-```ts
-const tokenWithUserId = await authProvider.addUserForToken({
-	accessToken: '<ACCESS_TOKEN>',
-	refreshToken: '<REFRESH_TOKEN>',
-	expiresIn: 0,
-	obtainmentTimestamp: 0,
-	scopes: ['oauth-user-show', 'oauth-donation-index', 'oauth-custom_alert-store'],
-});
-```
+    This method returns an [AccessTokenWithUserId](https://stimulcross.github.io/donation-alerts/interfaces/auth.AccessTokenWithUserId.html) object.
 
-The ID of the user will be fetched internally followed by adding it to the provider with the given token data.
+    > [!WARNING]
+    > The token must be valid for the `oauth-user-show` scope to fetch user data; otherwise, a [MissingScopeError](https://stimulcross.github.io/donation-alerts/classes/auth.MissingScopeError.html) will be thrown.
 
-Returns [AccessTokenWithUserId](https://stimulcross.github.io/donation-alerts/interfaces/auth.AccessTokenWithUserId.html) object.
+- **addUserForCode**
 
-> [!WARNING]
-> The token must be valid for `oauth-user-show` scope to fetch the user data. Otherwise, the [MissingScopeError](https://stimulcross.github.io/donation-alerts/classes/auth.MissingScopeError.html) exception will be thrown.
+    Alternatively, you can add a user using an authorization code obtained during the OAuth2 flow:
 
-#### `addUserForCode`
+    ```ts
+    const tokenWithUserId = await authProvider.addUserForCode('<AUTH_CODE>', [
+    	'oauth-user-show',
+    	'oauth-donation-index',
+    	'oauth-custom_alert-store',
+    ]);
+    ```
 
-Another option to add a user to the provider is using an authorization code received during the OAuth2 authorization flow.
+    The `addUserForCode` method accepts an array of scopes as its second argument; these will be compared against the provider's scopes (if specified).
 
-```ts
-const tokenWithUserId = await authProvider.addUserForCode('<AUTH_CODE>', [
-	'oauth-user-show',
-	'oauth-donation-index',
-	'oauth-custom_alert-store',
-]);
-```
+    This method exchanges the code for an access token, retrieves the user associated with the token, and adds them to the auth provider.
 
-`addUserForCode` method accepts token scopes as the second argument. They will be compared against the provider's scopes (if any) as described above.
+    > [!WARNING]
+    > The token must include the `oauth-user-show` scope to fetch user data; otherwise, a [MissingScopeError](https://stimulcross.github.io/donation-alerts/classes/auth.MissingScopeError.html) will be thrown.
 
-This method exchanges the code for the access token, followed by getting the user associated with the token and adding it to the auth provider.
+    This method returns an [AccessTokenWithUserId](https://stimulcross.github.io/donation-alerts/interfaces/auth.AccessTokenWithUserId.html) object.
 
-> [!WARNING]
-> The token must be valid for `oauth-user-show` scope to fetch the user data. Otherwise, the [MissingScopeError](https://stimulcross.github.io/donation-alerts/classes/auth.MissingScopeError.html) exception will be thrown.
+- **removeUser**
 
-Returns [AccessTokenWithUserId](https://stimulcross.github.io/donation-alerts/interfaces/auth.AccessTokenWithUserId.html) object.
+    Removes a user from the provider by their user ID:
 
-#### `removeUser`
+    ```ts
+    authProvider.removeUser(123456789);
+    ```
 
-Removes the specified user ID from the auth provider.
+#### Managing Tokens
 
-```ts
-authProvider.removeUser(123456789);
-```
+- **getAccessTokenForUser**
 
-#### Managing tokens in refreshing authentication provider
+    Retrieves the user's access token. If the token has expired, it will be automatically refreshed, and the new token will be returned:
 
-Now let's move on to what we started all this for.
+    ```ts
+    const token = await authProvider.getAccessTokenForUser(12345678);
+    ```
 
-#### `getAccessTokenForUser`
+    Returns an [AccessTokenWithUserId](https://stimulcross.github.io/donation-alerts/interfaces/auth.AccessTokenWithUserId.html) object.
 
-You can get the user's access token by calling the `getAccessTokenForUser` method. If the token has expired, it will be refreshed internally by the provider, and a new one will be returned.
+- **refreshAccessTokenForUser**
 
-```ts
-const token = await authProvider.getAccessTokenForUser(12345678);
-```
+    For cases when you need to force a token refresh, call the `refreshAccessTokenForUser` method:
 
-Returns [AccessTokenWithUserId](https://stimulcross.github.io/donation-alerts/interfaces/auth.AccessTokenWithUserId.html) object.
+    ```ts
+    const token = await authProvider.refreshAccessTokenForUser(12345678);
+    ```
 
-#### `refreshAccessTokenForUser`
-
-If for some reason you need to force refresh the access token, you can call `refreshAccessTokenForUser`method:
-
-```ts
-const token = await authProvider.refreshAccessTokenForUser(12345678);
-```
-
-Returns [AccessTokenWithUserId](https://stimulcross.github.io/donation-alerts/interfaces/auth.AccessTokenWithUserId.html) object.
+    Returns a [AccessTokenWithUserId](https://stimulcross.github.io/donation-alerts/interfaces/auth.AccessTokenWithUserId.html) object.
 
 #### Events
 
-When an access token is refreshed, whether internally or externally, `onRefresh` event occurs. You can listen to it, for example, to save the token to a persistence storage.
+Whenever an access token is refreshed—either automatically or manually—the `onRefresh` event is triggered. This allows you to perform actions such as saving the updated token to persistent storage:
 
 ```ts
 import { AccessToken } from '@donation-alerts/auth';
@@ -251,8 +255,8 @@ authProvider.onRefresh((userId: number, token: AccessToken) => {
 });
 ```
 
-Check the [StaticAuthProvider](https://stimulcross.github.io/donation-alerts/classes/auth.StaticAuthProvider.html) and [RefreshingAuthProvider](https://stimulcross.github.io/donation-alerts/classes/auth.RefreshingAuthProvider.html) documentation pages to see the full list of available properties and methods.
+For a complete list of available methods and properties, please refer to the [StaticAuthProvider](https://stimulcross.github.io/donation-alerts/classes/auth.StaticAuthProvider.html) and [RefreshingAuthProvider](https://stimulcross.github.io/donation-alerts/classes/auth.RefreshingAuthProvider.html) documentation.
 
 ---
 
-For more information check the [documentation](https://stimulcross.github.io/donation-alerts/modules/auth.html).
+For more detailed information, please refer to the [documentation](https://stimulcross.github.io/donation-alerts/modules/auth.html).

@@ -1,62 +1,69 @@
 # Donation Alerts - Api Call
 
-A basic Donation Alerts API call wrapper.
+A lightweight wrapper for making API calls to Donation Alerts.
 
-This package contains simple utils that allow you to send requests to different Donation Alerts API endpoints with given credentials.
-
-If you need to use the Donation Alerts API, consider using the [@donation-alerts/api](https://stimulcross.github.io/donation-alerts/modules/api.html) package, which allows for more flexibility and convenience in requesting data from the Donation Alerts API. The [@donation-alerts/api](https://stimulcross.github.io/donation-alerts/modules/api.html) package already uses this package internally, so you don't need to install it separately.
-
-But if you still need it:
+This package provides simple utilities for sending requests to various Donation Alerts API endpoints using provided credentials. Although it is mainly intended for internal use, some of its utilities may prove useful in your own code. For a more flexible and feature-rich experience with the Donation Alerts API, consider using the [@donation-alerts/api](https://stimulcross.github.io/donation-alerts/modules/api.html) package.
 
 ## Installation
 
-Using `npm`:
+#### Using `npm`:
 
 ```
 npm i @donation-alerts/api-call
 ```
 
-Using `yarn`:
+#### Using `yarn`:
 
 ```
 yarn add @donation-alerts/api-call
 ```
 
+#### Using `pnpm`:
+
+```
+pnpm add @donation-alerts/api-call
+```
+
 ## Usage
 
-You can call Donation Alerts API in one of two ways:
+You can call the Donation Alerts API in two ways:
 
-1. Using `callDonationAlertsApiRaw()` function to get native `Response` object.
-2. Using `callDonationAlertsApi<T>()` function to get only payload data. You can specify data type in the type parameter `T`.
+1. **Using `callDonationAlertsApiRaw()`**: This function returns the native `Response` object from the Fetch API.
 
-The both functions accepts the same arguments:
+2. **Using `callDonationAlertsApi<T>()`**: This function returns only the payload data, which you can type via the generic parameter `T`.
 
-- `options`: [DonationAlertsApiCallOptions](https://stimulcross.github.io/donation-alerts/interfaces/api_call.DonationAlertsApiCallOptions.html)
-- `accessToken`?: string
-- `fetchOptions`?: [DonationAlertsCallFetchOptions](https://stimulcross.github.io/donation-alerts/types/api_call.DonationAlertsCallFetchOptions.html)
+Both functions accept the following arguments:
 
-You can do the following to request raw data, for example, from `alerts/donations` endpoint:
+- **`options`**: [DonationAlertsApiCallOptions](https://stimulcross.github.io/donation-alerts/interfaces/api_call.DonationAlertsApiCallOptions.html)
+- **`accessToken`** (optional): string
+- **`fetchOptions`** (optional): [DonationAlertsCallFetchOptions](https://stimulcross.github.io/donation-alerts/types/api_call.DonationAlertsCallFetchOptions.html)
+
+### Example: Fetching Raw Data
+
+To fetch raw data from the `alerts/donations` endpoint:
 
 ```ts
 import { callDonationAlertsApiRaw } from '@donation-alerts/api-call';
 
-// Assuming we are inside an async funcation or with top level `await` enabled.
+// Within an async function or when using top-level await:
 const response = await callDonationAlertsApiRaw(
 	{
 		url: 'alerts/donations',
 	},
 	'<YOUR_ACCESS_TOKEN>',
 );
+
+// 'response' is the native Response object from the Fetch API.
 ```
 
-The `response` will be native `Response` object of the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
+### Example: Fetching Mapped Payload Data
 
-To request only payload mapped data, you can do the following:
+To receive only the mapped payload data, you can do the following:
 
 ```ts
 import { callDonationAlertsApi } from '@donation-alerts/api-call';
 
-// Create an interface that represents the data you expect to receive.
+// Define an interface representing the expected payload.
 interface PayloadData {
 	// ...
 }
@@ -65,14 +72,15 @@ const response = await callDonationAlertsApi<PayloadData>(
 	{
 		url: '<endpoint>',
 	},
-	'<your access token>',
+	'<YOUR_ACCESS_TOKEN>',
 );
+
+// 'response' is mapped to the PayloadData interface.
 ```
 
-The `response` will be mapped to the `PayloadData` interface that we passed as a type parameter.
-
-The function above can throw the [HttpError](https://stimulcross.github.io/donation-alerts/classes/api_call.HttpError.html) which you can catch and use.
+> [!NOTE]
+> The above function may throw an [HttpError](https://stimulcross.github.io/donation-alerts/classes/api_call.HttpError.html), which you should catch and handle accordingly.
 
 ---
 
-For more information check the [documentation](https://stimulcross.github.io/donation-alerts/modules/api_call.html).
+For more detailed information, please refer to the [documentation](https://stimulcross.github.io/donation-alerts/modules/api_call.html).

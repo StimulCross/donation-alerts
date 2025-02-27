@@ -1,24 +1,30 @@
 # Donation Alerts - API
 
-API client that allows fetching data from Donation Alerts API. The library covers 100% of available API endpoints.
+A fully-featured API client that enables seamless access to the Donation Alerts API. This library offers complete coverage of all available API endpoints.
 
 ## Installation
 
-Using `npm`:
+#### Using `npm`:
 
-```
+```bash
 npm i @donation-alerts/api @donation-alerts/auth
 ```
 
-Using `yarn`:
+#### Using `yarn`:
 
-```
+```bash
 yarn add @donation-alerts/api @donation-alerts/auth
+```
+
+#### Using `pnpm`:
+
+```bash
+pnpm add @donation-alerts/api @donation-alerts/auth
 ```
 
 ## Usage
 
-To create an [ApiClient](https://stimulcross.github.io/donation-alerts/classes/api.ApiClient.html) instance, you must provide an [AuthProvider](https://stimulcross.github.io/donation-alerts/interfaces/auth.AuthProvider.html) class. Read the [Authentication](https://stimulcross.github.io/donation-alerts/modules/auth.html) documentation to learn how to set up [AuthProvider](https://stimulcross.github.io/donation-alerts/interfaces/auth.AuthProvider.html).
+To instantiate an [ApiClient](https://stimulcross.github.io/donation-alerts/classes/api.ApiClient.html), you need to provide an [AuthProvider](https://stimulcross.github.io/donation-alerts/interfaces/auth.AuthProvider.html) instance. For detailed instructions on setting up an `AuthProvider`, please refer to the [Authentication](https://stimulcross.github.io/donation-alerts/modules/auth.html) documentation.
 
 ```ts
 import { ApiClient } from '@donation-alerts/api';
@@ -28,11 +34,11 @@ const apiClient = new ApiClient({
 });
 ```
 
-Check the [ApiConfig](https://stimulcross.github.io/donation-alerts/interfaces/api.ApiConfig.html) documentation page to see all available configuration options.
+For a complete list of available configuration options, see the documentation for [ApiConfig](https://stimulcross.github.io/donation-alerts/interfaces/api.ApiConfig.html).
 
 ### Getting data
 
-After creating `ApiClient`, it's very straightforward to get data from the API. The `ApiClient` includes 5 namespaces:
+After creating the `ApiClient`, fetching data from the API becomes very straightforward. The client is organized into five namespaces:
 
 - [users](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsUsersApi.html)
 - [donations](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsDonationsApi.html)
@@ -40,8 +46,8 @@ After creating `ApiClient`, it's very straightforward to get data from the API. 
 - [centrifugo](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsCentrifugoApi.html)
 - [merchandises](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsMerchandiseApi.html)
 
-> [!NOTE]
-> The user must be registered in the authentication provider instance you passed to the [ApiConfig](https://stimulcross.github.io/donation-alerts/interfaces/api.ApiConfig.html) object. Otherwise, the library won't be able to obtain the user's access token to perform a request and will throw [UnregisteredUserError](https://stimulcross.github.io/donation-alerts/classes/auth.UnregisteredUserError.html).
+> [!IMPORTANT]
+> Ensure that the user is registered with the authentication provider instance specified in the [ApiConfig](https://stimulcross.github.io/donation-alerts/interfaces/api.ApiConfig.html). Otherwise, the library will not be able to retrieve the user's access token required for requests, and it will throw an [UnregisteredUserError](https://stimulcross.github.io/donation-alerts/classes/auth.UnregisteredUserError.html).
 
 ---
 
@@ -49,15 +55,15 @@ After creating `ApiClient`, it's very straightforward to get data from the API. 
 
 **Required scope:** `oauth-user-show`
 
-Donation Alerts API currently supports only getting the user associated with the access token used in the request.
+Currently, the Donation Alerts API only supports fetching the user associated with the access token used in the request.
 
 ```ts
 const user = await apiClient.users.getUser(123456789);
 ```
 
-Returns [DonationAlertsUser](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsUser.html) instance.
+This returns an instance of [DonationAlertsUser](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsUser.html).
 
-There is also a way to get the socket connection token directly:
+Additionally, you can directly fetch the socket connection token:
 
 ```ts
 const connectionToken = await apiClient.users.getSocketConnectionToken(123456789);
@@ -69,11 +75,11 @@ const connectionToken = await apiClient.users.getSocketConnectionToken(123456789
 
 **Required scope:** `oauth-donation-index`
 
-You can use a few approaches to get user's donations.
+There are multiple ways to retrieve a user's donations.
 
-#### `getDonations`
+##### getDonations
 
-The first one is [getDonations](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsDonationsApi.html#getDonations) method. It accepts the ID of the user as the first argument.
+The [getDonations](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsDonationsApi.html#getDonations) method accepts a user ID as its first argument:
 
 ```ts
 const userId = 123456789;
@@ -82,41 +88,41 @@ const donations = await apiClient.donations.getDonations(userId);
 
 This returns an array of [DonationAlertsDonation](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsDonation.html) objects.
 
-The example above gets only the first page of donations. To get a specific page, you can pass pagination data as the second argument.
+This method returns an array of [DonationAlertsDonation](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsDonation.html) objects. By default, only the first page of donations is returned; to request a specific page, pass pagination options as the second argument:
 
 ```ts
 const userId = 123456789;
 const donations = await apiClient.donations.getDonations(userId, { page: 2 });
 ```
 
-#### `getAllDonations`
+##### getAllDonations
 
-If you want to get all donations you can use [getAllDonations](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsDonationsApi.html#getAllDonations) method.
+If you need to fetch all donations at once, you can use the [getAllDonations](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsDonationsApi.html#getAllDonations) method:
 
 ```ts
 const donations = await apiClient.donations.getAllDonations(123456789);
 ```
 
-Returns an array of [DonationAlertsDonation](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsDonation.html) objects.
+This returns an array of [DonationAlertsDonation](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsDonation.html) objects.
 
 > [!WARNING]
-> Use with caution. This method can return a huge amount of data and can take a very long time. It is possible that your application will crash.
+> Use this method with caution. Retrieving all donations can result in a significant amount of data and may take a long time, potentially causing performance issues or application crashes.
 
-#### `createDonationsPaginator`
+##### createDonationsPaginator
 
-The more flexible way to get user donations is by using the [DonationAlertsApiPaginator](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html) class. It allows you to navigate pages in both directions and keeps track of the current state.
+For more flexible pagination, the [DonationAlertsApiPaginator](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html) class is available. This paginator allows you to navigate pages in both directions while keeping track of the current state.
 
 ```ts
 const userId = 123456789;
 const paginator = apiClient.donations.createDonationsPaginator(userId);
 ```
 
-After creating a paginator instance, you can use its methods to navigate pages:
+Once you have a paginator instance, you can navigate between pages using its methods:
 
-- [getNext](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#getNext) - Gets the next page. If you reached the last page, this method returns an empty array.
-- [getPrev](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#getPrev) - Gets the previous page. If you already on the first page, this method returns it back.
-- [getPage](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#getPage) - Gets the specified page. If page does not exist, this method returns an empty array.
-- [getAll](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#getAll) - Gets all available donations. Use it carefully because this can return a huge amount of data and take a lot of time.
+- [getNext](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#getNext) – Retrieves the next page. Returns an empty array if there are no further pages.
+- [getPrev](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#getPrev) – Retrieves the previous page. If already on the first page, it returns that same page.
+- [getPage](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#getPage) – Retrieves a specific page. If the page does not exist, it returns an empty array.
+- [getAll](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#getAll) – Retrieves all available donations. Use with caution due to potential performance drawbacks.
 
 ```ts
 const nextPage = await paginator.getNext();
@@ -125,7 +131,7 @@ const page5 = await paginator.getPage(5);
 const donations = await paginator.getAll();
 ```
 
-The paginator also supports async iterations. It returns an array of page donations per iteration.
+The paginator also supports asynchronous iteration, yielding an array of donations for each page:
 
 ```ts
 const userId = 123456789;
@@ -136,9 +142,9 @@ for await (const page of paginator) {
 }
 ```
 
-There is also a batch of useful accessors indicating the current pagination state: [currentPage](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#currentPage), [totalPages](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#totalPages), [perPage](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#perPage), etc. To see the full list of available properties and methods, check the paginator [documentation](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html) page.
+In addition, the paginator provides useful properties to inspect the current state, such as [currentPage](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#currentPage), [totalPages](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#totalPages), [perPage](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#perPage), and others. For a complete list of available properties and methods, refer to the paginator [documentation](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html).
 
-You can reset the state at any time using the [reset](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#reset) method.
+You can reset the paginator’s state at any time using the [reset](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsApiPaginator.html#reset) method:
 
 ```ts
 paginator.reset();
@@ -150,7 +156,7 @@ paginator.reset();
 
 **Required scope:** `oauth-custom_alert-store`
 
-Donation Alerts supports custom alerts. When a broadcaster creates a widget with the `Custom alert` variation type, you can send alerts to this widget via this API.
+Donation Alerts supports custom alerts. When a broadcaster creates a widget with the `Custom alert` variation type, you can send alerts to that widget using this API.
 
 ```ts
 await apiClient.customAlerts.sendCustomAlert(123456789, {
@@ -159,21 +165,21 @@ await apiClient.customAlerts.sendCustomAlert(123456789, {
 });
 ```
 
-That's it! The widget triggers the alert. Check [DonationAlertsSendCustomAlertData](https://stimulcross.github.io/donation-alerts/interfaces/api.DonationAlertsSendCustomAlertData.html) documentation page to see all the available options you can use with custom alerts.
+That's it — the widget triggers the alert immediately. For a complete list of configuration options when sending custom alerts, please refer to the [DonationAlertsSendCustomAlertData](https://stimulcross.github.io/donation-alerts/interfaces/api.DonationAlertsSendCustomAlertData.html) documentation.
 
 ---
 
 #### [Centrifugo API](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsCentrifugoApi.html)
 
-Donation Alerts supports real-time notifications over WebSocket protocol. To be able to listen to real-time notifications, you must subscribe to the private channels of your choice. This API handles this task.
+Donation Alerts supports real-time notifications over the WebSocket protocol. To receive these notifications, you must subscribe to the private channels you’re interested in. This API simplifies that process.
 
 > [!IMPORTANT]
-> You must obtain an UUIDv4 client ID to subscribe users. This client ID is **NOT** the same as your Donation Alerts application client ID. Read more in the official Donation Alerts [documentation](https://www.donationalerts.com/apidoc#advertisement).
+> You must obtain a UUIDv4 client ID to subscribe users. This client ID is **NOT** the same as your Donation Alerts application client ID. For more details, consult the official Donation Alerts [documentation](https://www.donationalerts.com/apidoc).
 
-> [!NOTE]
-> If you need to listen to real-time Donation Alerts notifications, consider using [@donation-alerts/events](https://stimulcross.github.io/donation-alerts/modules/events.html) package. This library makes it very straightforward to listen to supported Donation Alerts channels without any extra actions.
+> [!TIP]
+> If you need to listen to real-time Donation Alerts notifications, consider using the [@donation-alerts/events](https://stimulcross.github.io/donation-alerts/modules/events.html) package. It offers a straightforward way to subscribe to Donation Alerts channels without additional configuration.
 
-To subscribe to private channels you can use [subscribeUserToPrivateChannels](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsCentrifugoApi.html#subscribeUserToPrivateChannels) method:
+To subscribe to private channels, use the [subscribeUserToPrivateChannels](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsCentrifugoApi.html#subscribeUserToPrivateChannels) method:
 
 ```ts
 const userId = 123456789;
@@ -186,11 +192,11 @@ const channels = await apiClient.centrifugo.subscribeUserToPrivateChannels(userI
 ]);
 ```
 
-This method returns an array of [DonationAlertsCentrifugoChannel](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsCentrifugoChannel.html) objects that include the channel name and subscription token.
+This method returns an array of [DonationAlertsCentrifugoChannel](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsCentrifugoChannel.html) objects, each containing a channel name and a subscription token.
 
-To subscribe to a private channel, the channel name must fit the following template: `<channel>_<userId>`. If you want to subscribe to donation notifications (means `$alerts:donation` channel) of user `123456789`, you don't need to form the channel name yourself; the library takes on this task for you. The result will be a valid target channel with joined channel name and user ID: `$alerts:donation_123456789`.
+To subscribe to a private channel, DonationAlerts requires the channel name to follow the format `<channel>_<userId>`, but you don't need to create the complete name manually. For instance, if you wish to subscribe to donation notifications (`$alerts:donation`) for a user with the ID `123456789`, simply provide the base channel name. The library will automatically append the user ID to form the full channel name: `$alerts:donation_123456789`.
 
-If you are passing already valid channel, you should disable this behavior by passing [DonationAlertsCentrifugoSubscribeOptions](https://stimulcross.github.io/donation-alerts/interfaces/api.DonationAlertsCentrifugoSubscribeOptions.html) as the fourth argument with property `transformChannel` equal to `false`:
+If you prefer to pass an already fully formed channel name and disable the automatic transformation, provide [DonationAlertsCentrifugoSubscribeOptions](https://stimulcross.github.io/donation-alerts/interfaces/api.DonationAlertsCentrifugoSubscribeOptions.html) as the fourth argument with the property `transformChannel` set to `false`:
 
 ```ts
 const userId = 123456789;
@@ -208,7 +214,13 @@ const channels = await apiClient.centrifugo.subscribeUserToPrivateChannels(
 
 In this case, the library won't transform the channel.
 
-In addition to the above method, you can use special methods to subscribe to specific channels: [subscribeUserToDonationAlertEvents](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsCentrifugoApi.html#subscribeUserToDonationAlertEvents), [subscribeUserToGoalUpdateEvents](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsCentrifugoApi.html#subscribeUserToGoalUpdateEvents), and [subscribeUserToPollUpdateEvents](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsCentrifugoApi.html#subscribeUserToPollUpdateEvents).
+In addition to this generic method, there are specialized methods to subscribe to specific notification channels:
+
+- [subscribeUserToDonationAlertEvents](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsCentrifugoApi.html#subscribeUserToDonationAlertEvents)
+- [subscribeUserToGoalUpdateEvents](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsCentrifugoApi.html#subscribeUserToGoalUpdateEvents)
+- [subscribeUserToPollUpdateEvents](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsCentrifugoApi.html#subscribeUserToPollUpdateEvents)
+
+For example:
 
 ```ts
 const userId = 123456789;
@@ -219,19 +231,20 @@ const goalUpdateChannel = await apiClient.centrifugo.subscribeUserToGoalUpdateEv
 const pollUpdateChannel = await apiClient.centrifugo.subscribeUserToPollUpdateEvents(userId, clientId);
 ```
 
-These methods also accept [DonationAlertsCentrifugoSubscribeOptions](https://stimulcross.github.io/donation-alerts/interfaces/api.DonationAlertsCentrifugoSubscribeOptions.html) as the third argument, and you can disable channel transformation here, too.
+These methods also accept [DonationAlertsCentrifugoSubscribeOptions](https://stimulcross.github.io/donation-alerts/interfaces/api.DonationAlertsCentrifugoSubscribeOptions.html) as an optional parameter, allowing you to disable channel transformation if needed.
 
 ---
 
 #### [Merchandise API](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsMerchandiseApi.html)
 
-> [!WARNING] > `Merchandise API` wasn't tested because access to these API endpoints is given as per request. Check the official [documentation](https://www.donationalerts.com/apidoc#advertisement__merchandises) to read more.
+> [!WARNING]
+> Merchandise API hasn't been tested because access to these endpoints is provided upon request. Please refer to the official [documentation](https://www.donationalerts.com/apidoc#advertisement__merchandises) for more details.
 
-Donation Alerts allow the merchant to sell their merchandise and provide the API methods to create or update merchandise and send sale notifications.
+DonationAlerts enables merchants to sell their merchandise by providing API methods to create or update products and to send sale notifications.
 
 #### Creating merchandise
 
-To create merchandise you can use [createMerchandise](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsMerchandiseApi.html#createMerchandise) method:
+To create merchandise, use the [createMerchandise](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsMerchandiseApi.html#createMerchandise) method:
 
 ```ts
 const userId = 123456789;
@@ -257,13 +270,14 @@ const merchadiseData: DonationAlertsCreateMerchandiseData = {
 const createdMerchandise = await apiClient.merchandise.createMerchandise(userId, clientSecret, merchadiseData);
 ```
 
-To read about all the available merchandise options you can check the [DonationAlertsCreateMerchandiseData](https://stimulcross.github.io/donation-alerts/interfaces/api.DonationAlertsCreateMerchandiseData.html) documentation page.
+For details on all available merchandise options, see the [DonationAlertsCreateMerchandiseData](https://stimulcross.github.io/donation-alerts/interfaces/api.DonationAlertsCreateMerchandiseData.html) documentation.
 
-> [!NOTE] > `en_US` title is required, but other languages are optional.
+> [!NOTE]
+> The `en_US` title is mandatory, while other language titles are optional.
 
 #### Updating merchandise
 
-Updating the merchandise is also very straightforward with [updateMerchandise](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsMerchandiseApi.html#updateMerchandise) method:
+Updating merchandise is straightforward with the [updateMerchandise](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsMerchandiseApi.html#updateMerchandise) method:
 
 ```ts
 const userId = 123456789;
@@ -286,11 +300,39 @@ const createdMerchandise = await apiClient.merchandise.updateMerchandise(
 );
 ```
 
-Unlike [DonationAlertsCreateMerchandiseData](https://stimulcross.github.io/donation-alerts/interfaces/api.DonationAlertsCreateMerchandiseData.html), in [DonationAlertsUpdateMerchandiseData](https://stimulcross.github.io/donation-alerts/interfaces/api.DonationAlertsUpdateMerchandiseData.html), all fields are optional, and you can selectively update merchandise data.
+Unlike [DonationAlertsCreateMerchandiseData](https://stimulcross.github.io/donation-alerts/interfaces/api.DonationAlertsCreateMerchandiseData.html), all fields in [DonationAlertsUpdateMerchandiseData](https://stimulcross.github.io/donation-alerts/interfaces/api.DonationAlertsUpdateMerchandiseData.html) are optional, allowing you to update only the desired values.
+
+#### Creating or updating merchandise
+
+A combined [createOrUpdateMerchandise](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsMerchandiseApi.html#createOrUpdateMerchandise) method which allows updating merchandise, or create if it doesn't exist yet:
+
+```ts
+const userId = 123456789;
+const clientSecret = 'SUPER_SECRET_STRING';
+
+const merchadiseData: DonationAlertsCreateMerchandiseData = {
+	merchantIdentifier: '<MERCHANT_ID>',
+	merchandiseIdentifier: '<MERCHANDISE_ID>',
+	title: {
+		en_US: 'English Title',
+		ru_RU: 'Русский заголовок',
+	},
+	isActive: true,
+	isPercentage: true,
+	currency: 'EUR',
+	priceUser: 5,
+	priceService: 2,
+	url: '<MERCHANDISE_WEB_PAGE_URL>',
+	imgUrl: '<IMAGE_URL>',
+	endTimestamp: 1660632051919,
+};
+
+const merchandise = await apiClient.merchandise.createOrUpdateMerchandise(userId, clientSecret, merchadiseData);
+```
 
 #### Sending sale notifications
 
-To send merchandise sale notification use [sendSaleAlert](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsMerchandiseApi.html#sendSaleAlert) method:
+To send a merchandise sale notification, use the [sendSaleAlert](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsMerchandiseApi.html#sendSaleAlert) method:
 
 ```ts
 const userId = 123456789;
@@ -308,15 +350,15 @@ const alertData: DonationAlertsSendMerchandiseSaleAlertData = {
 await apiClient.merchandise.sendSaleAlert(userId, clientSecret, alertData);
 ```
 
-Check the [DonationAlertsSendMerchandiseSaleAlertData](https://stimulcross.github.io/donation-alerts/interfaces/api.DonationAlertsSendMerchandiseSaleAlertData.html) documentation page to see all available alert data you can send.
+For a complete list of available alert data fields, refer to the [DonationAlertsSendMerchandiseSaleAlertData](https://stimulcross.github.io/donation-alerts/interfaces/api.DonationAlertsSendMerchandiseSaleAlertData.html) documentation.
 
 ### Rate Limits
 
-According to the official [documentation](https://www.donationalerts.com/apidoc#introduction__http_api_requests__limitations), Donation Alerts API limits requests to the API methods for each application by 60 requests per minute, making it 1 request per second.
+According to the [official documentation](https://www.donationalerts.com/apidoc#introduction__http_api_requests__limitations), the Donation Alerts API restricts each application to 60 requests per minute — essentially, 1 request per second.
 
-The library, by default, limits the number of requests to 1 per second. This means if you run, for example, 60 concurrent requests at the same time, they will be executed sequentially at 1 request per second.
+By default, the library enforces this limit, so even if you initiate 60 concurrent requests, they will be executed one by one at a rate of 1 per second.
 
-To manage rate limit behavior, you can pass [rateLimiterOptions](https://stimulcross.github.io/donation-alerts/interfaces/api.ApiConfig.html#rateLimiterOptions) to the `ApiClient` constructor:
+You can adjust rate the limiter behavior by providing [rateLimiterOptions](https://stimulcross.github.io/donation-alerts/interfaces/api.ApiConfig.html#rateLimiterOptions) to the `ApiClient` constructor:
 
 ```ts
 import { ApiClient } from '@donation-alerts/api';
@@ -330,11 +372,11 @@ const apiClient = new ApiClient({
 });
 ```
 
-If you set [limitToOneRequestPerSecond](https://stimulcross.github.io/donation-alerts/interfaces/api.RateLimiterOptions.html#limitToOneRequestPerSecond) to `false`, you can reach the rate limit, let's say, in 10 seconds, and the library will not be able to send requests for the remaining 50 seconds of the available 60-second time window. So the client will be idle, waiting for a new time window. By default, this option is set to `true`.
+Setting [limitToOneRequestPerSecond](https://stimulcross.github.io/donation-alerts/interfaces/api.RateLimiterOptions.html#limitToOneRequestPerSecond) to `false` means that you might reach the rate limit sooner (for example, 60 requests in 10 seconds), after which the library will be idle until the next 60-second window. By default, this option is enabled.
 
-You can also specify the limit reached behavior by setting [limitReachedBehavior](https://stimulcross.github.io/donation-alerts/interfaces/api.RateLimiterOptions.html#limitReachedBehavior). By default, this option is set to `enqueue`, which means that if a request reaches the rate limit, it will be enqueued and sent when possible. Other available options are `throw` and `null`. Read more about rate limiter options in the [documentation](https://stimulcross.github.io/donation-alerts/interfaces/api.RateLimiterOptions.html) page.
+Furthermore, you can specify the behavior when the rate limit is reached using [limitReachedBehavior](https://stimulcross.github.io/donation-alerts/interfaces/api.RateLimiterOptions.html#limitReachedBehavior). The default is `enqueue`, which queues requests that exceed the rate limit until they can be sent. Other options include `throw` and `null`. For more details, refer to the [documentation](https://stimulcross.github.io/donation-alerts/interfaces/api.RateLimiterOptions.html).
 
-These settings define the default behavior of the rate limiter at the entire API client level, but you can specify the behavior of the rate limiter on a per-request basis. All methods of `ApiClient` namespaces allow you to specify the behavior of the rate limiter.
+These settings define the default behavior at the API client level; however, you can override them on a per-request basis. For instance:
 
 ```ts
 const user = await apiClient.users.getUser(123456789, {
@@ -342,11 +384,11 @@ const user = await apiClient.users.getUser(123456789, {
 });
 ```
 
-In this case, the method will throw `RateLimitReachedError` if the rate limit is reached.
+In this scenario, the method will throw a `RateLimitReachedError` if the rate limit is exceeded.
 
 ### Undocumented fields
 
-Donation Alerts data often includes fields that are not mentioned in the official documentation. While it's not safe to rely on these fields in production, I just want to inform you that you can access this data using [getRawData](https://stimulcross.github.io/donation-alerts/functions/common.getRawData.html) function from [@donation-alerts/common](https://stimulcross.github.io/donation-alerts/modules/common.html) package.
+Donation Alerts responses often include fields not mentioned in the official documentation. Although it is not recommended to rely on these undocumented fields in production, you can access the raw data using the [getRawData](https://stimulcross.github.io/donation-alerts/functions/common.getRawData.html) function from the [@donation-alerts/common](https://stimulcross.github.io/donation-alerts/modules/common.html) package:
 
 ```ts
 import { getRawData } from '@donation-alerts/common';
@@ -358,7 +400,7 @@ const rawData = getRawData(donations[0]);
 console.log(rawData);
 ```
 
-At the time of writing this documentation, the output looks like this:
+At the time of writing, the output resembles the following structure:
 
 ```ts
 interface DonationRawData {
@@ -386,8 +428,8 @@ interface DonationRawData {
 }
 ```
 
-But again, you better avoid using undocumented fields.
+It is advisable to avoid depending on undocumented fields as their structure may change.
 
 ---
 
-For more information check the [documentation](https://stimulcross.github.io/donation-alerts/modules/api.html).
+For additional information, please refer to the [documentation](https://stimulcross.github.io/donation-alerts/modules/api.html).
