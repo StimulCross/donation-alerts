@@ -15,7 +15,7 @@ async function runYarn(args) {
 async function runAndPassOutput(cmd, args) {
 	return new Promise(resolve => {
 		const proc = spawn(cmd, args, {
-			stdio: 'inherit'
+			stdio: 'inherit',
 		});
 		proc.on('exit', code => {
 			if (code) {
@@ -52,10 +52,10 @@ await runYarn([
 	'--no-commit-hooks',
 	'--force-publish',
 	'--preid',
-	'pre',
+	'next',
 	versionType,
 	'-m',
-	'build: release version %v'
+	'build: release version %v',
 ]);
 
 if (versionType.startsWith('pre')) {
