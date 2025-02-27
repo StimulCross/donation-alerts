@@ -16,7 +16,6 @@ import { type AccessTokenWithUserId, type AuthProvider } from '@donation-alerts/
 import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { createLogger, type Logger, type LoggerOptions } from '@stimulcross/logger';
 import { nonenumerable } from '@stimulcross/shared-utils';
-import { stringify } from 'qs';
 import { Memoize } from 'typescript-memoize';
 import { DonationAlertsCentrifugoApi } from './api/centrifugo/donation-alerts-centrifugo-api';
 import { DonationAlertsCustomAlertsApi } from './api/customAlerts/donation-alerts-custom-alerts-api';
@@ -81,7 +80,7 @@ export interface ApiConfig {
 	/**
 	 * Options to pass to the logger.
 	 */
-	logger?: LoggerOptions;
+	logger?: Partial<LoggerOptions>;
 
 	/**
 	 * Defines the rate limiter options.
@@ -234,15 +233,15 @@ export class ApiClient {
 		const type = options.type ?? 'api';
 		const limitReachedBehavior = rateLimiterOptions.limitReachedBehavior ?? this._limitReachedBehavior;
 
-		this._logger.debug(`Calling ${type} API: ${options.method ?? 'GET'} ${options.url}`);
+		this._logger.debug(`Calling ${type}: ${options.method ?? 'GET'} ${options.url}`);
 		this._logger.trace(`Query: ${JSON.stringify(options.query)}`);
 
 		if (options.jsonBody) {
-			this._logger.trace(`Request body: ${JSON.stringify(options.jsonBody)}`);
+			this._logger.trace(`Request JSON body: ${JSON.stringify(options.jsonBody)}`);
 		}
 
 		if (options.formBody) {
-			this._logger.trace(`Request body: ${stringify(options.formBody)}`);
+			this._logger.trace(`Request form body: ${JSON.stringify(options.formBody)}`);
 		}
 
 		const response =
