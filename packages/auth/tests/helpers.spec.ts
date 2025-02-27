@@ -66,18 +66,23 @@ describe('compareScopes', () => {
 
 		// The function should not throw when requestedScopes are included
 		expect(() => {
-			compareScopes(tokenScopes, requestedScopes);
-		}).not.toThrow();
+			compareScopes(tokenScopes, requestedScopes, 123);
+		}).not.toThrow(MissingScopeError);
 	});
 
 	it('should throw MissingScopeError if any requested scope is missing', () => {
+		const userId = 123;
 		const tokenScopes = ['scope1', 'scope2'];
 		const requestedScopes = ['scope1', 'scope3'];
 
-		// The function should throw MissingScopeError when a required scope is missing
-		expect(() => {
-			compareScopes(tokenScopes, requestedScopes);
-		}).toThrow(MissingScopeError);
+		try {
+			compareScopes(tokenScopes, requestedScopes, userId);
+			fail('Expected MissingScopeError to be thrown');
+		} catch (e) {
+			expect(e).toBeInstanceOf(MissingScopeError);
+			expect((e as MissingScopeError).userId).toBe(userId);
+			expect((e as MissingScopeError).scopes).toEqual(['scope3']);
+		}
 	});
 
 	it('should not throw an error if requestedScopes is undefined', () => {
@@ -86,7 +91,7 @@ describe('compareScopes', () => {
 		const requestedScopes = undefined;
 
 		expect(() => {
-			compareScopes(tokenScopes, requestedScopes);
-		}).not.toThrow();
+			compareScopes(tokenScopes, requestedScopes, 123);
+		}).not.toThrow(MissingScopeError);
 	});
 });

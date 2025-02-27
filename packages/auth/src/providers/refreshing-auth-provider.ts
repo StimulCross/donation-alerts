@@ -1,10 +1,10 @@
 import { EventEmitter } from '@d-fischer/typed-event-emitter';
-import { callDonationAlertsApi, HttpError } from '@donation-alerts/api-call';
+import { callDonationAlertsApi } from '@donation-alerts/api-call';
 import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { nonenumerable } from '@stimulcross/shared-utils';
 import { type AuthProvider } from './auth-provider';
 import { type AccessToken, type AccessTokenWithUserId, isAccessTokenExpired } from '../access-token';
-import { InvalidTokenError, MissingScopeError, UnregisteredUserError } from '../errors';
+import { InvalidTokenError, UnregisteredUserError } from '../errors';
 import { compareScopes, getAccessToken, refreshAccessToken } from '../helpers';
 
 /**
@@ -91,10 +91,15 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	 * @param token The initial token data.
 	 */
 	addUser(user: UserIdResolvable, token: AccessToken): void {
-		this._validateToken(token);
-		this._compareScopes(token);
+		const userId = extractUserId(user);
 
-		this._registry.set(extractUserId(user), token);
+		this._validateToken(token);
+
+		if (token.scopes) {
+			compareScopes(token.scopes, this._config.scopes, userId);
+		}
+
+		this._registry.set(userId, token);
 	}
 
 	/**
@@ -110,11 +115,6 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 
 		let accessToken = token;
 		let isTokenRefreshed = false;
-		let userId: number;
-
-		if (accessToken.scopes) {
-			compareScopes(accessToken.scopes, this._config.scopes);
-		}
 
 		if (!isAccessTokenExpired(accessToken)) {
 			accessToken = await refreshAccessToken(
@@ -126,23 +126,14 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 			isTokenRefreshed = true;
 		}
 
-		try {
-			const user = await callDonationAlertsApi<{ data: { id: number } }>(
-				{ type: 'api', url: 'user/oauth' },
-				accessToken.accessToken,
-			);
+		const user = await callDonationAlertsApi<{ data: { id: number } }>(
+			{ type: 'api', url: 'user/oauth' },
+			accessToken.accessToken,
+		);
+		const userId = user.data.id;
 
-			userId = user.data.id;
-		} catch (e) {
-			if (e instanceof HttpError && e.status === 401) {
-				throw new MissingScopeError(
-					`Failed to query the user associated with the token.
-Received 401 error: "${e.message}".
-The access token must include "oauth-user-show" scope to query the user associated with the token.`,
-				);
-			}
-
-			throw e;
+		if (accessToken.scopes) {
+			compareScopes(accessToken.scopes, this._config.scopes, userId);
 		}
 
 		this.addUser(userId, accessToken);
@@ -172,16 +163,16 @@ The access token must include "oauth-user-show" scope to query the user associat
 			code,
 		);
 
-		token.scopes = scopes;
-
-		if (token.scopes) {
-			compareScopes(token.scopes, this._config.scopes);
-		}
-
 		const user = await callDonationAlertsApi<{ data: { id: number } }>(
 			{ type: 'api', url: 'user/oauth' },
 			token.accessToken,
 		);
+
+		token.scopes = scopes;
+
+		if (token.scopes) {
+			compareScopes(token.scopes, this._config.scopes, user.data.id);
+		}
 
 		this.addUser(user.data.id, token);
 		this.emit(this.onRefresh, user.data.id, token);
@@ -228,7 +219,7 @@ The access token must include "oauth-user-show" scope to query the user associat
 
 		if (currentToken.accessToken && !isAccessTokenExpired(currentToken)) {
 			if (currentToken.scopes) {
-				compareScopes(currentToken.scopes, scopes);
+				compareScopes(currentToken.scopes, scopes, userId);
 			}
 
 			return { ...currentToken, userId };
@@ -238,7 +229,7 @@ The access token must include "oauth-user-show" scope to query the user associat
 		token.scopes = currentToken.scopes;
 
 		if (token.scopes) {
-			compareScopes(token.scopes, scopes);
+			compareScopes(token.scopes, scopes, userId);
 		}
 
 		return { ...token, userId };
@@ -282,12 +273,6 @@ The access token must include "oauth-user-show" scope to query the user associat
 
 		if (!token.refreshToken) {
 			throw new InvalidTokenError("The refresh token is invalid. Make sure it's a non-empty string");
-		}
-	}
-
-	private _compareScopes(token: AccessToken): void {
-		if (token.scopes) {
-			compareScopes(token.scopes, this._config.scopes);
 		}
 	}
 }

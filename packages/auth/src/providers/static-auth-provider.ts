@@ -39,10 +39,15 @@ export class StaticAuthProvider implements AuthProvider {
 	 * @param token The initial token data.
 	 */
 	addUser(user: UserIdResolvable, token: Pick<AccessToken, 'accessToken' | 'scopes'>): void {
-		this._validateAccessToken(token);
-		this._compareScopes(token);
+		const userId = extractUserId(user);
 
-		this._registry.set(extractUserId(user), {
+		this._validateAccessToken(token);
+
+		if (token.scopes) {
+			compareScopes(token.scopes, this._scopes, userId);
+		}
+
+		this._registry.set(userId, {
 			accessToken: token.accessToken,
 			refreshToken: null,
 			expiresIn: null,
@@ -88,7 +93,7 @@ export class StaticAuthProvider implements AuthProvider {
 		}
 
 		if (token.scopes) {
-			compareScopes(token.scopes, scopes);
+			compareScopes(token.scopes, scopes, userId);
 		}
 
 		return { ...token, userId };
@@ -97,12 +102,6 @@ export class StaticAuthProvider implements AuthProvider {
 	private _validateAccessToken(token: Pick<AccessToken, 'accessToken' | 'scopes'>): void {
 		if (!token.accessToken) {
 			throw new InvalidTokenError("The access token is invalid. Make sure it's a non-empty string");
-		}
-	}
-
-	private _compareScopes(token: Pick<AccessToken, 'accessToken' | 'scopes'>): void {
-		if (token.scopes) {
-			compareScopes(token.scopes, this._scopes);
 		}
 	}
 }
