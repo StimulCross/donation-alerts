@@ -12,7 +12,9 @@ import {
 	type DonationAlertsMerchandiseMerchantData,
 } from './donation-alerts-merchandise-merchant';
 
-/** @internal */
+/**
+ * Object carrying merchandise's titles in different locales.
+ */
 export interface DonationAlertsMerchandiseTitleData extends Partial<Record<DonationAlertsLocaleCode, string>> {
 	en_US: string;
 }

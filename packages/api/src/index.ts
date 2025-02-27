@@ -35,7 +35,10 @@ export {
 	type DonationAlertsCreateMerchandiseData,
 	type DonationAlertsCreateMerchandiseTitleData,
 } from './api/merchandise/donation-alerts-merchandise-api';
-export { DonationAlertsMerchandise } from './api/merchandise/donation-alerts-merchandise';
+export {
+	type DonationAlertsMerchandiseTitleData,
+	DonationAlertsMerchandise,
+} from './api/merchandise/donation-alerts-merchandise';
 export {
 	DonationAlertsMerchandiseSale,
 	type DonationAlertsMerchandiseSaleAlertType,
