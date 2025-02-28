@@ -20,17 +20,15 @@ export interface RefreshingAuthProviderConfig {
 	 * The Donation Alerts client secret.
 	 *
 	 * @remarks
-	 * In order to refresh the access token for a user, you must provide the application client secret.
-	 *
-	 * That's why it's not safe to use {@link RefreshingAuthProvider} on the frontend, because it will leak application
-	 * client secret.
+	 * This is required to refresh expired tokens for any user. If you do not need token refreshing,
+	 * you may opt for {@link StaticAuthProvider}.
 	 */
 	clientSecret: string;
 
 	/**
-	 * A valid redirect URI for your application.
+	 * A list of scopes that must be present in any registered tokens.
 	 *
-	 * Only required if you intend to use {@link RefreshingAuthProvider#addUserForCode}.
+	 * If the token is missing any scope specified here, a {@link MissingScopeError} will be thrown.
 	 */
 	redirectUri?: string;
 
@@ -44,8 +42,7 @@ export interface RefreshingAuthProviderConfig {
 }
 
 /**
- * An authentication provider implementation that uses user refresh tokens to automatically refresh the access token
- * whenever necessary.
+ * An authentication provider that automatically refreshes user access tokens when they expire.
  */
 @ReadDocumentation('events')
 export class RefreshingAuthProvider extends EventEmitter implements AuthProvider {
@@ -56,15 +53,15 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	/**
 	 * Fires when a user's token is successfully refreshed.
 	 *
-	 * @param userId The ID of the user the token belongs to.
-	 * @param token The refreshed {@link AccessToken} object.
+	 * @param userId The ID of the user whose token was refreshed.
+	 * @param token The updated {@link AccessToken} object.
 	 */
 	readonly onRefresh = this.registerEvent<[userId: number, token: AccessToken]>();
 
 	/**
-	 * Creates a new authentication provider that can automatically refresh tokens.
+	 * Creates a new instance of the `RefreshingAuthProvider`.
 	 *
-	 * @param config The configuration object.
+	 * @param config The configuration object that defines client credentials and settings.
 	 */
 	constructor(config: RefreshingAuthProviderConfig) {
 		super();
@@ -76,19 +73,22 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	}
 
 	/**
-	 * Checks whether a user was added to the provider.
+	 * Checks whether the specified user is registered in this provider.
 	 *
-	 * @param user The user to check.
+	 * @param user The ID of the user to check.
 	 */
 	hasUser(user: UserIdResolvable): boolean {
 		return this._registry.has(extractUserId(user));
 	}
 
 	/**
-	 * Adds a user to the auth provider registry.
+	 * Adds a user to this provider, associating them with the provided token data.
 	 *
-	 * @param user The ID of the user.
-	 * @param token The initial token data.
+	 * @param user The ID of the user to add.
+	 * @param token The token data, including refresh and access tokens.
+	 *
+	 * @throws {@link InvalidTokenError} if the access or refresh tokens are invalid.
+	 * @throws {@link MissingScopeError} if the token does not match the required scopes.
 	 */
 	addUser(user: UserIdResolvable, token: AccessToken): AccessTokenWithUserId {
 		const userId = extractUserId(user);
@@ -104,12 +104,11 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	}
 
 	/**
-	 * Finds out the user associated to the given access token and adds them to the provider.
+	 * Determines the user ID from an access token and registers that user.
 	 *
-	 * If you already know the ID of the user you are adding,
-	 * consider using {@link RefreshingAuthProvider#addUser} instead.
+	 * If you already know the user's ID, using {@link addUser} might be preferable.
 	 *
-	 * @param token The initial token data.
+	 * @param token The token data, including refresh and access tokens.
 	 */
 	async addUserForToken(token: AccessToken): Promise<AccessTokenWithUserId> {
 		this._validateToken(token);
@@ -147,10 +146,15 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	}
 
 	/**
-	 * Exchanges an authorization code for an access token and adds the user to the provider.
+	 * Exchanges a grant authorization code for an access token and registers the user in this auth provider.
+	 *
+	 * @remarks
+	 * The `redirectUri` option must be specified in {@link RefreshingAuthProviderConfig} to complete
+	 * this flow successfully.
 	 *
 	 * @param code The authorization code.
-	 * @param scopes The authorization code.
+	 * @param scopes Optional scopes that the user granted when retrieving the code. These scopes will be compared
+	 * against the scopes specified in the constructor.
 	 */
 	async addUserForCode(code: string, scopes?: string[]): Promise<AccessTokenWithUserId> {
 		if (!this._config.redirectUri) {
@@ -182,9 +186,9 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	}
 
 	/**
-	 * Removes a user from the auth provider registry.
+	 * Removes a user from this provider.
 	 *
-	 * @param user The ID of the suer to add.
+	 * @param user The ID of the user to remove.
 	 */
 	removeUser(user: UserIdResolvable): void {
 		this._registry.delete(extractUserId(user));
@@ -239,6 +243,14 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 		return { ...token, userId };
 	}
 
+	/**
+	 * Forces a token refresh for the specified user and updates the provider's registry accordingly.
+	 *
+	 * @param user The ID of the user to add.
+	 *
+	 * @throws {@link UnregisteredUserError} if the user is not registered in this provider.
+	 * @throws {@link InvalidTokenError} if the refresh token is missing or invalid.
+	 */
 	async refreshAccessTokenForUser(user: UserIdResolvable): Promise<AccessTokenWithUserId> {
 		const userId = extractUserId(user);
 

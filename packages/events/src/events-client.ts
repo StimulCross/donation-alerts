@@ -11,15 +11,26 @@ import { UserEventsClient } from './user-events-client';
 
 /**
  * Configuration for {@link EventsClient}.
+ *
+ * @remarks
+ * Defines the settings required to initialize the `EventsClient`, including the API client
+ * for communication and optional logger configuration.
  */
 export interface EventsClientConfig {
 	apiClient: ApiClient;
 	logger?: Partial<LoggerOptions>;
 }
+
 /**
- * Donation Alerts events client that allows listen to various events, such as new donations, goal updates,
- * and poll updates.
+ * Donation Alerts events client that manages multiple users and allows listening to
+ * various events such as donations, goal updates, and poll updates.
+ *
+ * @remarks
+ * The `EventsClient` acts as a central manager for event subscriptions. Each user tracked
+ * by the client operates within its own {@link UserEventsClient} instance. This class
+ * simplifies handling multiple users while maintaining individual event subscription control.
  */
+
 @ReadDocumentation('events')
 export class EventsClient extends EventEmitter {
 	@nonenumerable private readonly _config: EventsClientConfig;
@@ -27,20 +38,19 @@ export class EventsClient extends EventEmitter {
 	@nonenumerable private readonly _userClients: Map<number, UserEventsClient> = new Map();
 
 	/**
-	 * Fires when a user's client establishes a connection to a Centrifugo server.
+	 * Fires when a user's client successfully connects to the Centrifugo server.
 	 */
 	readonly onConnect = this.registerEvent<[userId: number]>();
 
 	/**
-	 * Fires when a user's client disconnected from a Centrifugo server.
+	 * Fires when a user's client disconnected from the Centrifugo server.
 	 */
 	readonly onDisconnect = this.registerEvent<[userId: number, reason: string, reconnect: boolean]>();
 
 	/**
-	 * Creates the Donation Alerts events client that allows listen to various events, such as new donations,
-	 * goal updates, and poll updates.
+	 * Initializes the Donation Alerts events client.
 	 *
-	 * @param config
+	 * @param config Configuration for creating the `EventsClient`.
 	 */
 	constructor(config: EventsClientConfig) {
 		super();
@@ -50,9 +60,10 @@ export class EventsClient extends EventEmitter {
 	}
 
 	/**
-	 * Returns a {@link UserEventsClient} by user ID.
+	 * Returns an instance of {@link UserEventsClient} for a specific user.
 	 *
-	 * @param user The user to get the {@link UserEventsClient} instance of.
+	 * @param user The ID of the user to retrieve the client instance for.
+	 * @throws Error if the user has not been registered in the client.
 	 */
 	getUserClient(user: UserIdResolvable): UserEventsClient {
 		const userId = extractUserId(user);
@@ -67,16 +78,23 @@ export class EventsClient extends EventEmitter {
 	}
 
 	/**
-	 * Checks whether a user was added to the client.
+	 * Checks if a user is registered in the client.
+	 *
+	 * @param user The user ID to check for registration.
+	 * @returns `true` if the user is registered; otherwise, `false`.
 	 */
 	hasUser(user: UserIdResolvable): boolean {
 		return this._userClients.has(extractUserId(user));
 	}
 
 	/**
-	 * Registers a user in the client.
+	 * Registers a user with the client and creates a new {@link UserEventsClient} for them.
 	 *
 	 * @param user The ID of the user to register.
+	 *
+	 * @returns A {@link UserEventsClient} instance for the registered user.
+	 *
+	 * @throws Error if the user is already registered.
 	 */
 	addUser(user: UserIdResolvable): UserEventsClient {
 		const userId = extractUserId(user);
@@ -102,9 +120,11 @@ export class EventsClient extends EventEmitter {
 	}
 
 	/**
-	 * Removes a user and the listeners from the client.
+	 * Unregisters a user and removes their listeners and event subscriptions.
 	 *
-	 * If the user client doesn't have active channels, the connection will be closed.
+	 * @remarks
+	 * If the user's client is not actively subscribed to channels, the WebSocket connection
+	 * will be closed.
 	 *
 	 * @param user The ID of the user to remove.
 	 */
@@ -124,10 +144,12 @@ export class EventsClient extends EventEmitter {
 	}
 
 	/**
-	 * Creates a listener for user for donation events.
+	 * Subscribes to donation events for a specific user.
 	 *
-	 * @param user The ID of the user to listen donation events to.
-	 * @param callback A function to be called when donation event is sent to the user.
+	 * @param user The ID of the user whose donations are being monitored.
+	 * @param callback A function invoked when a donation event is received.
+	 *
+	 * @returns An {@link EventsListener} instance for managing the subscription.
 	 */
 	async onDonation(
 		user: UserIdResolvable,
@@ -137,10 +159,12 @@ export class EventsClient extends EventEmitter {
 	}
 
 	/**
-	 * Creates a listener for user for goal update events.
+	 * Subscribes to goal update events for a specific user.
 	 *
-	 * @param user The ID of the user to listen goal update events to.
-	 * @param callback A function to be called when goal update is sent to the user.
+	 * @param user The ID of the user whose goal updates are being monitored.
+	 * @param callback A function invoked when a goal update event is received.
+	 *
+	 * @returns An {@link EventsListener} instance for managing the subscription.
 	 */
 	async onGoalUpdate(
 		user: UserIdResolvable,
@@ -150,10 +174,12 @@ export class EventsClient extends EventEmitter {
 	}
 
 	/**
-	 * Creates a listener for user for poll update events.
+	 * Subscribes to poll update events for a specific user.
 	 *
-	 * @param user The ID of the user to listen poll update events to.
-	 * @param callback A function to be called when poll update is sent to the user.
+	 * @param user The ID of the user whose poll updates are being monitored.
+	 * @param callback A function invoked when a poll update event is received.
+	 *
+	 * @returns An {@link EventsListener} instance for managing the subscription.
 	 */
 	async onPollUpdate(
 		user: UserIdResolvable,

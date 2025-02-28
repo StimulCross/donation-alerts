@@ -7,21 +7,32 @@ import { type DonationAlertsResponseSingleData } from '../donation-alerts-respon
 /**
  * Donation Alerts Users API.
  *
- * Allows fetching the authorized user.
+ * @remarks
+ * Provides methods to interact with Donation Alerts users, including retrieving user profiles
+ * and socket connection tokens.
  */
 @ReadDocumentation('api')
 export class DonationAlertsUsersApi extends BaseApi {
 	/**
-	 * Gets the user profile.
+	 * Fetches the authenticated user's information based on the provided user ID.
 	 *
-	 * Requires the `oauth-user-show` scope.
+	 * @remarks
+	 * Requires `oauth-user-show` scope.
 	 *
-	 * @param user The ID of the user to get profile for.
-	 * @param rateLimiterOptions The rate limiter options.
+	 * @param user The ID of the user whose profile needs to be fetched.
+	 * @param rateLimiterOptions Optional rate limiter configuration to control API requests.
 	 *
-	 * @throws {@link HttpError} if response status code is out of 200-299 range.
-	 * @throws {@link UnregisteredUserError} if the user you are trying to get is not registered in authentication provider.
-	 * @throws {@link MissingScopeError} if the access token does not have `oauth-user-show` scope.
+	 * @returns A {@link DonationAlertsUser} instance containing the user's profile information.
+	 *
+	 * @throws {@link HttpError} if the response status code falls outside the 200–299 range.
+	 * @throws {@link UnregisteredUserError} if the specified user is not registered in the authentication provider.
+	 * @throws {@link MissingScopeError} if the provided access token is missing the required `oauth-user-show` scope.
+	 *
+	 * @example
+	 * ```ts
+	 * const user = await apiClient.users.getUser(userId);
+	 * console.log(`User ID: ${user.id}, Name: ${user.name}`);
+	 * ```
 	 */
 	async getUser(user: UserIdResolvable, rateLimiterOptions?: RateLimiterRequestOptions): Promise<DonationAlertsUser> {
 		const response = await this._apiClient.callApi<DonationAlertsResponseSingleData<DonationAlertsUserData>>(
@@ -40,16 +51,27 @@ export class DonationAlertsUsersApi extends BaseApi {
 	}
 
 	/**
-	 * Gets the socket connection token of the specified user.
+	 * Fetches a Centrifugo connection token required for establishing real-time socket connections for the
+	 * specified user.
 	 *
-	 * Requires `oauth-user-show` scope.
+	 * @remarks
+	 * This method internally uses {@link getUser} method to fetch the profile of the user, then extracts
+	 * the `socketConnectionToken` property.
 	 *
-	 * @param user The ID of the user to get profile for.
-	 * @param rateLimiterOptions The rate limiter options.
+	 * @param user The ID of the user for whom the token is being fetched.
+	 * @param rateLimiterOptions Optional rate limiter configuration to control API requests.
 	 *
-	 * @throws {@link HttpError} if response status code is out of 200-299 range.
-	 * @throws {@link UnregisteredUserError} if the user you are trying to get is not registered in authentication provider.
-	 * @throws {@link MissingScopeError} if the access token does not have `oauth-user-show` scope.
+	 * @returns A string containing the user's socket connection token.
+	 *
+	 * @throws {@link HttpError} if the response status code falls outside the 200–299 range.
+	 * @throws {@link UnregisteredUserError} if the specified user is not registered in the authentication provider.
+	 * @throws {@link MissingScopeError} if the provided access token is missing the required `oauth-user-show` scope.
+	 *
+	 * @example
+	 * ```ts
+	 * const token = await apiClient.users.getSocketConnectionToken(authenticatedUserId);
+	 * console.log(`Socket connection token: ${token}`);
+	 * ```
 	 */
 	async getSocketConnectionToken(
 		user: UserIdResolvable,

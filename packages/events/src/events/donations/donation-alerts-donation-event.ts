@@ -12,7 +12,10 @@ import { mapNullable } from '@stimulcross/shared-utils';
 export type DonationEventNameType = 'Donations';
 
 /**
- * The message type. The possible values are `text` for a text messages and `audio` for an audio messages.
+ * The message type for donations.
+ *
+ * @remarks
+ * The message can either be a plain text message (`text`) or a message containing audio (`audio`).
  */
 export type DonationEventMessageType = 'text' | 'audio';
 
@@ -31,77 +34,99 @@ export interface DonationAlertsDonationEventData {
 }
 
 /**
- * Represents Donation Alerts donation.
+ * Represents a Donation Alerts donation event.
  *
- * Note: The object contains undocumented fields
+ * @remarks
+ * This class provides detailed information about a donation, including user details, donation amount, message,
+ * currency, and timestamps for creation and display.
  */
 @ReadDocumentation('events')
 export class DonationAlertsDonationEvent extends DataObject<DonationAlertsDonationEventData> {
 	/**
-	 * The unique donation alert identifier.
+	 * The unique identifier for the donation alert.
 	 */
 	get id(): number {
 		return this[rawDataSymbol].id;
 	}
 
 	/**
-	 * Type of the alert. Always `Donations` in this context.
+	 * The type of the alert.
+	 *
+	 * @remarks
+	 * Always returns `Donations` in this context.
 	 */
 	get name(): DonationEventNameType {
 		return this[rawDataSymbol].name;
 	}
 
 	/**
-	 * The name of the user who sent the donation and the alert.
+	 * The username of the donor.
+	 *
+	 * @remarks
+	 * This is the name that the user who sent the donation chose to display publicly.
 	 */
 	get username(): string {
 		return this[rawDataSymbol].username;
 	}
 
 	/**
-	 * The message type. The possible values are text for a `text` messages and `audio` for an audio messages.
+	 * The type of the message accompanying the donation.
+	 *
+	 * @remarks
+	 * Possible values:
+	 * - `text` — A plain text message sent with the donation.
+	 * - `audio` — A message that includes an audio component.
 	 */
 	get messageType(): DonationEventMessageType {
 		return this[rawDataSymbol].message_type;
 	}
 
 	/**
-	 * The message sent along with the donation and the alert.
+	 * The message sent by the donor along with the donation.
 	 */
 	get message(): string {
 		return this[rawDataSymbol].message;
 	}
 
 	/**
-	 * The donation amount.
+	 * The donated amount.
 	 */
 	get amount(): number {
 		return this[rawDataSymbol].amount;
 	}
 
 	/**
-	 * The currency code (ISO 4217 formatted).
+	 * The currency of the donated amount.
+	 *
+	 * @remarks
+	 * This value represents the currency code in ISO 4217 format (e.g., `USD`, `EUR`, `RUB`).
 	 */
 	get currency(): DonationAlertsOutputCurrency {
 		return this[rawDataSymbol].currency;
 	}
 
 	/**
-	 * Whether the alert was shown in the streamer's widget.
+	 * Indicates whether the alert was shown in the streamer's widget.
+	 *
+	 * @returns `true` if the donation alert has been displayed; otherwise, `false`.
 	 */
 	get isShown(): boolean {
 		return this[rawDataSymbol].is_shown === 1;
 	}
 
 	/**
-	 * The donation date and time.
+	 * The date and time when the donation was received.
+	 *
+	 * @returns A `Date` object representing the donation creation time.
 	 */
 	get creationDate(): Date {
 		return new Date(this[rawDataSymbol].created_at);
 	}
 
 	/**
-	 * Date and time indicating when the alert was shown. Or `null` if the alert is not shown yet.
+	 * The date and time when the alert was shown on the streamer's widget.
+	 *
+	 * @returns A `Date` object if the alert was shown; `null` otherwise.
 	 */
 	get showDate(): Date | null {
 		return mapNullable(this[rawDataSymbol].shown_at, (v: string) => new Date(v));

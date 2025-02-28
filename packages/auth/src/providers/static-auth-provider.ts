@@ -6,7 +6,8 @@ import { InvalidTokenError, UnregisteredUserError } from '../errors';
 import { compareScopes } from '../helpers';
 
 /**
- * Static non-self-refreshing authentication provider, that always returns the same initially given credentials.
+ * A non-refreshable (static) authentication provider that always returns
+ * the initially provided credentials.
  */
 @ReadDocumentation('events')
 export class StaticAuthProvider implements AuthProvider {
@@ -14,6 +15,12 @@ export class StaticAuthProvider implements AuthProvider {
 	@nonenumerable private readonly _scopes?: string[];
 	@nonenumerable private readonly _registry = new Map<number, AccessToken>();
 
+	/**
+	 * Creates a new instance of StaticAuthProvider.
+	 *
+	 * @param clientId The client ID associated with your application.
+	 * @param scopes An optional list of required scopes to validate against.
+	 */
 	constructor(clientId: string, scopes?: string[]) {
 		this._clientId = clientId;
 		this._scopes = scopes;
@@ -24,19 +31,26 @@ export class StaticAuthProvider implements AuthProvider {
 	}
 
 	/**
-	 * Checks whether a user was added to the provider.
+	 * Checks if the specified user is already registered in this auth provider.
 	 *
-	 * @param user The user to check.
+	 * @param user The ID of the user to look for.
+	 * @returns A boolean indicating whether the user is registered.
 	 */
 	hasUser(user: UserIdResolvable): boolean {
 		return this._registry.has(extractUserId(user));
 	}
 
 	/**
-	 * Adds a user to the auth provider registry.
+	 * Adds a user and their related token data to this auth provider.
 	 *
 	 * @param user The ID of the user.
-	 * @param token The initial token data.
+	 * @param accessToken The access token.
+	 * @param scopes An optional list of scopes associated with the access token.
+	 * These scopes will be compared against the scopes specified in the constructor.
+	 * the scopes specified in the constructor (if any).
+	 *
+	 * @throws {@link InvalidTokenError} if the access token is empty or undefined.
+	 * @throws {@link MissingScopeError} if the token scopes miss required scopes.
 	 */
 	addUser(user: UserIdResolvable, accessToken: string, scopes?: string[]): void {
 		const userId = extractUserId(user);
@@ -62,9 +76,9 @@ export class StaticAuthProvider implements AuthProvider {
 	}
 
 	/**
-	 * Removes a user from the auth provider registry.
+	 * Removes an existing user from this auth provider.
 	 *
-	 * @param user The ID of the suer to add.
+	 * @param user The ID of the user to remove.
 	 */
 	removeUser(user: UserIdResolvable): void {
 		this._registry.delete(extractUserId(user));

@@ -5,9 +5,17 @@ import { klona } from 'klona';
 export const rawDataSymbol: unique symbol = Symbol('donationAlertsRawData');
 
 /**
- * Returns the raw data of the data object.
+ * Retrieves a deep clone of the raw data of the given `DataObject` instance.
  *
- * @param data The data object to get the raw data of.
+ * @param data The `DataObject` instance from which to obtain the raw data.
+ *
+ * @returns A deep-cloned copy of the raw data stored within the given data object.
+ *
+ * @example
+ * ```ts
+ * const rawData = getRawData(myDataObject);
+ * console.log(rawData); // Logs the raw data
+ * ```
  */
 export function getRawData<T>(data: DataObject<T>): T {
 	return klona(data[rawDataSymbol]);

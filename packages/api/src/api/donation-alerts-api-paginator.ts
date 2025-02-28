@@ -7,15 +7,17 @@ import { type ApiClient } from '../api-client';
 /**
  * Donation Alerts API paginator.
  *
- * Allows fetching data by page, or all at once.
+ * @remarks
+ * A utility class for managing paginated responses from the Donation Alerts API.
+ * This paginator supports navigating through paginated data by individual pages or fetching all data at once. It internally keeps track of the current page, total pages, and other metadata to simplify navigation.
  */
 @ReadDocumentation('events')
 export class DonationAlertsApiPaginator<D, T> {
 	private _path?: string;
 	private _currentPage?: number;
 	private _totalPages?: number;
-	private _from?: number | null;
-	private _to?: number | null;
+	private _from?: number;
+	private _to?: number;
 	private _perPage?: number;
 	private _total?: number;
 
@@ -32,21 +34,24 @@ export class DonationAlertsApiPaginator<D, T> {
 	) {}
 
 	/**
-	 * The current path.
+	 * The current API endpoint path.
+	 *
+	 * @remarks
+	 * This represents the path currently associated with the pagination request.
 	 */
 	get path(): string | undefined {
 		return this._path;
 	}
 
 	/**
-	 * The first element index.
+	 * The index of the first element in the currently fetched page.
 	 */
 	get from(): number | null | undefined {
 		return this._from;
 	}
 
 	/**
-	 * The last element index.
+	 * The index of the last element in the currently fetched page.
 	 */
 	get to(): number | null | undefined {
 		return this._to;
@@ -54,6 +59,9 @@ export class DonationAlertsApiPaginator<D, T> {
 
 	/**
 	 * The current page number.
+	 *
+	 * @remarks
+	 * This value is updated after each retrieval of a specific page.
 	 */
 	get currentPage(): number | undefined {
 		return this._currentPage;
@@ -74,28 +82,36 @@ export class DonationAlertsApiPaginator<D, T> {
 	}
 
 	/**
-	 * Total numbers of entities.
+	 * The total number of items in the dataset.
 	 */
 	get total(): number | undefined {
 		return this._total;
 	}
 
 	/**
-	 * Whether the paginator reached the last page.
+	 * Indicates whether the paginator has reached the last page.
+	 *
+	 * @remarks
+	 * When this flag is `true`, calling `getNext()` will return an empty array without making additional API requests.
 	 */
 	get isFinished(): boolean {
 		return this._isFinished;
 	}
 
 	/**
-	 * Gets a raw data of the last retrieved page.
+	 * The raw data of the last retrieved page, including metadata.
+	 *
+	 * @returns The full API response for the most recently fetched page, or `undefined` if no request has been made yet.
 	 */
 	get rawData(): DonationAlertsResponseWithMeta<D> | undefined {
 		return this._currentData;
 	}
 
 	/**
-	 * Resets the current state of the paginator.
+	 * Resets the paginator's internal state.
+	 *
+	 * @remarks
+	 * After calling this method, the paginator will appear as if it has not yet fetched any data.
 	 */
 	reset(): void {
 		this._isFinished = false;
@@ -109,15 +125,23 @@ export class DonationAlertsApiPaginator<D, T> {
 	}
 
 	/**
-	 * Gets donations by page number.
+	 * Fetches and returns data from a specific page.
 	 *
-	 * Returns empty array if the requested page is greater than the last page.
+	 * @remarks
+	 * If the requested page number exceeds the total number of pages, the method returns an empty array.
 	 *
-	 * @param page Page number to request. Default is `1`.
+	 * @param page The page number to fetch. Defaults to `1`.
 	 *
-	 * @throws {@link HttpError} if response status code is out of 200-299 range.
-	 * @throws {@link UnregisteredUserError} if the user you are trying to get is not registered in authentication provider.
-	 * @throws {@link MissingScopeError} if the access token does not have required scope.
+	 * @returns An array of mapped data objects for the requested page.
+	 *
+	 * @throws {@link HttpError} if the response status code is not within the `200-299` range.
+	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
+	 * @throws {@link MissingScopeError} if the access token does not include the required scope.
+	 *
+	 * @example
+	 * ```ts
+	 * const data = await paginator.getPage(42);
+	 * ```
 	 */
 	async getPage(page: number = 1): Promise<T[]> {
 		if (this._totalPages && page > this._totalPages) {
@@ -129,13 +153,17 @@ export class DonationAlertsApiPaginator<D, T> {
 	}
 
 	/**
-	 * Gets the next or the first page of donations.
+	 * Fetches the next page of data, or the first page if no pages have been loaded yet.
 	 *
-	 * Returns an empty array if the last page is reached.
+	 * @remarks
+	 * This method automatically increments the page counter and checks the total number of pages to stop requests
+	 * when the end is reached.
 	 *
-	 * @throws {@link HttpError} if response status code is out of 200-299 range.
-	 * @throws {@link UnregisteredUserError} if the user you are trying to get is not registered in authentication provider.
-	 * @throws {@link MissingScopeError} if the access token does not have required scope.
+	 * @returns An array of mapped data objects for the next page, or an empty array if the last page is reached.
+	 *
+	 * @throws {@link HttpError} if the response status code is not within the `200-299` range.
+	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
+	 * @throws {@link MissingScopeError} if the access token does not include the required scope.
 	 */
 	async getNext(): Promise<T[]> {
 		if (this._isFinished) {
@@ -158,13 +186,16 @@ export class DonationAlertsApiPaginator<D, T> {
 	}
 
 	/**
-	 * Gets the previous page of donations.
+	 * Fetches the previous page of data.
 	 *
-	 * If the current page number is `1`, then it returns it back.
+	 * @remarks
+	 * If the current page is `1`, this method will return data for the first page.
 	 *
-	 * @throws {@link HttpError} if response status code is out of 200-299 range.
-	 * @throws {@link UnregisteredUserError} if the user you are trying to get is not registered in authentication provider.
-	 * @throws {@link MissingScopeError} if the access token does not have required scope.
+	 * @returns An array of mapped data objects for the previous page.
+	 *
+	 * @throws {@link HttpError} if the response status code is not within the `200-299` range.
+	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
+	 * @throws {@link MissingScopeError} if the access token does not include the required scope.
 	 */
 	async getPrev(): Promise<T[]> {
 		let page = 1;
@@ -178,11 +209,20 @@ export class DonationAlertsApiPaginator<D, T> {
 	}
 
 	/**
-	 * Gets all donations.
+	 * Fetches all pages and aggregates the results into a single array.
 	 *
-	 * @throws {@link HttpError} if response status code is out of 200-299 range.
-	 * @throws {@link UnregisteredUserError} if the user you are trying to get is not registered in authentication provider.
-	 * @throws {@link MissingScopeError} if the access token does not have required scope.
+	 * @remarks
+	 * This method resets the paginator at the start and end of the operation. It sequentially requests each page
+	 * and concatenates the results.
+	 *
+	 * This method may take longer to execute, especially for users with a large volume of donations.
+	 * For better performance with large datasets, consider using the {@link getNext} method to fetch data in chunks.
+	 *
+	 * @returns A combined array of all mapped data objects from all pages.
+	 *
+	 * @throws {@link HttpError} if the response status code is not within the `200-299` range.
+	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
+	 * @throws {@link MissingScopeError} if the access token does not include the required scope.
 	 */
 	async getAll(): Promise<T[]> {
 		this.reset();
@@ -203,19 +243,20 @@ export class DonationAlertsApiPaginator<D, T> {
 	}
 
 	/**
-	 * Makes it possible to use async iterator to sequentially loop over all available pages.
+	 * Enables asynchronous iteration over all available pages.
+	 *
+	 * @throws {@link HttpError} if the response status code is not within the `200-299` range.
+	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
+	 * @throws {@link MissingScopeError} if the access token does not include the required scope.
 	 *
 	 * @example
-	 * const apiClient = new ApiClient({ ...config });
+	 * ```ts
 	 * const paginator = apiClient.donations.createDonationsPaginator();
 	 *
-	 * for await (const data of paginator) {
-	 *   ...
+	 * for await (const pageData of paginator) {
+	 *   console.log(pageData);
 	 * }
-	 *
-	 * @throws {@link HttpError} if response status code is out of 200-299 range.
-	 * @throws {@link UnregisteredUserError} if the user you are trying to get is not registered in authentication provider.
-	 * @throws {@link MissingScopeError} if the access token does not have required scope.
+	 * ```
 	 */
 	async *[Symbol.asyncIterator](): AsyncGenerator<T[], void, undefined> {
 		this.reset();

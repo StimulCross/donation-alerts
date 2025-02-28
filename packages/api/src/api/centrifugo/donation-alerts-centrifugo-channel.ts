@@ -12,19 +12,29 @@ export interface DonationAlertsCentrifugoChannelData {
 }
 
 /**
- * Represents Donation Alerts Centrifuge channel.
+ * Represents a Donation Alerts Centrifugo private channel.
+ *
+ * @remarks
+ * This class provides access to a private channel's data, including its name (`channel`)
+ * and the token required to connect to this channel (`token`).
  */
 @ReadDocumentation('api')
 export class DonationAlertsCentrifugoChannel extends DataObject<DonationAlertsCentrifugoChannelData> {
 	/**
-	 * Private channel name.
+	 * The private channel name.
+	 *
+	 * @example
+	 * `$alerts:donation_12345`.
 	 */
 	get channel(): string {
 		return this[rawDataSymbol].channel;
 	}
 
 	/**
-	 * Centrifugo connection token. This token can be used to connect to the private channel.
+	 * The Centrifugo connection token.
+	 *
+	 * @remarks
+	 * This token is required to establish a connection to the respective private channel.
 	 */
 	get token(): string {
 		return this[rawDataSymbol].token;

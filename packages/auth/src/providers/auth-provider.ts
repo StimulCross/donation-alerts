@@ -2,15 +2,16 @@ import { type UserIdResolvable } from '@donation-alerts/common';
 import { type AccessTokenWithUserId } from '../access-token';
 
 /**
- * Authentication provider that manages access tokens for users.
+ * Authentication provider that manages user access tokens.
  *
  * @remarks
- * There are two build-in authentication provider implementations:
- * - {@link StaticAuthProvider} - Accepts a user with the access token, but cannot refresh it.
- * - {@link RefreshingAuthProvider} - Automatically refreshes access tokens on expiration whether necessary.
+ * This interface can be implemented in various ways. Two built-in implementations are provided:
+ * - {@link StaticAuthProvider} - Accepts a user and an access token, but does not support refreshing.
+ * - {@link RefreshingAuthProvider} - Automatically refreshes access tokens upon expiration.
  *
- * If these implementations do not meet your needs, you can create your own provider, for example, a Redis-based one,
- * that can share auth data between separate processes.
+ * If these implementations are not sufficient for your use case, you can create a custom one.
+ * For example, you could store and manage authentication data in Redis to share it between
+ * multiple processes or containers.
  */
 export interface AuthProvider {
 	/**
@@ -19,31 +20,34 @@ export interface AuthProvider {
 	readonly clientId: string;
 
 	/**
-	 * Gets the scopes for a user that are currently available using the access token.
+	 * Retrieves the scopes currently associated with the specified user's access token.
 	 *
-	 * If scopes were not set on user registration then it returns an empty array.
+	 * Returns an empty array if no scopes were set during user registration.
 	 *
-	 * @throws {@link UnregisteredUserError} if user is not registered in the provider.
+	 * @param user The ID of a user whose scopes should be retrieved.
+	 *
+	 * @throws {@link UnregisteredUserError} - Thrown if the user is not registered with this provider.
 	 */
 	getScopesForUser(user: UserIdResolvable): string[];
 
 	/**
-	 * Gets the access token data for the given user.
+	 * Gets the access token data for the specified user.
 	 *
-	 * @param user The ID of the user to get the access token of.
-	 * @param scopes The list of required scopes that will be compared against the existing token scopes.
+	 * @param user The ID of a user whose token is being requested.
+	 * @param scopes An optional list of required scopes to validate against the token's current scopes.
 	 *
-	 * @throws {@link UnregisteredUserError} if user is not registered in the provider.
-	 * @throws {@link MissingScopeError} if user is not registered in the provider.
+	 * @throws {@link UnregisteredUserError} if the user is not registered with this provider.
+	 * @throws {@link MissingScopeError} if the token does not include the required scopes.
 	 */
 	getAccessTokenForUser(user: UserIdResolvable, scopes?: string[]): Promise<AccessTokenWithUserId>;
 
 	/**
-	 * Refreshes the access token.
+	 * Refreshes the user's access token.
 	 *
-	 * This method is optional to implement.
+	 * @remarks
+	 * This method is optional and may not be implemented by all authentication providers.
 	 *
-	 * @param user The ID of the user to refresh the access token of.
+	 * @param user The ID of a user whose token should be refreshed.
 	 */
 	refreshAccessTokenForUser?(user: UserIdResolvable): Promise<AccessTokenWithUserId>;
 }

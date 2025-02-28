@@ -24,37 +24,37 @@ import { DonationAlertsMerchandiseApi } from './api/merchandise/donation-alerts-
 import { DonationAlertsUsersApi } from './api/users/donation-alerts-users-api';
 
 /**
- * Defines the rate limiter options.
+ * Configuration options for the rate limiter.
  */
 export interface RateLimiterOptions {
 	/**
-	 * Limits the number of requests per second to one.
+	 * Whether to limit the number of requests to 1 per second.
 	 *
 	 * @remarks
-	 * According to the official documentation, Donation Alerts API limits requests to the API methods for each
-	 * application by 60 requests per minute, making it 1 request per second.
+	 * According to the official documentation, the Donation Alerts API allows up to 60 requests per minute per
+	 * application, which translates to 1 request per second.
 	 *
-	 * The library, by default, limits the number of requests to 1 per second. This means that if you run,
-	 * for example, 60 concurrent requests at the same time, they will be executed sequentially at 1 request per second.
+	 * By default, the library enforces this rate limit, ensuring that requests are executed sequentially at 1 request
+	 * per second. For example, if you initiate 60 simultaneous requests, they will be queued and executed one by one.
 	 *
-	 * If you set this option to `false`, you can reach the rate limit let's say in 10 seconds, and the library will not
-	 * be able to send requests for the remaining 50 seconds of the available 60 seconds timeframe.
+	 * If set to `false`, you can exceed the limit in a short period (e.g., 10 seconds), but subsequent requests
+	 * will fail for the remaining duration of the 60-second window due to the API's rate limit.
 	 *
-	 * By default, all requests enqueued to execute later when possible. You can change this behavior by setting
-	 * {@link RateLimiterOptions#limitReachedBehavior} property.
+	 * Requests exceeding the limit are enqueued and executed later by default. You can customize this behavior
+	 * using the {@link RateLimiterOptions#limitReachedBehavior} property.
 	 *
 	 * @defaultValue `true`
 	 */
 	limitToOneRequestPerSecond?: boolean;
 
 	/**
-	 * Defines behavior when the rate limit is reached.
+	 * Behavior to apply when the rate limit is reached.
 	 *
 	 * @remarks
-	 * The possible values are:
-	 * - `enqueue` - Enqueues the request and send it when possible.
-	 * - `throw` - Throws the `RateLimitReachedError` exception when rate limit is reached.
-	 * - `null` - Returns `null` when rate limit is reached.
+	 * Specifies what happens if the number of requests exceeds the rate limit. The available options are:
+	 * - `enqueue` - Adds the request to a queue to be executed when possible.
+	 * - `throw` - Throws a `RateLimitReachedError` when the limit is exceeded.
+	 * - `null` - Returns `null` instead of executing the request.
 	 *
 	 * @defaultValue `enqueue`
 	 */
@@ -62,28 +62,30 @@ export interface RateLimiterOptions {
 }
 
 /**
- * Configuration for {@link ApiClient} instance.
+ * Configuration options for creating an {@link ApiClient}.
  */
 export interface ApiConfig {
 	/**
-	 * An authentication provider that supplies tokens to the client.
+	 * The authentication provider responsible for supplying access tokens to the client.
 	 *
-	 * For more information, see the {@link AuthProvider} documentation.
+	 * @remarks
+	 * The client uses this provider to authorize requests to the Donation Alerts API.
+	 * For more details, refer to the {@link AuthProvider} documentation.
 	 */
 	authProvider: AuthProvider;
 
 	/**
-	 * Additional options to pass to the fetch method.
+	 * Custom options to pass to the fetch method used for API requests.
 	 */
 	fetchOptions?: DonationAlertsCallFetchOptions;
 
 	/**
-	 * Options to pass to the logger.
+	 * Configuration options for logging within the client.
 	 */
 	logger?: Partial<LoggerOptions>;
 
 	/**
-	 * Defines the rate limiter options.
+	 * Settings for the rate limiter that controls the request rate to the API.
 	 */
 	rateLimiterOptions?: RateLimiterOptions;
 }
@@ -96,7 +98,7 @@ export interface DonationAlertsApiCallOptionsInternal {
 }
 
 /**
- * The client to interact with Donation Alerts API.
+ * The client for interacting with the Donation Alerts API.
  */
 @ReadDocumentation('api')
 export class ApiClient {
@@ -109,9 +111,10 @@ export class ApiClient {
 	@nonenumerable private readonly _limitReachedBehavior: QueueEntryLimitReachedBehavior;
 
 	/**
-	 * Creates a new API client instance.
+	 * Creates a new instance of the API client.
 	 *
-	 * @param config The API client configuration.
+	 * @param config The configuration options for the API client.
+	 * @throws Error if the `authProvider` is not supplied in the configuration.
 	 */
 	constructor(config: ApiConfig) {
 		if (!config.authProvider) {
@@ -146,7 +149,9 @@ export class ApiClient {
 	}
 
 	/**
-	 * Donation Alerts `Users` API namespace.
+	 * Users API namespace.
+	 *
+	 * This namespace allows you to fetch user details, such as information about the authenticated user.
 	 */
 	@Memoize()
 	get users(): DonationAlertsUsersApi {
@@ -154,7 +159,9 @@ export class ApiClient {
 	}
 
 	/**
-	 * Donation Alerts `Donations` API namespace.
+	 * Donations API namespace.
+	 *
+	 * This namespace provides methods for retrieving donation data.
 	 */
 	@Memoize()
 	get donations(): DonationAlertsDonationsApi {
@@ -162,7 +169,9 @@ export class ApiClient {
 	}
 
 	/**
-	 * Donation Alerts `Custom Alerts` API namespace.
+	 * Custom Alerts API namespace.
+	 *
+	 * This namespace provides methods for sending custom alerts.
 	 */
 	@Memoize()
 	get customAlerts(): DonationAlertsCustomAlertsApi {
@@ -170,7 +179,10 @@ export class ApiClient {
 	}
 
 	/**
-	 * Donation Alerts `Centrifugo` API namespace.
+	 *
+	 * Centrifugo API namespace.
+	 *
+	 * This namespace provides methods for subscribing to Centrifugo channels.
 	 */
 	@Memoize()
 	get centrifugo(): DonationAlertsCentrifugoApi {
@@ -178,7 +190,9 @@ export class ApiClient {
 	}
 
 	/**
-	 * Donation Alerts `Merchandise` API namespace.
+	 * Merchandise API namespace.
+	 *
+	 * This namespace allows managing merchandise-related data.
 	 */
 	@Memoize()
 	get merchandise(): DonationAlertsMerchandiseApi {
@@ -186,15 +200,15 @@ export class ApiClient {
 	}
 
 	/**
-	 * Makes a call to the Donation Alerts API.
+	 * Sends a request to the Donation Alerts API.
 	 *
-	 * @param user The ID of the user.
-	 * @param options The API call options.
-	 * @param rateLimiterOptions The rate limiter options.
+	 * @param user The ID of the user making the request.
+	 * @param options Options for the API call, including method, URL, and other details.
+	 * @param rateLimiterOptions Options for fine-tuning rate-limiting behavior.
 	 *
-	 * @throws {@link HttpError} if response status code is out of 200-299 range.
-	 * @throws {@link UnregisteredUserError} if the user you are trying to get is not registered in authentication provider.
-	 * @throws {@link MissingScopeError} if the access token does not have required scope.
+	 * @throws {@link HttpError} If the response status code is outside the 200-299 range.
+	 * @throws {@link UnregisteredUserError} If the specified user is not registered in the authentication provider.
+	 * @throws {@link MissingScopeError} If the access token lacks the required scope to complete the request.
 	 */
 	async callApi<T = unknown>(
 		user: UserIdResolvable,

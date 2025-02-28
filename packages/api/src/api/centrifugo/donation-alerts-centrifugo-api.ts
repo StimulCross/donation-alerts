@@ -27,30 +27,46 @@ export interface DonationAlertsCentrifugoSubscribeOptions {
 /**
  * Donation Alerts Centrifugo API.
  *
- * Allows to subscribe a user to the Centrifugo private channels.
+ * Provides methods to manage user subscriptions to Centrifugo private channels.
+ * These channels allow receiving real-time updates about specific events such as donations, goals, and polls.
  */
+
 @ReadDocumentation('api')
 export class DonationAlertsCentrifugoApi extends BaseApi {
 	/**
-	 * Subscribes a user to the given Centrifugo private channels.
+	 * Subscribes a user to the specified Centrifugo private channels.
 	 *
-	 * You must obtain the UUIDv4 Client ID via WebSockets to subscribe user to Centrifugo private channels.
+	 * @remarks
+	 * To subscribe a user, you must first obtain the Client ID (UUIDv4) via WebSockets.
 	 *
-	 * See the complete subscription flow in the official documentation:
+	 * The full subscription flow is described in the official documentation:
 	 * {@link https://www.donationalerts.com/apidoc#introduction__centrifugo}
 	 *
-	 * Also, consider using the "@donation-alerts/events" library which makes it very easy to subscribe and listen
-	 * to events.
+	 * Alternatively, the `@donation-alerts/events` library can simplify the process of subscribing
+	 * and listening to events.
 	 *
 	 * @param user The Donation Alerts user ID.
-	 * @param clientId The previously obtained Client ID.
-	 * @param channels The private channel names the user should be subscribed to. The channel names must not contain
-	 * the user IDs. The library will properly format channel names itself.
-	 * @param options Additional subscribe options.
-	 * @param rateLimiterOptions The rate limiter options.
+	 * @param clientId The Client ID obtained beforehand.
+	 * @param channels List of private channel names to subscribe the user to. Channel names should not include the
+	 * user ID – the library will format them automatically if needed.
+	 * @param options Additional options for subscription, such as formatting channel names.
+	 * @param rateLimiterOptions Options for controlling the request rate using a rate limiter.
 	 *
-	 * @throws {@link HttpError} if response status code is out of 200-299 range.
-	 * @throws {@link UnregisteredUserError} if the user you are trying to get is not registered in authentication provider.
+	 * @returns A promise resolving with a list of {@link DonationAlertsCentrifugoChannel}.
+	 *
+	 * @throws {@link HttpError} If the HTTP status code is outside the range of 200–299.
+	 * @throws {@link UnregisteredUserError} If the user provided is not registered in the auth provider.
+	 *
+	 * @example
+	 * ```ts
+	 * const subscribedChannels = await apiClient.centrifugo.subscribeUserToPrivateChannels(userId, clientId, [
+	 *   '$alerts:donation',
+	 *   '$goals:goal'
+	 * ]);
+	 * subscribedChannels.forEach(channel =>
+	 *   console.log(`Subscribed to ${channel.channel}; token: ${channel.token}`)
+	 * );
+	 * ```
 	 */
 	async subscribeUserToPrivateChannels(
 		user: UserIdResolvable,
@@ -69,23 +85,35 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 	}
 
 	/**
-	 * Subscribes a user to the donation alert events.
+	 * Subscribes a user to donation alert events.
 	 *
-	 * You must obtain the UUIDv4 Client ID via WebSockets to subscribe to Centrifugo private channels.
+	 * Donation alert events notify when a new donation is made. This requires the user to be subscribed
+	 * to the `$alerts:donation` private channel.
 	 *
-	 * See the complete subscription flow in the official documentation:
+	 * @remarks
+	 * Requires `oauth-donation-subscribe` scope.
+	 *
+	 * See the official documentation for more details:
 	 * {@link https://www.donationalerts.com/apidoc#introduction__centrifugo}
 	 *
-	 * Also, consider using the `@donation-alerts/events` library which makes it very easy to subscribe and listen
-	 * to events.
+	 * Alternatively, the `@donation-alerts/events` library can simplify the process of subscribing
+	 * and listening to events.
 	 *
 	 * @param user The Donation Alerts user ID.
-	 * @param clientId The previously obtained Client ID.
-	 * @param options Additional subscribe options.
-	 * @param rateLimiterOptions The rate limiter options.
+	 * @param clientId The Client ID obtained beforehand.
+	 * @param options Additional options for subscription, such as formatting channel names.
+	 * @param rateLimiterOptions Options for rate limiting during the subscription.
 	 *
-	 * @throws {@link HttpError} if response status code is out of 200-299 range.
-	 * @throws {@link UnregisteredUserError} if the user you are trying to get is not registered in authentication provider.
+	 * @returns A promise resolving with the {@link DonationAlertsCentrifugoChannel} object.
+	 *
+	 * @throws {@link HttpError} If the HTTP status code is outside the range of 200–299.
+	 * @throws {@link UnregisteredUserError} If the user provided is not registered in the auth provider.
+	 *
+	 * @example
+	 * ```ts
+	 * const channel = await apiClient.centrifugo.subscribeUserToDonationAlertEvents(userId, clientId);
+	 * console.log(`Subscribed to channel: ${channel.channel}; token: ${channel.token}`);
+	 * ```
 	 */
 	async subscribeUserToDonationAlertEvents(
 		user: UserIdResolvable,
@@ -104,23 +132,35 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 	}
 
 	/**
-	 * Subscribes a user to the goal update events.
+	 * Subscribes a user to goal update events.
 	 *
-	 * You must obtain the UUIDv4 Client ID via WebSockets to subscribe to Centrifugo private channels.
+	 * Goal update events provide information about the progress and completion of goals.
+	 * This requires the user to be subscribed to the `$goals:goal` private channel.
 	 *
-	 * See the complete subscription flow in the official documentation:
+	 * @remarks
+	 * Requires `oauth-goal-subscribe` scope.
+	 *
+	 * See the official documentation for more details:
 	 * {@link https://www.donationalerts.com/apidoc#introduction__centrifugo}
 	 *
-	 * Also, consider using the "@donation-alerts/events" library which makes it very easy to subscribe and listen
-	 * to events.
+	 * Alternatively, the `@donation-alerts/events` library can simplify the process of subscribing
+	 * and listening to events.
 	 *
 	 * @param user The Donation Alerts user ID.
-	 * @param clientId The previously obtained Client ID.
-	 * @param options Additional subscribe options.
-	 * @param rateLimiterOptions The rate limiter options.
+	 * @param clientId The Client ID obtained beforehand.
+	 * @param options Additional options for subscription, such as formatting channel names.
+	 * @param rateLimiterOptions Options for rate limiting during the subscription.
 	 *
-	 * @throws {@link HttpError} if response status code is out of 200-299 range.
-	 * @throws {@link UnregisteredUserError} if the user you are trying to get is not registered in authentication provider.
+	 * @returns A promise resolving with the successfully subscribed channel object.
+	 *
+	 * @throws {@link HttpError} If the HTTP status code is outside the range of 200–299.
+	 * @throws {@link UnregisteredUserError} If the user provided is not registered in the auth.
+	 *
+	 * @example
+	 * ```ts
+	 * const channel = await apiClient.centrifugo.subscribeUserToGoalUpdateEvents(userId, clientId);
+	 * console.log(`Subscribed to channel: ${channel.channel}; token: ${channel.token}`);
+	 * ```
 	 */
 	async subscribeUserToGoalUpdateEvents(
 		user: UserIdResolvable,
@@ -139,23 +179,35 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 	}
 
 	/**
-	 * Subscribes a user to the poll update events.
+	 * Subscribes a user to poll update events.
 	 *
-	 * You must obtain the UUIDv4 Client ID via WebSockets to subscribe to Centrifugo private channels.
+	 * Poll update events notify about ongoing poll progress or results.
+	 * This requires the user to be subscribed to the `$polls:poll` private channel.
 	 *
-	 * See the complete subscription flow in the official documentation:
+	 * @remarks
+	 * Requires `oauth-poll-subscribe` scope.
+	 *
+	 * See the official documentation for more details:
 	 * {@link https://www.donationalerts.com/apidoc#introduction__centrifugo}
 	 *
-	 * Also, consider using the "@donation-alerts/events" library which makes it very easy to subscribe and listen
-	 * to events.
+	 * Alternatively, the `@donation-alerts/events` library can simplify the process of subscribing
+	 * and listening to events.
 	 *
 	 * @param user The Donation Alerts user ID.
-	 * @param clientId The previously obtained Client ID.
-	 * @param options Additional subscribe options.
-	 * @param rateLimiterOptions The rate limiter options.
+	 * @param clientId The Client ID obtained beforehand.
+	 * @param options Additional options for subscription, such as formatting channel names.
+	 * @param rateLimiterOptions Options for rate limiting during the subscription.
 	 *
-	 * @throws {@link HttpError} if response status code is out of 200-299 range.
-	 * @throws {@link UnregisteredUserError} if the user you are trying to get is not registered in authentication provider.
+	 * @returns A promise resolving with the successfully subscribed channel object.
+	 *
+	 * @throws {@link HttpError} If the HTTP status code is outside the range of 200–299.
+	 * @throws {@link UnregisteredUserError} If the user provided is not registered in the auth provider.
+	 *
+	 * @example
+	 * ```ts
+	 * const channel = await apiClient.centrifugo.subscribeUserToPollUpdateEvents(userId, clientId);
+	 * console.log(`Subscribed to channel: ${channel.channel}; token: ${channel.token}`);
+	 * ```
 	 */
 	async subscribeUserToPollUpdateEvents(
 		user: UserIdResolvable,

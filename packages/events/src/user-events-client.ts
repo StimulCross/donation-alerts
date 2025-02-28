@@ -51,6 +51,10 @@ interface DisconnectContext {
 
 /**
  * Configuration for {@link UserEventsClient}.
+ *
+ * @remarks
+ * Defines the settings required to initialize an instance of `UserEventsClient`.
+ * Includes user identification, an API client for server interaction, and optional logger options.
  */
 export interface UserEventsClientConfig {
 	user: UserIdResolvable;
@@ -59,7 +63,14 @@ export interface UserEventsClientConfig {
 }
 
 /**
- * Single user client to listen to Donation Alerts events.
+ * Client for managing and subscribing to Donation Alerts events.
+ *
+ * This class provides a WebSocket-based interface for real-time interaction with the Donation Alerts platform.
+ * It connects to its Centrifugo WebSocket server, enabling receiving notifications
+ * about donations, goal updates, and poll updates.
+ *
+ * Designed for single-user use cases, it supports managing connection states (connect, disconnect, reconnect)
+ * and subscribing to or unsubscribing from specific event types.
  */
 @ReadDocumentation('events')
 export class UserEventsClient extends EventEmitter {
@@ -93,7 +104,7 @@ export class UserEventsClient extends EventEmitter {
 	};
 
 	/**
-	 * Fires when the client establishes connection with Centrifugo server.
+	 * Fires when the client establishes a connection with Centrifugo server.
 	 */
 	readonly onConnect = this.registerEvent();
 
@@ -103,9 +114,14 @@ export class UserEventsClient extends EventEmitter {
 	readonly onDisconnect = this.registerEvent<[reason: string, reconnect: boolean]>();
 
 	/**
-	 * Creates Donation Alerts Events client that allows listen to the various events.
+	 * Initializes a client for listening to various Donation Alerts events.
 	 *
-	 * @param config Configuration for single user `EventsClient`.
+	 * @remark This client is designed for single-user scenarios, with event subscriptions managed
+	 *         through Centrifugo WebSocket connections.
+	 *
+	 * @param config Configuration required for setting up the client, including user information,
+	 *               an API client for server communication, and optional logger options.
+	 *
 	 */
 	constructor(config: UserEventsClientConfig) {
 		super();
@@ -157,32 +173,35 @@ export class UserEventsClient extends EventEmitter {
 	}
 
 	/**
-	 * The ID of the user the events client belongs to.
+	 * Unique identifier of the user associated with this client.
 	 */
 	get userId(): number {
 		return this._userId;
 	}
 
 	/**
-	 * Centrifugo current connection client ID.
+	 * Client ID assigned by the Centrifugo server.
 	 *
-	 * Returns `null` if no connection is established.
+	 * Returns `null` if the client is not connected.
 	 */
 	get clientId(): string | null {
 		return this._client;
 	}
 
 	/**
-	 * Checks whether the client is currently connected to the server.
+	 * Indicates whether the client is connected to the Centrifugo server.
+	 *
+	 * @returns `true` if the client is connected; otherwise `false`.
 	 */
 	get isConnected(): boolean {
 		return this._centrifuge.isConnected();
 	}
 
 	/**
-	 * Connects to the Donation Alerts Centrifugo WebSocket server and subscribes to the topics.
+	 * Establishes a connection to the Centrifugo server.
 	 *
-	 * @param restoreExistingListeners Whether to restore previously registered listeners on connect. Default is `true`.
+	 * @param restoreExistingListeners Specifies whether existing listeners should be restored after connection.
+	 *                                 Defaults to `true`.
 	 */
 	async connect(restoreExistingListeners: boolean = true): Promise<void> {
 		for (const [, listener] of this._listeners) {
@@ -199,10 +218,11 @@ export class UserEventsClient extends EventEmitter {
 	}
 
 	/**
-	 * Disconnects from the Donation Alerts Centrifugo WebSocket server.
+	 * Closes the connection to the Centrifugo server.
 	 *
-	 * @param removeListeners Whether to remove all active listeners on disconnect. If you don't remove them,
-	 * the client will try to restore them on the next connection. Default is `false`.
+	 * @param removeListeners Indicates whether all active listeners should be removed on disconnect.
+	 *                        If set to `false`, the listeners will be restored on the next connection.
+	 *                        Default to `false`.
 	 */
 	async disconnect(removeListeners: boolean = false): Promise<void> {
 		if (removeListeners) {
@@ -217,10 +237,11 @@ export class UserEventsClient extends EventEmitter {
 	}
 
 	/**
-	 * Reconnects to the Donation Alerts Centrifugo WebSocket server.
+	 * Re-establishes the connection to the Centrifugo server.
 	 *
-	 * @param removeListeners Whether to remove all listeners on reconnect. If the listeners won't be removed,
-	 * the client will restore all listeners on reconnect. Defaults to `false`.
+	 * @param removeListeners Indicates whether all listeners should be removed during reconnection.
+	 *                        If `false`, all listeners will be restored automatically after reconnection.
+	 *                        Defaults to `false`.
 	 */
 	async reconnect(removeListeners: boolean = false): Promise<void> {
 		await this.disconnect(removeListeners);
@@ -228,9 +249,11 @@ export class UserEventsClient extends EventEmitter {
 	}
 
 	/**
-	 * Subscribes to Donation Alerts donation events.
+	 * Subscribes to donation events from Donation Alerts.
 	 *
-	 * @param callback A function to be called when a donation event is sent to the user.
+	 * @param callback A function invoked whenever a donation event is received.
+	 *                 The callback receives an instance of {@link DonationAlertsDonationEvent}.
+	 * @returns An {@link EventsListener} instance that manages the subscription.
 	 */
 	async onDonation(callback: (event: DonationAlertsDonationEvent) => void): Promise<EventsListener> {
 		return await this._createListener<DonationAlertsDonationEventData, DonationAlertsDonationEvent>(
@@ -241,9 +264,11 @@ export class UserEventsClient extends EventEmitter {
 	}
 
 	/**
-	 * Subscribes to Donation Alerts goal update events.
+	 * Subscribes to goal update events from Donation Alerts.
 	 *
-	 * @param callback A function to be called when a goal update event is sent to the user.
+	 * @param callback A function invoked whenever a goal update event is received.
+	 *                 The callback receives an instance of {@link DonationAlertsGoalUpdateEvent}.
+	 * @returns An {@link EventsListener} instance that manages the subscription.
 	 */
 	async onGoalUpdate(callback: (event: DonationAlertsGoalUpdateEvent) => void): Promise<EventsListener> {
 		return await this._createListener<DonationAlertsGoalUpdateEventData, DonationAlertsGoalUpdateEvent>(
@@ -254,9 +279,11 @@ export class UserEventsClient extends EventEmitter {
 	}
 
 	/**
-	 * Subscribes to Donation Alerts poll update events.
+	 * Subscribes to poll update events from Donation Alerts.
 	 *
-	 * @param callback A function to be called when a poll update event is sent to the user.
+	 * @param callback A function invoked whenever a poll update event is received.
+	 *                 The callback receives an instance of {@link DonationAlertsPollUpdateEvent}.
+	 * @returns An {@link EventsListener} instance that manages the subscription.
 	 */
 	async onPollUpdate(callback: (event: DonationAlertsPollUpdateEvent) => void): Promise<EventsListener> {
 		return await this._createListener<DonationAlertsPollUpdateEventData, DonationAlertsPollUpdateEvent>(
@@ -267,9 +294,12 @@ export class UserEventsClient extends EventEmitter {
 	}
 
 	/**
-	 * Unsubscribes from a channel and removes its listener.
+	 * Unsubscribes and removes a listener for a specific channel.
 	 *
-	 * @param listener The listener to remove.
+	 * @remark
+	 * If this is the last listener, the WebSocket connection is also closed.
+	 *
+	 * @param listener The {@link EventsListener} instance to be removed.
 	 */
 	async removeEventsListener(listener: EventsListener): Promise<void> {
 		if (this._listeners.has(listener.channelName)) {

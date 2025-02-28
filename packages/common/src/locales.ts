@@ -24,15 +24,25 @@ export type DonationAlertsLocaleCode =
 	| 'zh_CN';
 
 /**
- * Supported locales array.
+ * Represents a locale supported by Donation Alerts API with its code and human-readable name.
  */
 export interface DonationAlertsLocale {
+	/**
+	 * The locale code following the pattern language_REGION (for example, `en_US` for English in the USA).
+	 */
 	code: DonationAlertsLocaleCode;
+
+	/**
+	 * A human-readable name for the locale.
+	 */
 	name: string;
 }
 
 /**
- * Locale code with name.
+ * A collection of supported locales by the Donation Alerts API.
+ *
+ * @remarks
+ * Each locale is defined by a unique `code` and a corresponding human-readable `name`.
  */
 export const locales: DonationAlertsLocale[] = [
 	{
