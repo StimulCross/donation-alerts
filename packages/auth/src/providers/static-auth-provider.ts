@@ -38,26 +38,26 @@ export class StaticAuthProvider implements AuthProvider {
 	 * @param user The ID of the user.
 	 * @param token The initial token data.
 	 */
-	addUser(user: UserIdResolvable, token: Pick<AccessToken, 'accessToken' | 'scopes'>): void {
+	addUser(user: UserIdResolvable, accessToken: string, scopes?: string[]): void {
 		const userId = extractUserId(user);
 
-		if (!token.accessToken) {
+		if (!accessToken) {
 			throw new InvalidTokenError(
 				userId,
 				`The access token of user "${userId}" is invalid. Make sure it's a non-empty string.`,
 			);
 		}
 
-		if (token.scopes) {
-			compareScopes(token.scopes, this._scopes, userId);
+		if (scopes) {
+			compareScopes(scopes, this._scopes, userId);
 		}
 
 		this._registry.set(userId, {
-			accessToken: token.accessToken,
+			accessToken,
 			refreshToken: '',
 			expiresIn: 0,
 			obtainmentTimestamp: Date.now(),
-			scopes: token.scopes,
+			scopes,
 		});
 	}
 

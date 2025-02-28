@@ -25,7 +25,7 @@ describe('auth', () => {
 
 		beforeEach(() => {
 			provider.removeUser(USER_ID);
-			provider.addUser(USER_ID, { accessToken: ACCESS_TOKEN, scopes: SCOPES });
+			provider.addUser(USER_ID, ACCESS_TOKEN, SCOPES);
 		});
 
 		it('should return correct client ID', () => {
@@ -33,13 +33,13 @@ describe('auth', () => {
 		});
 
 		it('should add user', () => {
-			provider.addUser(USER_ID, { accessToken: ACCESS_TOKEN, scopes: SCOPES });
+			provider.addUser(USER_ID, ACCESS_TOKEN, SCOPES);
 			expect(provider.hasUser(USER_ID)).toBe(true);
 		});
 
 		it('should throw "InvalidTokenError" if token is empty string', () => {
 			try {
-				provider.addUser(USER_ID, { accessToken: '' });
+				provider.addUser(USER_ID, '');
 				fail('Expected InvalidTokenError to be thrown');
 			} catch (e) {
 				expect(e).toBeInstanceOf(InvalidTokenError);
@@ -49,7 +49,7 @@ describe('auth', () => {
 
 		it('should throw "MissingScopeError" if token does not include required scopes', () => {
 			const t = (): void => {
-				provider.addUser(USER_ID, { accessToken: ACCESS_TOKEN, scopes: ['oauth-user-show'] });
+				provider.addUser(USER_ID, ACCESS_TOKEN, ['oauth-user-show']);
 			};
 			expect(t).toThrow(MissingScopeError);
 		});
@@ -72,7 +72,7 @@ describe('auth', () => {
 		});
 
 		it('should throw "MissingScopeError" if token does not include requested scope', async () => {
-			provider.addUser(USER_ID, { accessToken: ACCESS_TOKEN, scopes: SCOPES });
+			provider.addUser(USER_ID, ACCESS_TOKEN, SCOPES);
 			await expect(provider.getAccessTokenForUser(USER_ID, [MISSING_SCOPE])).rejects.toThrow(MissingScopeError);
 		});
 
