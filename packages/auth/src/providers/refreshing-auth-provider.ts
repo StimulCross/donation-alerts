@@ -117,7 +117,7 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 		let accessToken = token;
 		let isTokenRefreshed = false;
 
-		if (!isAccessTokenExpired(accessToken)) {
+		if (isAccessTokenExpired(accessToken)) {
 			accessToken = await refreshAccessToken(
 				this._config.clientId,
 				this._config.clientSecret,
