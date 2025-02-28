@@ -1,6 +1,7 @@
 import { flattenObject } from '@stimulcross/shared-utils';
 import { sha256 } from 'cross-sha256';
 
+/** @internal */
 export function createSha256SignatureFromParams(params: Record<PropertyKey, unknown>, secret: string): string {
 	const valuesString = Object.values(flattenObject(params))
 		.filter(v => v !== undefined)
