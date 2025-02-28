@@ -119,16 +119,14 @@ describe('auth', () => {
 		});
 
 		it('should refresh token and emit onRefresh event in addUserForToken', async () => {
-			// Подготавливаем исходный токен
 			const initialToken: AccessToken = {
 				accessToken: ACCESS_TOKEN,
 				refreshToken: REFRESH_TOKEN,
-				expiresIn: 3600, // Токен считается просроченным для целей теста
+				expiresIn: 0,
 				obtainmentTimestamp: Date.now(),
 				scopes: SCOPES,
 			};
 
-			// Подготавливаем обновлённый токен, который должен вернуться после refresh
 			const updatedToken: AccessToken = {
 				accessToken: 'UPDATED_ACCESS_TOKEN',
 				refreshToken: 'updated-refresh',
@@ -137,30 +135,22 @@ describe('auth', () => {
 				scopes: SCOPES,
 			};
 
-			// Подменяем refreshAccessToken из модуля helpers, чтобы избежать реального вызова API
 			const refreshSpy = jest.spyOn(helpers, 'refreshAccessToken').mockResolvedValue(updatedToken);
 
-			// Подписываемся на событие onRefresh, чтобы отследить его эмиссию
 			const onRefreshSpy = jest.fn();
 			provider.onRefresh(onRefreshSpy);
 
-			// Вызываем метод addUserForToken, который должен использовать подменённый refreshAccessToken
 			const tokenWithUser: AccessTokenWithUserId = await provider.addUserForToken(initialToken);
 
-			// Verify that refreshAccessToken was called with correct parameters
 			expect(refreshSpy).toHaveBeenCalledWith(CLIENT_ID, CLIENT_SECRET, initialToken.refreshToken, SCOPES);
 
-			// Validate that the token returned reflects the updated token
 			expect(tokenWithUser.accessToken).toBe(updatedToken.accessToken);
 
-			// Validate that the onRefresh event was emitted once with the correct parameters
 			expect(onRefreshSpy).toHaveBeenCalledTimes(1);
 			const emittedArgs = onRefreshSpy.mock.calls[0];
-			// Check first argument is a number (user id)
 			expect(typeof emittedArgs[0]).toBe('number');
 			expect(emittedArgs[1].accessToken).toBe(updatedToken.accessToken);
 
-			// Clean up the spy
 			refreshSpy.mockRestore();
 		});
 
