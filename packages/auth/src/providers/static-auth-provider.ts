@@ -54,8 +54,8 @@ export class StaticAuthProvider implements AuthProvider {
 
 		this._registry.set(userId, {
 			accessToken: token.accessToken,
-			refreshToken: null,
-			expiresIn: null,
+			refreshToken: '',
+			expiresIn: 0,
 			obtainmentTimestamp: Date.now(),
 			scopes: token.scopes,
 		});

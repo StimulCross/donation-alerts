@@ -15,20 +15,6 @@ describe('getExpiryMilliseconds', () => {
 		const result = getExpiryMilliseconds(token);
 		expect(result).toBe(expected);
 	});
-
-	it('should return null when expiresIn is null', () => {
-		const now = Date.now();
-		const token: AccessToken = {
-			accessToken: 'test-token',
-			refreshToken: 'test-refresh',
-			expiresIn: null,
-			obtainmentTimestamp: now,
-			scopes: ['scope1'],
-		};
-
-		const result = getExpiryMilliseconds(token);
-		expect(result).toBeNull();
-	});
 });
 
 describe('getTokenExpiryDate', () => {
@@ -46,20 +32,6 @@ describe('getTokenExpiryDate', () => {
 		const expectedDate = new Date(expiryMs);
 		const result = getTokenExpiryDate(token);
 		expect(result).toEqual(expectedDate);
-	});
-
-	it('should return null when expiresIn is null', () => {
-		const now = Date.now();
-		const token: AccessToken = {
-			accessToken: 'test-token',
-			refreshToken: 'test-refresh',
-			expiresIn: null,
-			obtainmentTimestamp: now,
-			scopes: ['scope1'],
-		};
-
-		const result = getTokenExpiryDate(token);
-		expect(result).toBeNull();
 	});
 });
 
@@ -83,19 +55,6 @@ describe('isAccessTokenExpired', () => {
 			accessToken: 'test-token',
 			refreshToken: 'test-refresh',
 			expiresIn: 3600, // 1 hour
-			obtainmentTimestamp: now,
-			scopes: ['scope1'],
-		};
-
-		expect(isAccessTokenExpired(token)).toBe(false);
-	});
-
-	it('should return false if expiresIn is null', () => {
-		const now = Date.now();
-		const token: AccessToken = {
-			accessToken: 'test-token',
-			refreshToken: 'test-refresh',
-			expiresIn: null,
 			obtainmentTimestamp: now,
 			scopes: ['scope1'],
 		};

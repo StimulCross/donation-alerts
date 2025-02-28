@@ -1,5 +1,3 @@
-import { mapNullable } from '@stimulcross/shared-utils';
-
 /**
  * Represents the data of an OAuth access token returned by Donation Alerts.
  */
@@ -10,14 +8,14 @@ export interface AccessToken {
 	readonly accessToken: string;
 
 	/**
-	 * The refresh token which is necessary to refresh the access token once it expires.
+	 * The refresh token used to obtain a new access token when the current one expires.
 	 */
-	readonly refreshToken: string | null;
+	readonly refreshToken: string;
 
 	/**
-	 * The time, in seconds from the obtainment date, when the access token expires.
+	 * The time remaining, in seconds from the obtainment timestamp, until the access token expires.
 	 */
-	readonly expiresIn: number | null;
+	readonly expiresIn: number;
 
 	/**
 	 * The date when the token was obtained, in epoch milliseconds.
@@ -38,30 +36,42 @@ export interface AccessTokenWithUserId extends AccessToken {
 }
 
 /**
- * Calculates milliseconds since UNIX epoch when the access token will expire.
+ * Calculates the expiration time of the access token in milliseconds since UNIX epoch.
  *
- * @param token The access token.
+ * @remarks
+ * This function computes the approximate time when the token will expire by adding
+ * the `expiresIn` value (in seconds) to the `obtainmentTimestamp`.
+ *
+ * @param token The access token whose expiration time should be calculated.
+ *
+ * @returns The expiration time in milliseconds since UNIX epoch.
  */
-export function getExpiryMilliseconds(token: AccessToken): number | null {
-	return mapNullable(token.expiresIn, val => token.obtainmentTimestamp + val * 1000);
+export function getExpiryMilliseconds(token: AccessToken): number {
+	return token.obtainmentTimestamp + token.expiresIn * 1000;
 }
 
 /**
- * Calculates the date when the access token will expire.
+ * Calculates the expiration date of the access token as a `Date` object.
  *
- * @param token The access token.
+ * @param token The access token whose expiration date should be calculated.
+ *
+ * @returns A `Date` object representing the token expiration date.
  */
-export function getTokenExpiryDate(token: AccessToken): Date | null {
-	return mapNullable(getExpiryMilliseconds(token), val => new Date(val));
+export function getTokenExpiryDate(token: AccessToken): Date {
+	return new Date(getExpiryMilliseconds(token));
 }
 
 /**
  * Checks whether the given access token is expired.
  *
- * A one-minute grace period is applied for smooth handling of API latency.
+ * @remarks
+ * To handle potential latency issues between the API and the client,
+ * this function applies a one-minute grace period when determining expiry.
  *
- * @param token The access token.
+ * @param token The access token to evaluate.
+ *
+ * @returns A boolean indicating whether the token has expired (`true`) or not (`false`).
  */
 export function isAccessTokenExpired(token: AccessToken): boolean {
-	return mapNullable(getExpiryMilliseconds(token), val => Date.now() >= val) ?? false;
+	return Date.now() >= getExpiryMilliseconds(token);
 }
