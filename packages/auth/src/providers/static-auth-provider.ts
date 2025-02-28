@@ -96,7 +96,10 @@ export class StaticAuthProvider implements AuthProvider {
 		const token = this._registry.get(userId)!;
 
 		if (!token.accessToken) {
-			throw new Error(`No token found for user ${userId}`);
+			throw new InvalidTokenError(
+				userId,
+				`The access token of user "${userId}" is invalid. Make sure it's a non-empty string.`,
+			);
 		}
 
 		if (token.scopes) {
