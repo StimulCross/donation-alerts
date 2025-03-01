@@ -126,11 +126,6 @@ To instantiate a `RefreshingAuthProvider`, configure it with a [RefreshingAuthPr
 - **redirectUri** (optional) – Your application's redirect URI, used in the `addUserForCode` method to exchange an authorization code for an access token.
 - **scopes** (optional) – An array of scopes that all registering tokens must be valid for.
 
-- **clientId** – Your Donation Alerts application client ID.
-- **clientSecret** – Your Donation Alerts application client secret.
-- **redirectUri** (optional) – The redirect URI set for your application. This is used in the `addUserForCode` method to exchange an authorization code for an access token.
-- **scopes** (optional) – An array of scopes that every registering token must be valid for.
-
 ```ts
 import { RefreshingAuthProvider } from '@donation-alerts/auth';
 
