@@ -259,4 +259,17 @@ For a complete list of available methods and properties, please refer to the [St
 
 ---
 
+### Utility Functions
+
+This package also provides some utility functions you may find useful if you handle some tasks outside the library:
+
+- **[getExpiryMilliseconds](https://stimulcross.github.io/donation-alerts/functions/auth.getExpiryMilliseconds.html)** - Calculates the expiration time of the access token in milliseconds since UNIX epoch.
+- **[getTokenExpiryDate](https://stimulcross.github.io/donation-alerts/functions/auth.getTokenExpiryDate.html)** - Calculates the expiration date of the access token as a `Date` object.
+- **[isAccessTokenExpired](https://stimulcross.github.io/donation-alerts/functions/auth.isAccessTokenExpired.html)** - Checks whether the given access token is expired.
+- **[getAccessToken](https://stimulcross.github.io/donation-alerts/functions/auth.getAccessToken.html)** - Obtains an access token using client credentials and an authorization code.
+- **[refreshAccessToken](https://stimulcross.github.io/donation-alerts/functions/auth.refreshAccessToken.html)** - Refreshes an expired access token using the refresh token.
+- **[compareScopes](https://stimulcross.github.io/donation-alerts/functions/auth.compareScopes.html)** - Compares and verifies the token's scopes against requested scopes.
+
+---
+
 For more detailed information, please refer to the [documentation](https://stimulcross.github.io/donation-alerts/modules/auth.html).
