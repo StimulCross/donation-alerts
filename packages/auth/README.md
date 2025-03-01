@@ -164,14 +164,14 @@ const authProvider = new RefreshingAuthProvider({
     });
     ```
 
-    > [!NOTE]
-    > Both `accessToken` and `refreshToken` must be non-empty strings; otherwise, an [InvalidTokenError](https://stimulcross.github.io/donation-alerts/classes/auth.InvalidTokenError.html) will be thrown.
-
     If `expiresIn` and `obtainmentTimestamp` are unknown, set them to `0` to force a token refresh on first access.
 
     Since there is no dynamic way to verify token scopes, if you require scope validation, ensure valid scopes are provided when adding the token. It is recommended to store the token along with its valid scopes and obtainment timestamp in persistent storage (e.g., a database) after the authentication process.
 
     This method returns an [AccessTokenWithUserId](https://stimulcross.github.io/donation-alerts/interfaces/auth.AccessTokenWithUserId.html) object.
+
+> [!WARNING]
+> Both `accessToken` and `refreshToken` must be non-empty strings; otherwise, an [InvalidTokenError](https://stimulcross.github.io/donation-alerts/classes/auth.InvalidTokenError.html) will be thrown.
 
 - **addUserForToken:** You can also add a user using only token data:
 
@@ -189,8 +189,8 @@ const authProvider = new RefreshingAuthProvider({
 
     This method returns an [AccessTokenWithUserId](https://stimulcross.github.io/donation-alerts/interfaces/auth.AccessTokenWithUserId.html) object.
 
-    > [!WARNING]
-    > The token must be valid for the `oauth-user-show` scope to fetch user data; otherwise, a [MissingScopeError](https://stimulcross.github.io/donation-alerts/classes/auth.MissingScopeError.html) will be thrown.
+> [!WARNING]
+> The token must be valid for the `oauth-user-show` scope to fetch user data; otherwise, a [MissingScopeError](https://stimulcross.github.io/donation-alerts/classes/auth.MissingScopeError.html) will be thrown.
 
 - **addUserForCode**
 
@@ -208,10 +208,10 @@ const authProvider = new RefreshingAuthProvider({
 
     This method exchanges the code for an access token, retrieves the user associated with the token, and adds them to the auth provider.
 
-    > [!WARNING]
-    > The token must include the `oauth-user-show` scope to fetch user data; otherwise, a [MissingScopeError](https://stimulcross.github.io/donation-alerts/classes/auth.MissingScopeError.html) will be thrown.
-
     This method returns an [AccessTokenWithUserId](https://stimulcross.github.io/donation-alerts/interfaces/auth.AccessTokenWithUserId.html) object.
+
+> [!WARNING]
+> The token must include the `oauth-user-show` scope to fetch user data; otherwise, a [MissingScopeError](https://stimulcross.github.io/donation-alerts/classes/auth.MissingScopeError.html) will be thrown.
 
 - **removeUser**
 
