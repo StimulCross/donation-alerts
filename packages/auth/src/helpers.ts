@@ -1,4 +1,5 @@
 import { callDonationAlertsApi } from '@donation-alerts/api-call';
+import { extractUserId, UserIdResolvable } from '@donation-alerts/common';
 import { type AccessToken } from './access-token';
 import { MissingScopeError } from './errors';
 
@@ -131,7 +132,7 @@ export async function refreshAccessToken(
 }
 
 /**
- * Compares and verifies the token's scopes against requested scopes.
+ * c.
  *
  * @remarks
  * This function checks if the provided token has all the necessary scopes for an operation.
@@ -140,7 +141,7 @@ export async function refreshAccessToken(
  *
  * @param scopesToCompare The list of scopes present in the token.
  * @param requestedScopes The scopes needed for the operation. Default to an empty array.
- * @param userId The user ID associated with the token. This is used in the error message if scopes are missing.
+ * @param user The user ID associated with the token. This is used in the error message if scopes are missing.
  *
  * @throws {@link MissingScopeError} If the token does not include the required scopes.
  *
@@ -155,7 +156,11 @@ export async function refreshAccessToken(
  * }
  * ```
  */
-export function compareScopes(scopesToCompare: string[], requestedScopes: string[] = [], userId: number): void {
+export function compareScopes(
+	scopesToCompare: string[],
+	requestedScopes: string[] = [],
+	user?: UserIdResolvable,
+): void {
 	const scopes = new Set<string>(scopesToCompare);
 	const missingScopes: string[] = [];
 
@@ -167,7 +172,7 @@ export function compareScopes(scopesToCompare: string[], requestedScopes: string
 
 	if (missingScopes.length > 0) {
 		throw new MissingScopeError(
-			userId,
+			user ? extractUserId(user) : null,
 			missingScopes,
 			`The token does not have the requested scopes: ${requestedScopes.join(', ')}`,
 		);

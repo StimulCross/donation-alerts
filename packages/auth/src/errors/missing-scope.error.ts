@@ -6,7 +6,7 @@ import { CustomError } from '@donation-alerts/common';
 export class MissingScopeError extends CustomError {
 	/** @internal */
 	constructor(
-		private readonly _userId: number,
+		private readonly _userId: number | null,
 		private readonly _scopes: string[],
 		message: string,
 	) {
@@ -14,9 +14,9 @@ export class MissingScopeError extends CustomError {
 	}
 
 	/**
-	 * The ID of the user associated with the token.
+	 * The ID of the user associated with the token, or `null` if user is not known.
 	 */
-	get userId(): number {
+	get userId(): number | null {
 		return this._userId;
 	}
 

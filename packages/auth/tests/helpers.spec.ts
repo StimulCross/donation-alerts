@@ -85,6 +85,20 @@ describe('compareScopes', () => {
 		}
 	});
 
+	it('should throw MissingScopeError without userId if it was not specified', () => {
+		const tokenScopes = ['scope1', 'scope2'];
+		const requestedScopes = ['scope1', 'scope3'];
+
+		try {
+			compareScopes(tokenScopes, requestedScopes);
+			fail('Expected MissingScopeError to be thrown');
+		} catch (e) {
+			expect(e).toBeInstanceOf(MissingScopeError);
+			expect((e as MissingScopeError).userId).toBe(null);
+			expect((e as MissingScopeError).scopes).toEqual(['scope3']);
+		}
+	});
+
 	it('should not throw an error if requestedScopes is undefined', () => {
 		// When no scopes are requested, the function does nothing
 		const tokenScopes = ['scope1', 'scope2'];
