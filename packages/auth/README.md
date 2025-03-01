@@ -76,10 +76,11 @@ The `StaticAuthProvider` offers several methods to manage users:
 - **addUser:** Registers a user with their authentication data.
 
     ```ts
-    authProvider.addUser(123456789, {
-    	accessToken: '<ACCESS_TOKEN>',
-    	scopes: ['oauth-user-show', 'oauth-donation-index', 'oauth-custom_alert-store'],
-    });
+    authProvider.addUser(123456789, '<ACCESS_TOKEN>', [
+    	'oauth-user-show',
+    	'oauth-donation-index',
+    	'oauth-custom_alert-store',
+    ]);
     ```
 
 - **removeUser:** Unregisters a user.
