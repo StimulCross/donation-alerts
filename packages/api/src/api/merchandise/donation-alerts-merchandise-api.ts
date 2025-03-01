@@ -153,7 +153,9 @@ export interface DonationAlertsSendMerchandiseSaleAlertData {
  * as well as to notify DonationAlerts of new sales.
  * Merchants can use this API to integrate sales systems with DonationAlerts' platform, enabling
  * streamers to sell merchandise with flexible revenue sharing. Access is granted upon request.
- * For details, contact `business@donationalerts.com`.
+ * For details, refer to the official documentation.
+ *
+ * @see https://www.donationalerts.com/apidoc#advertisement__merchandises
  */
 @ReadDocumentation('api')
 export class DonationAlertsMerchandiseApi extends BaseApi {
