@@ -116,7 +116,7 @@ export class UserEventsClient extends EventEmitter {
 	/**
 	 * Initializes a client for listening to various Donation Alerts events.
 	 *
-	 * @remark This client is designed for single-user scenarios, with event subscriptions managed
+	 * @remarks This client is designed for single-user scenarios, with event subscriptions managed
 	 *         through Centrifugo WebSocket connections.
 	 *
 	 * @param config Configuration required for setting up the client, including user information,
@@ -296,7 +296,7 @@ export class UserEventsClient extends EventEmitter {
 	/**
 	 * Unsubscribes and removes a listener for a specific channel.
 	 *
-	 * @remark
+	 * @remarks
 	 * If this is the last listener, the WebSocket connection is also closed.
 	 *
 	 * @param listener The {@link EventsListener} instance to be removed.
