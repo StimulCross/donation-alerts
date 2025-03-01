@@ -248,7 +248,10 @@ export class ApiClient {
 		const limitReachedBehavior = rateLimiterOptions.limitReachedBehavior ?? this._limitReachedBehavior;
 
 		this._logger.debug(`Calling ${type}: ${options.method ?? 'GET'} ${options.url}`);
-		this._logger.trace(`Query: ${JSON.stringify(options.query)}`);
+
+		if (options.query) {
+			this._logger.trace(`Query: ${JSON.stringify(options.query)}`);
+		}
 
 		if (options.jsonBody) {
 			this._logger.trace(`Request JSON body: ${JSON.stringify(options.jsonBody)}`);
