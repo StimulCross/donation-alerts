@@ -26,9 +26,10 @@ export interface RefreshingAuthProviderConfig {
 	clientSecret: string;
 
 	/**
-	 * A list of scopes that must be present in any registered tokens.
+	 * A redirect URI configured in your application settings.
 	 *
-	 * If the token is missing any scope specified here, a {@link MissingScopeError} will be thrown.
+	 * @remarks
+	 * This is required only if you intend to use the {@link RefreshingAuthProvider#addUserForCode} method.
 	 */
 	redirectUri?: string;
 

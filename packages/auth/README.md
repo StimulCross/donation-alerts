@@ -241,7 +241,7 @@ const authProvider = new RefreshingAuthProvider({
 
 #### Events
 
-Whenever an access token is refreshed—either automatically or manually—the `onRefresh` event is triggered. This allows you to perform actions such as saving the updated token to persistent storage:
+Whenever an access token is refreshed — either automatically or manually — the `onRefresh` event is triggered. This allows you to perform actions such as saving the updated token to persistent storage:
 
 ```ts
 import { AccessToken } from '@donation-alerts/auth';
