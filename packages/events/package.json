@@ -55,16 +55,14 @@
 		"@stimulcross/logger": "^7.0.0",
 		"@stimulcross/shared-utils": "^0.2.3",
 		"centrifuge": "2.8.5",
-		"detect-node": "^2.1.0",
 		"typescript-memoize": "^1.1.1",
 		"ws": "^8.18.1"
 	},
 	"peerDependencies": {
-		"@donation-alerts/api": "3.0.1"
+		"@donation-alerts/api": "^4.0.0-next.2"
 	},
 	"devDependencies": {
 		"@donation-alerts/api": "^4.0.0-next.2",
-		"@types/detect-node": "^2.0.2",
 		"@types/ws": "^8.5.14",
 		"rimraf": "^6.0.1",
 		"tslib": "^2.8.1",

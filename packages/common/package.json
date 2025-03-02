@@ -48,11 +48,9 @@
 	],
 	"dependencies": {
 		"@stimulcross/shared-utils": "^0.2.3",
-		"detect-node": "^2.1.0",
 		"klona": "^2.0.6"
 	},
 	"devDependencies": {
-		"@types/detect-node": "^2.0.1",
 		"rimraf": "^6.0.1",
 		"tslib": "^2.8.1",
 		"tsukuru": "^0.8.3"

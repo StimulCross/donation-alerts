@@ -57,7 +57,7 @@
 		"typescript-memoize": "^1.1.1"
 	},
 	"peerDependencies": {
-		"@donation-alerts/auth": "3.0.1"
+		"@donation-alerts/auth": "^4.0.0-next.2"
 	},
 	"devDependencies": {
 		"@donation-alerts/auth": "^4.0.0-next.2",
