@@ -1,6 +1,6 @@
 {
 	"name": "@donation-alerts/events",
-	"version": "4.0.0-next.1",
+	"version": "4.0.0-next.2",
 	"publishConfig": {
 		"access": "public"
 	},
@@ -51,7 +51,7 @@
 	"dependencies": {
 		"@d-fischer/isomorphic-ws": "^7.0.2",
 		"@d-fischer/typed-event-emitter": "^3.3.3",
-		"@donation-alerts/common": "^4.0.0-next.1",
+		"@donation-alerts/common": "^4.0.0-next.2",
 		"@stimulcross/logger": "^7.0.0",
 		"@stimulcross/shared-utils": "^0.2.3",
 		"centrifuge": "2.8.5",
@@ -63,7 +63,7 @@
 		"@donation-alerts/api": "3.0.1"
 	},
 	"devDependencies": {
-		"@donation-alerts/api": "^4.0.0-next.1",
+		"@donation-alerts/api": "^4.0.0-next.2",
 		"@types/detect-node": "^2.0.2",
 		"@types/ws": "^8.5.14",
 		"rimraf": "^6.0.1",
