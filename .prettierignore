@@ -1,5 +1,4 @@
-/docs/*
-/packages/*/es
-/packages/*/lib
-/packages/*/LICENSE
+docs
+packages/*/es
+packages/*/cjs
 lerna.json
