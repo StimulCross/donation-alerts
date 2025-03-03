@@ -22,7 +22,7 @@ export function getRawData<T>(data: DataObject<T>): T {
 }
 
 /** @internal */
-export abstract class DataObject<T> {
+export abstract class DataObject<T, J extends object = object> {
 	/** @internal */
 	@nonenumerable readonly [rawDataSymbol]: T;
 
@@ -30,4 +30,13 @@ export abstract class DataObject<T> {
 	constructor(data: T) {
 		this[rawDataSymbol] = data;
 	}
+
+	/**
+	 * Serializes the instance into a plain JavaScript object.
+	 *
+	 * This method is automatically invoked when the instance is passed to `JSON.stringify()`.
+	 *
+	 * In Node.js, it's also used when the instance is logged via `console.log()` (via the `util.inspect` mechanism).
+	 */
+	abstract toJSON(): J;
 }

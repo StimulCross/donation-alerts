@@ -20,6 +20,21 @@ export interface DonationAlertsGoalUpdateEventData {
 }
 
 /**
+ * Represents a goal update event from Donation Alerts as a plain JavaScript object.
+ */
+export interface DonationAlertsGoalUpdateEventJson {
+	id: number;
+	isActive: boolean;
+	title: string;
+	currency: DonationAlertsInputCurrency;
+	startAmount: number;
+	raisedAmount: number;
+	goalAmount: number;
+	startDate: Date;
+	expiryDate: Date | null;
+}
+
+/**
  * Represents a goal update event from Donation Alerts.
  *
  * @remarks
@@ -27,7 +42,10 @@ export interface DonationAlertsGoalUpdateEventData {
  * including its current state, progress, and relevant timestamps.
  */
 @ReadDocumentation('events')
-export class DonationAlertsGoalUpdateEvent extends DataObject<DonationAlertsGoalUpdateEventData> {
+export class DonationAlertsGoalUpdateEvent extends DataObject<
+	DonationAlertsGoalUpdateEventData,
+	DonationAlertsGoalUpdateEventJson
+> {
 	/**
 	 * The unique identifier for the donation goal.
 	 */
@@ -108,5 +126,19 @@ export class DonationAlertsGoalUpdateEvent extends DataObject<DonationAlertsGoal
 	 */
 	get expiryDate(): Date | null {
 		return mapNullable(this[rawDataSymbol].expires_at, (v: string) => new Date(v));
+	}
+
+	override toJSON(): DonationAlertsGoalUpdateEventJson {
+		return {
+			id: this.id,
+			isActive: this.isActive,
+			title: this.title,
+			currency: this.currency,
+			startAmount: this.startAmount,
+			raisedAmount: this.raisedAmount,
+			goalAmount: this.goalAmount,
+			startDate: this.startDate,
+			expiryDate: this.expiryDate,
+		};
 	}
 }

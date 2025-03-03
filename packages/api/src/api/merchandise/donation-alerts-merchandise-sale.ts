@@ -27,6 +27,23 @@ export interface DonationAlertsMerchandiseSaleData {
 }
 
 /**
+ * Represents Donation Alerts merchandise sale alert as a plain JavaScript object.
+ */
+export interface DonationAlertsMerchandiseSaleJson {
+	id: number;
+	name: DonationAlertsMerchandiseSaleAlertType;
+	externalId: string;
+	username: string | null;
+	message: string | null;
+	amount: number;
+	currency: DonationAlertsOutputCurrency;
+	boughtAmount: number;
+	creationDate: Date;
+	isShown: boolean;
+	showDate: Date | null;
+}
+
+/**
  * Represents Donation Alerts merchandise sale alert.
  *
  * @remarks
@@ -36,7 +53,10 @@ export interface DonationAlertsMerchandiseSaleData {
  * was displayed in the streamer's widget.
  */
 @ReadDocumentation('api')
-export class DonationAlertsMerchandiseSale extends DataObject<DonationAlertsMerchandiseSaleData> {
+export class DonationAlertsMerchandiseSale extends DataObject<
+	DonationAlertsMerchandiseSaleData,
+	DonationAlertsMerchandiseSaleJson
+> {
 	/**
 	 * The unique identifier for the merchandise sale alert, assigned by Donation Alerts.
 	 *
@@ -154,5 +174,21 @@ export class DonationAlertsMerchandiseSale extends DataObject<DonationAlertsMerc
 
 	get showDate(): Date | null {
 		return mapNullable(this[rawDataSymbol].shown_at, (v: string) => new Date(v));
+	}
+
+	override toJSON(): DonationAlertsMerchandiseSaleJson {
+		return {
+			id: this.id,
+			name: this.name,
+			externalId: this.externalId,
+			username: this.username,
+			message: this.message,
+			amount: this.amount,
+			currency: this.currency,
+			boughtAmount: this.boughtAmount,
+			creationDate: this.creationDate,
+			isShown: this.isShown,
+			showDate: this.showDate,
+		};
 	}
 }

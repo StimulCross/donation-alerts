@@ -7,6 +7,14 @@ export interface DonationAlertsMerchandiseMerchantData {
 }
 
 /**
+ * Represents merchant information as a plain JavaScriptObject.
+ */
+export interface DonationAlertsMerchandiseMerchantJson {
+	identifier: string;
+	name: string;
+}
+
+/**
  * Represents merchant information.
  *
  * @remarks
@@ -14,7 +22,10 @@ export interface DonationAlertsMerchandiseMerchantData {
  * It includes the merchant's unique identifier and display name.
  */
 @ReadDocumentation('api')
-export class DonationAlertsMerchandiseMerchant extends DataObject<DonationAlertsMerchandiseMerchantData> {
+export class DonationAlertsMerchandiseMerchant extends DataObject<
+	DonationAlertsMerchandiseMerchantData,
+	DonationAlertsMerchandiseMerchantJson
+> {
 	/**
 	 * Unique merchant ID on Donation Alerts.
 	 *
@@ -37,5 +48,12 @@ export class DonationAlertsMerchandiseMerchant extends DataObject<DonationAlerts
 	 */
 	get name(): string {
 		return this[rawDataSymbol].name;
+	}
+
+	override toJSON(): DonationAlertsMerchandiseMerchantJson {
+		return {
+			identifier: this.identifier,
+			name: this.name,
+		};
 	}
 }

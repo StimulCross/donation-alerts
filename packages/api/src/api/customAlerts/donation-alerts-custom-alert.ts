@@ -15,6 +15,21 @@ export interface DonationAlertsCustomAlertData {
 }
 
 /**
+ * Represents a Donation Alerts custom alert as a plain JavaScript object.
+ */
+export interface DonationAlertsCustomAlertJson {
+	id: number;
+	externalId: string | null;
+	header: string | null;
+	message: string | null;
+	imageUrl: string | null;
+	soundUrl: string | null;
+	isShown: boolean;
+	creationDate: Date;
+	showDate: Date | null;
+}
+
+/**
  * Represents a Donation Alerts custom alert object.
  *
  * @remarks
@@ -22,7 +37,10 @@ export interface DonationAlertsCustomAlertData {
  * These alerts are shown in the streamer's widget when triggered.
  */
 @ReadDocumentation('api')
-export class DonationAlertsCustomAlert extends DataObject<DonationAlertsCustomAlertData> {
+export class DonationAlertsCustomAlert extends DataObject<
+	DonationAlertsCustomAlertData,
+	DonationAlertsCustomAlertJson
+> {
 	/**
 	 * The unique custom alert identifier.
 	 */
@@ -87,5 +105,19 @@ export class DonationAlertsCustomAlert extends DataObject<DonationAlertsCustomAl
 	 */
 	get showDate(): Date | null {
 		return mapNullable(this[rawDataSymbol].shown_at, (v: string) => new Date(v));
+	}
+
+	override toJSON(): DonationAlertsCustomAlertJson {
+		return {
+			id: this.id,
+			externalId: this.externalId,
+			header: this.header,
+			message: this.message,
+			imageUrl: this.imageUrl,
+			soundUrl: this.soundUrl,
+			isShown: this.isShown,
+			creationDate: this.creationDate,
+			showDate: this.showDate,
+		};
 	}
 }

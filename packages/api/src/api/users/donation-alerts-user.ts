@@ -11,6 +11,18 @@ export interface DonationAlertsUserData {
 }
 
 /**
+ * Represents user profile information as a plain JavaScript object.
+ */
+export interface DonationAlertsUserJson {
+	id: number;
+	code: string;
+	name: string;
+	avatar: string;
+	email: string;
+	socketConnectionToken: string;
+}
+
+/**
  * Represents user profile information.
  *
  * @remarks
@@ -18,7 +30,7 @@ export interface DonationAlertsUserData {
  * display names, email addresses, and authentication tokens for Centrifugo connections.
  */
 @ReadDocumentation('api')
-export class DonationAlertsUser extends DataObject<DonationAlertsUserData> {
+export class DonationAlertsUser extends DataObject<DonationAlertsUserData, DonationAlertsUserJson> {
 	/**
 	 * The unique and unchangeable user identifier.
 	 *
@@ -77,5 +89,16 @@ export class DonationAlertsUser extends DataObject<DonationAlertsUserData> {
 	 */
 	get socketConnectionToken(): string {
 		return this[rawDataSymbol].socket_connection_token;
+	}
+
+	override toJSON(): DonationAlertsUserJson {
+		return {
+			id: this.id,
+			code: this.code,
+			name: this.name,
+			avatar: this.avatar,
+			email: this.email,
+			socketConnectionToken: this.socketConnectionToken,
+		};
 	}
 }

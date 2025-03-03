@@ -36,6 +36,24 @@ export interface DonationAlertsMerchandiseData {
 }
 
 /**
+ * Represents Donation Alerts merchandise as a plain JavaScript object.
+ */
+export interface DonationAlertsMerchandiseJson {
+	id: number;
+	merchant: DonationAlertsMerchandiseMerchantData;
+	identifier: string;
+	title: DonationAlertsMerchandiseTitleData;
+	isActive: boolean;
+	isPercentage: boolean;
+	currency: DonationAlertsOutputCurrency;
+	priceUser: number;
+	priceService: number;
+	url: string | null;
+	imageUrl: string | null;
+	endDate: Date | null;
+}
+
+/**
  * Represents Donation Alerts merchandise.
  *
  * @remarks
@@ -44,7 +62,10 @@ export interface DonationAlertsMerchandiseData {
  * It parses and exposes raw data provided by the Donation Alerts API for ease of use.
  */
 @ReadDocumentation('api')
-export class DonationAlertsMerchandise extends DataObject<DonationAlertsMerchandiseData> {
+export class DonationAlertsMerchandise extends DataObject<
+	DonationAlertsMerchandiseData,
+	DonationAlertsMerchandiseJson
+> {
 	/**
 	 * Unique merchandise ID on Donation Alerts.
 	 */
@@ -186,5 +207,22 @@ export class DonationAlertsMerchandise extends DataObject<DonationAlertsMerchand
 	 */
 	get endDate(): Date | null {
 		return mapNullable(this[rawDataSymbol].end_at, (v: string) => new Date(v));
+	}
+
+	override toJSON(): DonationAlertsMerchandiseJson {
+		return {
+			id: this.id,
+			merchant: this.merchant.toJSON(),
+			identifier: this.identifier,
+			title: this.title,
+			isActive: this.isActive,
+			isPercentage: this.isPercentage,
+			currency: this.currency,
+			priceUser: this.priceUser,
+			priceService: this.priceService,
+			url: this.url,
+			imageUrl: this.imageUrl,
+			endDate: this.endDate,
+		};
 	}
 }

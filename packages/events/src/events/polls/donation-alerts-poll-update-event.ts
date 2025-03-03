@@ -1,6 +1,10 @@
 import { DataObject, rawDataSymbol, ReadDocumentation } from '@donation-alerts/common';
 import { Memoize } from 'typescript-memoize';
-import { DonationAlertsPollOption, type DonationAlertsPollOptionData } from './donation-alerts-poll-option';
+import {
+	DonationAlertsPollOption,
+	type DonationAlertsPollOptionData,
+	DonationAlertsPollOptionJson,
+} from './donation-alerts-poll-option';
 
 /**
  * The type of a poll, which determines the way the winner is calculated:
@@ -20,6 +24,18 @@ export interface DonationAlertsPollUpdateEventData {
 }
 
 /**
+ * Represents an updated poll object from Donation Alerts as a plain JavaScript object.
+ */
+export interface DonationAlertsPollUpdateEventJson {
+	id: number;
+	isActive: boolean;
+	title: string;
+	allowUserOptions: boolean;
+	type: DonationAlertsPollType;
+	options: DonationAlertsPollOptionJson[];
+}
+
+/**
  * Represents an updated poll object from Donation Alerts.
  *
  * @remarks
@@ -27,7 +43,10 @@ export interface DonationAlertsPollUpdateEventData {
  * and configuration details. It also indicates whether the poll is active or not.
  */
 @ReadDocumentation('events')
-export class DonationAlertsPollUpdateEvent extends DataObject<DonationAlertsPollUpdateEventData> {
+export class DonationAlertsPollUpdateEvent extends DataObject<
+	DonationAlertsPollUpdateEventData,
+	DonationAlertsPollUpdateEventJson
+> {
 	/**
 	 * The unique identifier of the poll.
 	 */
@@ -80,5 +99,16 @@ export class DonationAlertsPollUpdateEvent extends DataObject<DonationAlertsPoll
 	@Memoize()
 	get options(): DonationAlertsPollOption[] {
 		return this[rawDataSymbol].options.map(option => new DonationAlertsPollOption(option));
+	}
+
+	override toJSON(): DonationAlertsPollUpdateEventJson {
+		return {
+			id: this.id,
+			isActive: this.isActive,
+			title: this.title,
+			allowUserOptions: this.allowUserOptions,
+			type: this.type,
+			options: this.options.map(option => option.toJSON()),
+		};
 	}
 }

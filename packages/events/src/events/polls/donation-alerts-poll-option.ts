@@ -10,6 +10,17 @@ export interface DonationAlertsPollOptionData {
 }
 
 /**
+ * Represents an option in a Donation Alerts poll event as a plain JavaScript object.
+ */
+export interface DonationAlertsPollOptionJson {
+	id: number;
+	title: string;
+	amountValue: number;
+	amountPercent: number;
+	isWinner: boolean;
+}
+
+/**
  * Represents an option in a Donation Alerts poll event.
  *
  * @remarks
@@ -17,7 +28,7 @@ export interface DonationAlertsPollOptionData {
  * and helps identify important metrics, such as the total value and its relative percentage.
  */
 @ReadDocumentation('events')
-export class DonationAlertsPollOption extends DataObject<DonationAlertsPollOptionData> {
+export class DonationAlertsPollOption extends DataObject<DonationAlertsPollOptionData, DonationAlertsPollOptionJson> {
 	/**
 	 * The unique identifier of the poll option.
 	 */
@@ -63,5 +74,15 @@ export class DonationAlertsPollOption extends DataObject<DonationAlertsPollOptio
 	 */
 	get isWinner(): boolean {
 		return this[rawDataSymbol].is_winner === 1;
+	}
+
+	override toJSON(): DonationAlertsPollOptionJson {
+		return {
+			id: this.id,
+			title: this.title,
+			amountValue: this.amountValue,
+			amountPercent: this.amountPercent,
+			isWinner: this.isWinner,
+		};
 	}
 }

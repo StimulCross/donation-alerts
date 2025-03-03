@@ -12,6 +12,14 @@ export interface DonationAlertsCentrifugoChannelData {
 }
 
 /**
+ * Represents a Donation Alerts Centrifugo private channel as a plain JavaScript object.
+ */
+export interface DonationAlertsCentrifugoChannelJson {
+	channel: string;
+	token: string;
+}
+
+/**
  * Represents a Donation Alerts Centrifugo private channel.
  *
  * @remarks
@@ -19,7 +27,10 @@ export interface DonationAlertsCentrifugoChannelData {
  * and the token required to connect to this channel (`token`).
  */
 @ReadDocumentation('api')
-export class DonationAlertsCentrifugoChannel extends DataObject<DonationAlertsCentrifugoChannelData> {
+export class DonationAlertsCentrifugoChannel extends DataObject<
+	DonationAlertsCentrifugoChannelData,
+	DonationAlertsCentrifugoChannelJson
+> {
 	/**
 	 * The private channel name.
 	 *
@@ -38,5 +49,12 @@ export class DonationAlertsCentrifugoChannel extends DataObject<DonationAlertsCe
 	 */
 	get token(): string {
 		return this[rawDataSymbol].token;
+	}
+
+	override toJSON(): DonationAlertsCentrifugoChannelJson {
+		return {
+			channel: this.channel,
+			token: this.token,
+		};
 	}
 }

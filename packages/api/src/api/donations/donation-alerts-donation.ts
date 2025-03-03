@@ -34,6 +34,22 @@ export interface DonationAlertsDonationData {
 }
 
 /**
+ * Represents a donation received through Donation Alerts as a plain JavaScript object.
+ */
+export interface DonationAlertsDonationJson {
+	id: number;
+	name: DonationNameType;
+	username: string;
+	messageType: DonationMessageType;
+	message: string;
+	amount: number;
+	currency: DonationAlertsOutputCurrency;
+	isShown: boolean;
+	creationDate: Date;
+	showDate: Date | null;
+}
+
+/**
  * Represents a donation received through Donation Alerts.
  *
  * @remarks
@@ -41,7 +57,7 @@ export interface DonationAlertsDonationData {
  * currency, and timestamps for creation and display.
  */
 @ReadDocumentation('api')
-export class DonationAlertsDonation extends DataObject<DonationAlertsDonationData> {
+export class DonationAlertsDonation extends DataObject<DonationAlertsDonationData, DonationAlertsDonationJson> {
 	/**
 	 * The unique identifier for the donation alert.
 	 */
@@ -130,5 +146,20 @@ export class DonationAlertsDonation extends DataObject<DonationAlertsDonationDat
 	 */
 	get showDate(): Date | null {
 		return mapNullable(this[rawDataSymbol].shown_at, (v: string) => new Date(v));
+	}
+
+	override toJSON(): DonationAlertsDonationJson {
+		return {
+			id: this.id,
+			name: this.name,
+			username: this.username,
+			messageType: this.messageType,
+			message: this.message,
+			amount: this.amount,
+			currency: this.currency,
+			isShown: this.isShown,
+			creationDate: this.creationDate,
+			showDate: this.showDate,
+		};
 	}
 }

@@ -14,6 +14,7 @@ const globs = {
 };
 
 const memberNames = [
+	'^toJSON$',
 	'^Centrifuge$',
 	'^(access|refresh)_token$',
 	'^expires_in$',

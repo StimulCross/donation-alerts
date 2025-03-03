@@ -1,7 +1,27 @@
-import { DataObject, getRawData, rawDataSymbol } from '../src';
+import { DataObject, getRawData, rawDataSymbol, ReadDocumentation } from '../src';
 
-// Создадим минимальный класс-наследник для проверки абстрактного класса DataObject
-class TestDataObject<T> extends DataObject<T> {}
+class TestDataObject<T> extends DataObject<T> {
+	override toJSON(): object {
+		return {};
+	}
+}
+
+@ReadDocumentation('common')
+class SerializableDataObject<T extends { id: number }> extends DataObject<T> {
+	constructor(data: T) {
+		super(data);
+	}
+
+	get id(): number {
+		return this[rawDataSymbol].id;
+	}
+
+	override toJSON(): object {
+		return {
+			id: this.id,
+		};
+	}
+}
 
 describe('getRawData', () => {
 	it('should return a deep cloned raw data from DataObject', () => {
@@ -9,10 +29,8 @@ describe('getRawData', () => {
 		const instance = new TestDataObject(originalData);
 		const clonedData = getRawData(instance);
 
-		// Проверяем, что клонированные данные равны исходным
 		expect(clonedData).toEqual(originalData);
 
-		// Изменяем клонированные данные и убеждаемся, что исходные не изменились (глубокое клонирование)
 		clonedData.b.c = 100;
 		expect(originalData.b.c).toBe(2);
 	});
@@ -31,7 +49,6 @@ describe('DataObject', () => {
 		const data = { key: 'value' };
 		const instance = new TestDataObject(data);
 
-		// Получаем дескриптор свойства для rawDataSymbol
 		const descriptor = Object.getOwnPropertyDescriptor(instance, rawDataSymbol);
 		expect(descriptor).toBeDefined();
 		expect(descriptor?.enumerable).toBe(false);
@@ -41,8 +58,15 @@ describe('DataObject', () => {
 		const data = { key: 'value' };
 		const instance = new TestDataObject(data);
 
-		// Символьные свойства не попадают в Object.keys, поэтому ожидаем, что их там нет
 		const keys = Object.keys(instance);
 		expect(keys).not.toContain(String(rawDataSymbol));
+	});
+
+	it('should convert the instance to a plain object using toJSON and JSON.stringify', () => {
+		const data = { id: 123 };
+		const instance = new SerializableDataObject(data);
+
+		expect(instance.toJSON()).toEqual(data);
+		expect(JSON.stringify(instance)).toEqual(JSON.stringify(data));
 	});
 });

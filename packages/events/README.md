@@ -300,4 +300,57 @@ eventsClient.onDisconnect((userId: number, reason: string, reconnect: boolean) =
 
 ---
 
+### Serialization
+
+Each data instance (event) returned by the library is immutable and exposes its data through getters, ensuring that properties cannot be reassigned. For convenience, every data instance implements a `toJSON()` method, which serializes the instance into a plain JavaScript object representation of the data.
+
+This method is automatically invoked when the instance is passed to `JSON.stringify()`. In Node.js, it is also used when the instance is logged via `console.log()`, utilizing the `util.inspect` mechanism.
+
+> [!TIP]
+> If you wish to explore the structure of the data instance, it is always preferable to refer to the [official documentation](https://stimulcross.github.io/donation-alerts) rather than relying on logging. A data instance may include additional utility methods that are not serialized by `toJSON()`. The documentation also provides detailed descriptions of all available properties and methods.
+
+Also, each data instance retains the original event data received from the Donation Alerts Centrifugo API. This raw data is hidden and immutable but can be accessed via the [`getRawData`](https://stimulcross.github.io/donation-alerts/functions/common.getRawData.html) function provided by the [`@donation-alerts/common`](https://stimulcross.github.io/donation-alerts/modules/common.html) package:
+
+```ts
+import { getRawData } from '@donation-alerts/common';
+
+const donationsListener = userEventsClient.onDonation((evt: DonationAlertsDonationEvent) => {
+	console.log(evt);
+});
+```
+
+At the time of writing, the output resembles the following structure:
+
+```ts
+interface DonationEventRawData {
+	id: number;
+	name: 'Donations';
+	username: string;
+	message: string;
+	message_type: string;
+	payin_system: { title: string } | null;
+	amount: number;
+	currency: string;
+	is_shown: 0 | 1;
+	amount_in_user_currency: number;
+	recipient_name: string;
+	recipient: {
+		user_id: number;
+		code: string;
+		name: string;
+		avatar: string;
+	};
+	created_at: string;
+	shown_at: string | null;
+	reason: string;
+}
+```
+
+As you may notice, the raw response includes some fields that are neither directly exposed by the library nor mentioned in Donation Alerts' official [documentation](https://www.donationalerts.com/apidoc).
+
+> [!WARNING]
+> For best practices, avoid depending on undocumented fields, as their structure or availability may change over time.
+
+---
+
 For more detailed information, refer to the [documentation](https://stimulcross.github.io/donation-alerts/modules/events.html).
