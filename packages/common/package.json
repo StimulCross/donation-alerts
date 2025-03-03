@@ -44,7 +44,8 @@
 		"LICENSE",
 		"README.md",
 		"!cjs/**/*.d.ts.map",
-		"!es/**/*.d.ts.map"
+		"!es/**/*.d.ts.map",
+		"!es/**/*.d.ts"
 	],
 	"dependencies": {
 		"@stimulcross/shared-utils": "^0.2.3",

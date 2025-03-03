@@ -44,7 +44,8 @@
 		"LICENSE",
 		"README.md",
 		"!cjs/**/*.d.ts.map",
-		"!es/**/*.d.ts.map"
+		"!es/**/*.d.ts.map",
+		"!es/**/*.d.ts"
 	],
 	"dependencies": {
 		"@d-fischer/typed-event-emitter": "^3.3.3",
