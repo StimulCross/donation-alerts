@@ -1,6 +1,6 @@
 {
 	"name": "@donation-alerts/api-call",
-	"version": "4.0.0-next.3",
+	"version": "4.0.0-next.4",
 	"publishConfig": {
 		"access": "public"
 	},
@@ -48,7 +48,7 @@
 		"!es/**/*.d.ts"
 	],
 	"dependencies": {
-		"@donation-alerts/common": "^4.0.0-next.3",
+		"@donation-alerts/common": "^4.0.0-next.4",
 		"qs": "^6.14.0"
 	},
 	"devDependencies": {

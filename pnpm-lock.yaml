@@ -78,10 +78,10 @@ importers:
         specifier: ^1.0.1
         version: 1.0.1
       '@donation-alerts/api-call':
-        specifier: ^4.0.0-next.3
+        specifier: ^4.0.0-next.4
         version: link:../api-call
       '@donation-alerts/common':
-        specifier: ^4.0.0-next.3
+        specifier: ^4.0.0-next.4
         version: link:../common
       '@stimulcross/logger':
         specifier: ^7.0.0
@@ -100,7 +100,7 @@ importers:
         version: 1.1.1
     devDependencies:
       '@donation-alerts/auth':
-        specifier: ^4.0.0-next.3
+        specifier: ^4.0.0-next.4
         version: link:../auth
       '@types/qs':
         specifier: ^6.9.18
@@ -118,7 +118,7 @@ importers:
   packages/api-call:
     dependencies:
       '@donation-alerts/common':
-        specifier: ^4.0.0-next.3
+        specifier: ^4.0.0-next.4
         version: link:../common
       qs:
         specifier: ^6.14.0
@@ -140,10 +140,10 @@ importers:
         specifier: ^3.3.3
         version: 3.3.3
       '@donation-alerts/api-call':
-        specifier: ^4.0.0-next.3
+        specifier: ^4.0.0-next.4
         version: link:../api-call
       '@donation-alerts/common':
-        specifier: ^4.0.0-next.3
+        specifier: ^4.0.0-next.4
         version: link:../common
       '@stimulcross/shared-utils':
         specifier: ^0.2.3
@@ -187,7 +187,7 @@ importers:
         specifier: ^3.3.3
         version: 3.3.3
       '@donation-alerts/common':
-        specifier: ^4.0.0-next.3
+        specifier: ^4.0.0-next.4
         version: link:../common
       '@stimulcross/logger':
         specifier: ^7.0.0
@@ -206,7 +206,7 @@ importers:
         version: 8.18.1
     devDependencies:
       '@donation-alerts/api':
-        specifier: ^4.0.0-next.3
+        specifier: ^4.0.0-next.4
         version: link:../api
       '@types/ws':
         specifier: ^8.5.14
