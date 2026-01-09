@@ -1,6 +1,6 @@
-import { stringify } from 'qs';
-import { type DonationAlertsApiCallOptions } from '../donation-alerts-api-call-options';
-import { HttpError } from '../errors/http.error';
+import { qsStringify } from '@donation-alerts/common';
+import { type DonationAlertsApiCallOptions } from '../donation-alerts-api-call-options.js';
+import { HttpError } from '../errors/http.error.js';
 
 /** @internal */
 export async function handleDonationAlertsApiResponseError(
@@ -10,7 +10,7 @@ export async function handleDonationAlertsApiResponseError(
 	if (!response.ok) {
 		const isJson = response.headers.get('Content-Type') === 'application/json';
 		const text = isJson ? JSON.stringify(await response.json(), null, 2) : await response.text();
-		const params = stringify(options.query, { arrayFormat: 'repeat', addQueryPrefix: true });
+		const params = qsStringify(options.query, true);
 		const fullUrl = `${options.url}${params}`;
 		throw new HttpError(response.status, response.statusText, fullUrl, options.method ?? 'GET', text, isJson);
 	}

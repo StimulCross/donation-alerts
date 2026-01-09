@@ -1,8 +1,8 @@
 import { type RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
 import { type DonationAlertsApiCallOptions } from '@donation-alerts/api-call';
 import { ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
-import { type DonationAlertsResponseWithMeta } from './donation-alerts-response';
-import { type ApiClient } from '../api-client';
+import { type DonationAlertsResponseWithMeta } from './donation-alerts-response.js';
+import { type ApiClient } from '../api-client.js';
 
 /**
  * Donation Alerts API paginator.

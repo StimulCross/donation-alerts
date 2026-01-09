@@ -6,14 +6,14 @@ import {
 	type UserIdResolvable,
 } from '@donation-alerts/common';
 import { mapOptional } from '@stimulcross/shared-utils';
-import { DonationAlertsMerchandise, type DonationAlertsMerchandiseData } from './donation-alerts-merchandise';
 import {
 	DonationAlertsMerchandiseSale,
 	type DonationAlertsMerchandiseSaleData,
-} from './donation-alerts-merchandise-sale';
-import { createSha256SignatureFromParams } from '../../utils/create-sha256-signature-from-params';
-import { BaseApi } from '../base-api';
-import { type DonationAlertsResponseSingleData } from '../donation-alerts-response';
+} from './donation-alerts-merchandise-sale.js';
+import { DonationAlertsMerchandise, type DonationAlertsMerchandiseData } from './donation-alerts-merchandise.js';
+import { createSha256SignatureFromParams } from '../../utils/create-sha256-signature-from-params.js';
+import { BaseApi } from '../base-api.js';
+import { type DonationAlertsResponseSingleData } from '../donation-alerts-response.js';
 
 /**
  * Title of the merchandise in different locales.

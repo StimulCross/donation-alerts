@@ -10,7 +10,7 @@ import { Memoize } from 'typescript-memoize';
 import {
 	DonationAlertsMerchandiseMerchant,
 	type DonationAlertsMerchandiseMerchantData,
-} from './donation-alerts-merchandise-merchant';
+} from './donation-alerts-merchandise-merchant.js';
 
 /**
  * Object carrying merchandise's titles in different locales.

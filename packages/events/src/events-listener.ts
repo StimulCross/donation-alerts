@@ -1,6 +1,6 @@
 import { ReadDocumentation, type CentrifugoChannel } from '@donation-alerts/common';
 import { type Subscription } from 'centrifuge';
-import { type UserEventsClient } from './user-events-client';
+import { type UserEventsClient } from './user-events-client.js';
 
 /**
  * Listener for subscription-based events in Centrifugo channels.

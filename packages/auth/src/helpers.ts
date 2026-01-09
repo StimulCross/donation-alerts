@@ -1,7 +1,7 @@
 import { callDonationAlertsApi } from '@donation-alerts/api-call';
 import { extractUserId, UserIdResolvable } from '@donation-alerts/common';
-import { type AccessToken } from './access-token';
-import { MissingScopeError } from './errors';
+import { type AccessToken } from './access-token.js';
+import { MissingScopeError } from './errors/missing-scope.error.js';
 
 /** @internal */
 interface AccessTokenData {

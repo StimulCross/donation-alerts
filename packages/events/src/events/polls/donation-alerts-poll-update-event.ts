@@ -4,7 +4,7 @@ import {
 	DonationAlertsPollOption,
 	type DonationAlertsPollOptionData,
 	DonationAlertsPollOptionJson,
-} from './donation-alerts-poll-option';
+} from './donation-alerts-poll-option.js';
 
 /**
  * The type of a poll, which determines the way the winner is calculated:

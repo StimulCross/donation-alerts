@@ -9,8 +9,8 @@ import {
 import {
 	DonationAlertsCentrifugoChannel,
 	type DonationAlertsCentrifugoChannelsResponseData,
-} from './donation-alerts-centrifugo-channel';
-import { BaseApi } from '../base-api';
+} from './donation-alerts-centrifugo-channel.js';
+import { BaseApi } from '../base-api.js';
 
 /**
  * Additional subscribe options.

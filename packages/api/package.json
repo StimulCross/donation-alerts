@@ -1,51 +1,49 @@
 {
 	"name": "@donation-alerts/api",
 	"version": "4.0.0",
-	"publishConfig": {
-		"access": "public"
-	},
-	"author": "StimulCross <stimulcross@gmail.com>",
 	"description": "Interact with Donation Alerts API.",
-	"homepage": "https://github.com/StimulCross/donation-alerts/tree/main/packages/api#readme",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/StimulCross/donation-alerts.git",
-		"directory": "packages/api"
-	},
-	"engines": {
-		"node": ">=20"
-	},
 	"keywords": [
 		"donation-alerts",
 		"api",
 		"donations",
 		"tips"
 	],
+	"author": "StimulCross <stimulcross@gmail.com>",
 	"license": "MIT",
-	"main": "cjs",
-	"module": "es",
-	"types": "cjs",
+	"homepage": "https://github.com/StimulCross/donation-alerts/tree/main/packages/api#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/StimulCross/donation-alerts.git",
+		"directory": "packages/api"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"type": "module",
+	"sideEffects": false,
+	"main": "./lib/index.js",
+	"types": "./lib/index.d.ts",
 	"exports": {
 		".": {
-			"types": "./cjs/index.d.ts",
-			"require": "./cjs/index.js",
-			"import": "./es/index.mjs",
-			"default": "./cjs/index.js"
+			"types": "./lib/index.d.ts",
+			"default": "./lib/index.js"
 		}
 	},
 	"scripts": {
-		"build": "tsukuru -c tsconfig.build.json",
-		"rebuild": "tsukuru --clean -c tsconfig.build.json",
-		"clean": "rimraf es && rimraf cjs"
+		"build": "tsc -p tsconfig.json",
+		"rebuild": "pnpm run clean && pnpm run build",
+		"clean": "del-cli lib *.tsbuildinfo",
+		"test": "tsx --test \"tests/**/*.spec.ts\""
 	},
 	"files": [
-		"cjs",
-		"es",
 		"LICENSE",
 		"README.md",
-		"!cjs/**/*.d.ts.map",
-		"!es/**/*.d.ts.map",
-		"!es/**/*.d.ts"
+		"lib",
+		"!lib/**/*.d.ts.map",
+		"!lib/**/*.js.map"
 	],
 	"dependencies": {
 		"@d-fischer/rate-limiter": "^1.0.1",
@@ -54,17 +52,12 @@
 		"@stimulcross/logger": "^7.0.0",
 		"@stimulcross/shared-utils": "^0.2.3",
 		"cross-sha256": "^1.2.0",
-		"qs": "^6.14.0",
 		"typescript-memoize": "^1.1.1"
 	},
 	"peerDependencies": {
 		"@donation-alerts/auth": "4.0.0"
 	},
 	"devDependencies": {
-		"@donation-alerts/auth": "4.0.0",
-		"@types/qs": "^6.9.18",
-		"rimraf": "^6.0.1",
-		"tslib": "^2.8.1",
-		"tsukuru": "^0.8.3"
+		"@donation-alerts/auth": "4.0.0"
 	}
 }

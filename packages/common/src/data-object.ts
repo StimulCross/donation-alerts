@@ -1,4 +1,3 @@
-import { nonenumerable } from '@stimulcross/shared-utils';
 import { klona } from 'klona';
 
 /** @internal */
@@ -24,11 +23,16 @@ export function getRawData<T>(data: DataObject<T>): T {
 /** @internal */
 export abstract class DataObject<T, J extends object = object> {
 	/** @internal */
-	@nonenumerable readonly [rawDataSymbol]: T;
+	declare readonly [rawDataSymbol]: T;
 
 	/** @internal */
 	constructor(data: T) {
-		this[rawDataSymbol] = data;
+		Reflect.defineProperty(this, rawDataSymbol, {
+			value: data,
+			enumerable: false,
+			writable: true,
+			configurable: true,
+		});
 	}
 
 	/**

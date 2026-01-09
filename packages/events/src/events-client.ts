@@ -3,11 +3,11 @@ import { type ApiClient } from '@donation-alerts/api';
 import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { type LoggerOptions } from '@stimulcross/logger';
 import { nonenumerable } from '@stimulcross/shared-utils';
-import { type DonationAlertsDonationEvent } from './events/donations/donation-alerts-donation-event';
-import { type DonationAlertsGoalUpdateEvent } from './events/goals/donation-alerts-goal-update-event';
-import { type DonationAlertsPollUpdateEvent } from './events/polls/donation-alerts-poll-update-event';
-import { type EventsListener } from './events-listener';
-import { UserEventsClient } from './user-events-client';
+import { type DonationAlertsDonationEvent } from './events/donations/donation-alerts-donation-event.js';
+import { type DonationAlertsGoalUpdateEvent } from './events/goals/donation-alerts-goal-update-event.js';
+import { type DonationAlertsPollUpdateEvent } from './events/polls/donation-alerts-poll-update-event.js';
+import { type EventsListener } from './events-listener.js';
+import { UserEventsClient } from './user-events-client.js';
 
 /**
  * Configuration for {@link EventsClient}.

@@ -2,10 +2,11 @@ import { EventEmitter } from '@d-fischer/typed-event-emitter';
 import { callDonationAlertsApi } from '@donation-alerts/api-call';
 import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { nonenumerable } from '@stimulcross/shared-utils';
-import { type AuthProvider } from './auth-provider';
-import { type AccessToken, type AccessTokenWithUserId, isAccessTokenExpired } from '../access-token';
-import { InvalidTokenError, UnregisteredUserError } from '../errors';
-import { compareScopes, getAccessToken, refreshAccessToken } from '../helpers';
+import { type AuthProvider } from './auth-provider.js';
+import { type AccessToken, type AccessTokenWithUserId, isAccessTokenExpired } from '../access-token.js';
+import { InvalidTokenError } from '../errors/invalid-token.error.js';
+import { UnregisteredUserError } from '../errors/unregistered-user.error.js';
+import { compareScopes, getAccessToken, refreshAccessToken } from '../helpers.js';
 
 /**
  * Configuration for {@link RefreshingAuthProvider}.

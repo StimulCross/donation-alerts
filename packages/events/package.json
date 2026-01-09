@@ -1,20 +1,7 @@
 {
 	"name": "@donation-alerts/events",
 	"version": "4.0.0",
-	"publishConfig": {
-		"access": "public"
-	},
-	"author": "StimulCross <stimulcross@gmail.com>",
 	"description": "Listen to various Donation Alerts events.",
-	"homepage": "https://github.com/StimulCross/donation-alerts/tree/main/packages/events#readme",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/StimulCross/donation-alerts.git",
-		"directory": "packages/events"
-	},
-	"engines": {
-		"node": ">=20"
-	},
 	"keywords": [
 		"donation-alerts",
 		"api",
@@ -22,32 +9,42 @@
 		"tips",
 		"events"
 	],
-	"sideEffects": false,
+	"author": "StimulCross <stimulcross@gmail.com>",
 	"license": "MIT",
-	"main": "cjs",
-	"module": "es",
-	"types": "cjs",
+	"homepage": "https://github.com/StimulCross/donation-alerts/tree/main/packages/events#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/StimulCross/donation-alerts.git",
+		"directory": "packages/events"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"type": "module",
+	"sideEffects": false,
+	"main": "./lib/index.js",
+	"types": "./lib/index.d.ts",
 	"exports": {
 		".": {
-			"types": "./cjs/index.d.ts",
-			"require": "./cjs/index.js",
-			"import": "./es/index.mjs",
-			"default": "./cjs/index.js"
+			"types": "./lib/index.d.ts",
+			"default": "./lib/index.js"
 		}
 	},
 	"scripts": {
-		"build": "tsukuru -c tsconfig.build.json",
-		"rebuild": "tsukuru --clean -c tsconfig.build.json",
-		"clean": "rimraf es && rimraf cjs"
+		"build": "tsc -p tsconfig.json",
+		"rebuild": "pnpm run clean && pnpm run build",
+		"clean": "del-cli lib *.tsbuildinfo",
+		"test": "tsx --test \"tests/**/*.spec.ts\""
 	},
 	"files": [
-		"cjs",
-		"es",
 		"LICENSE",
 		"README.md",
-		"!cjs/**/*.d.ts.map",
-		"!es/**/*.d.ts.map",
-		"!es/**/*.d.ts"
+		"lib",
+		"!lib/**/*.d.ts.map",
+		"!lib/**/*.js.map"
 	],
 	"dependencies": {
 		"@d-fischer/isomorphic-ws": "^7.0.2",
@@ -64,9 +61,6 @@
 	},
 	"devDependencies": {
 		"@donation-alerts/api": "4.0.0",
-		"@types/ws": "^8.5.14",
-		"rimraf": "^6.0.1",
-		"tslib": "^2.8.1",
-		"tsukuru": "^0.8.3"
+		"@types/ws": "^8.5.14"
 	}
 }

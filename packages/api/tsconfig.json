@@ -1,4 +1,14 @@
 {
 	"extends": "../../tsconfig.base.json",
-	"exclude": ["node_modules", "dist"]
+	"compilerOptions": {
+		"rootDir": "src",
+		"outDir": "lib",
+		"paths": {
+			"@donation-alerts/common": ["../common/src"],
+			"@donation-alerts/api-call": ["../api-call/src"],
+			"@donation-alerts/auth": ["../auth/src"]
+		}
+	},
+	"include": ["src"],
+	"exclude": ["node_modules", "lib"]
 }

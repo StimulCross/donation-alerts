@@ -1,5 +1,5 @@
 import { nonenumerable } from '@stimulcross/shared-utils';
-import { type ApiClient } from '../api-client';
+import { type ApiClient } from '../api-client.js';
 
 /** @internal */
 export abstract class BaseApi {

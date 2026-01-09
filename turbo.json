@@ -4,12 +4,12 @@
 		"build": {
 			"dependsOn": ["^build"],
 			"cache": true,
-			"outputs": ["cjs/**", "es/**"]
+			"outputs": ["lib/**"]
 		},
 		"rebuild": {
 			"dependsOn": ["^rebuild"],
 			"cache": true,
-			"outputs": ["cjs/**", "es/**"]
+			"outputs": ["lib/**"]
 		},
 		"clean": {},
 		"lint": {

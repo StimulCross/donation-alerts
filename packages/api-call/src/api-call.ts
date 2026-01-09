@@ -1,10 +1,10 @@
-import { stringify } from 'qs';
+import { qsStringify } from '@donation-alerts/common';
 import {
 	type DonationAlertsApiCallOptions,
 	type DonationAlertsCallFetchOptions,
-} from './donation-alerts-api-call-options';
-import { handleDonationAlertsApiResponseError, transformDonationAlertsResponse } from './helpers/transform';
-import { getDonationAlertsApiUrl } from './helpers/url';
+} from './donation-alerts-api-call-options.js';
+import { handleDonationAlertsApiResponseError, transformDonationAlertsResponse } from './helpers/transform.js';
+import { getDonationAlertsApiUrl } from './helpers/url.js';
 
 /**
  * Makes a raw HTTP call to the Donation Alerts API with the given options and returns the raw {@link Response}
@@ -39,7 +39,7 @@ export async function callDonationAlertsApiRaw(
 ): Promise<Response> {
 	const type = options.type ?? 'api';
 	const url = getDonationAlertsApiUrl(options.url, type);
-	const params = stringify(options.query, { arrayFormat: 'repeat', addQueryPrefix: true });
+	const params = qsStringify(options.query, true);
 
 	const headers = new Headers();
 	headers.append('Accept', 'application/json');
@@ -50,7 +50,7 @@ export async function callDonationAlertsApiRaw(
 		body = JSON.stringify(options.jsonBody);
 		headers.append('Content-Type', 'application/json');
 	} else if (options.formBody) {
-		body = stringify(options.formBody);
+		body = qsStringify(options.formBody);
 		headers.append('Content-Type', 'application/x-www-form-urlencoded');
 	}
 

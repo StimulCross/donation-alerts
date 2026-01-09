@@ -1,38 +1,37 @@
-export { ApiClient } from './api-client';
-export { type ApiConfig, type RateLimiterOptions } from './api-client';
+export { ApiClient, type ApiConfig, type RateLimiterOptions } from './api-client.js';
 
-export { type DonationAlertsApiPagination } from './api/donation-alerts-api-pagination';
+export { type DonationAlertsApiPagination } from './api/donation-alerts-api-pagination.js';
 
-export { DonationAlertsApiPaginator } from './api/donation-alerts-api-paginator';
+export { DonationAlertsApiPaginator } from './api/donation-alerts-api-paginator.js';
 
-export { DonationAlertsUsersApi } from './api/users/donation-alerts-users-api';
-export { DonationAlertsUser, type DonationAlertsUserJson } from './api/users/donation-alerts-user';
+export { DonationAlertsUsersApi } from './api/users/donation-alerts-users-api.js';
+export { DonationAlertsUser, type DonationAlertsUserJson } from './api/users/donation-alerts-user.js';
 
-export { DonationAlertsDonationsApi } from './api/donations/donation-alerts-donations-api';
+export { DonationAlertsDonationsApi } from './api/donations/donation-alerts-donations-api.js';
 export {
 	DonationAlertsDonation,
 	type DonationAlertsDonationJson,
 	type DonationMessageType,
 	type DonationNameType,
-} from './api/donations/donation-alerts-donation';
+} from './api/donations/donation-alerts-donation.js';
 
 export {
 	DonationAlertsCustomAlertsApi,
 	type DonationAlertsSendCustomAlertData,
-} from './api/customAlerts/donation-alerts-custom-alerts-api';
+} from './api/customAlerts/donation-alerts-custom-alerts-api.js';
 export {
 	DonationAlertsCustomAlert,
 	type DonationAlertsCustomAlertJson,
-} from './api/customAlerts/donation-alerts-custom-alert';
+} from './api/customAlerts/donation-alerts-custom-alert.js';
 
 export {
 	DonationAlertsCentrifugoApi,
 	type DonationAlertsCentrifugoSubscribeOptions,
-} from './api/centrifugo/donation-alerts-centrifugo-api';
+} from './api/centrifugo/donation-alerts-centrifugo-api.js';
 export {
 	DonationAlertsCentrifugoChannel,
 	type DonationAlertsCentrifugoChannelJson,
-} from './api/centrifugo/donation-alerts-centrifugo-channel';
+} from './api/centrifugo/donation-alerts-centrifugo-channel.js';
 
 export {
 	DonationAlertsMerchandiseApi,
@@ -40,18 +39,18 @@ export {
 	type DonationAlertsUpdateMerchandiseData,
 	type DonationAlertsCreateMerchandiseData,
 	type DonationAlertsCreateMerchandiseTitleData,
-} from './api/merchandise/donation-alerts-merchandise-api';
+} from './api/merchandise/donation-alerts-merchandise-api.js';
 export {
 	type DonationAlertsMerchandiseTitleData,
 	type DonationAlertsMerchandiseJson,
 	DonationAlertsMerchandise,
-} from './api/merchandise/donation-alerts-merchandise';
+} from './api/merchandise/donation-alerts-merchandise.js';
 export {
 	DonationAlertsMerchandiseSale,
 	type DonationAlertsMerchandiseSaleAlertType,
 	type DonationAlertsMerchandiseSaleJson,
-} from './api/merchandise/donation-alerts-merchandise-sale';
+} from './api/merchandise/donation-alerts-merchandise-sale.js';
 export {
 	DonationAlertsMerchandiseMerchant,
 	type DonationAlertsMerchandiseMerchantJson,
-} from './api/merchandise/donation-alerts-merchandise-merchant';
+} from './api/merchandise/donation-alerts-merchandise-merchant.js';

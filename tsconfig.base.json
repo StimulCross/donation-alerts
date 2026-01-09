@@ -1,19 +1,19 @@
 {
 	"compilerOptions": {
 		"composite": true,
-		"module": "commonjs",
-		"target": "ES2020",
-		"lib": ["ESNext", "DOM"],
-		"moduleResolution": "node",
+		"module": "node16",
+		"moduleResolution": "nodenext",
+		"target": "ES2023",
+		"lib": ["ES2023", "DOM"],
 		"declaration": true,
+		"declarationMap": true,
+		"sourceMap": true,
 		"forceConsistentCasingInFileNames": true,
 		"noImplicitReturns": true,
-		"importHelpers": true,
 		"strict": true,
 		"noUnusedLocals": true,
 		"experimentalDecorators": true,
-		"downlevelIteration": true,
 		"isolatedModules": true,
-		"declarationMap": true
+		"esModuleInterop": true
 	}
 }

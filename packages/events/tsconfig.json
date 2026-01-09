@@ -1,7 +1,13 @@
 {
 	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
-		"esModuleInterop": true
+		"rootDir": "src",
+		"outDir": "lib",
+		"paths": {
+			"@donation-alerts/common": ["../common/src"],
+			"@donation-alerts/api": ["../api/src"]
+		}
 	},
-	"exclude": ["node_modules", "dist"]
+	"include": ["src"],
+	"exclude": ["node_modules", "lib"]
 }

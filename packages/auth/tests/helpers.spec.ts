@@ -1,21 +1,30 @@
 import { callDonationAlertsApi } from '@donation-alerts/api-call';
-import { AccessToken, compareScopes, getAccessToken, MissingScopeError, refreshAccessToken } from '../src';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import {
+	type AccessToken,
+	compareScopes,
+	getAccessToken,
+	MissingScopeError,
+	refreshAccessToken,
+} from '../src/index.js';
 
-jest.mock('@donation-alerts/api-call');
+vi.mock('@donation-alerts/api-call', () => ({
+	callDonationAlertsApi: vi.fn(),
+}));
 
 beforeEach(() => {
-	jest.clearAllMocks();
+	vi.clearAllMocks();
 });
 
 describe('getAccessToken', () => {
-	it('should return an AccessToken object with correct values', async () => {
+	it('should return AccessToken with correct values', async () => {
 		const apiResponse = {
 			access_token: 'dummy-access',
 			refresh_token: 'dummy-refresh',
 			expires_in: 3600,
 		};
 
-		(callDonationAlertsApi as any).mockResolvedValue(apiResponse);
+		vi.mocked(callDonationAlertsApi).mockResolvedValue(apiResponse as any);
 
 		const clientId = 'client-id';
 		const clientSecret = 'client-secret';
@@ -24,60 +33,53 @@ describe('getAccessToken', () => {
 
 		const token: AccessToken = await getAccessToken(clientId, clientSecret, redirectUri, code);
 
-		expect(token).toEqual({
-			accessToken: apiResponse.access_token,
-			refreshToken: apiResponse.refresh_token,
-			expiresIn: apiResponse.expires_in,
-			obtainmentTimestamp: expect.any(Number),
-		});
+		expect(token.accessToken).toBe(apiResponse.access_token);
+		expect(token.refreshToken).toBe(apiResponse.refresh_token);
+		expect(token.expiresIn).toBe(apiResponse.expires_in);
+		expect(token.obtainmentTimestamp).toBeTypeOf('number');
 	});
 });
 
 describe('refreshAccessToken', () => {
-	it('should return an AccessToken object with correct values on token refresh', async () => {
+	it('should return AccessToken with correct values on refresh', async () => {
 		const apiResponse = {
 			access_token: 'refreshed-access',
 			refresh_token: 'refreshed-refresh',
 			expires_in: 7200,
 		};
 
-		(callDonationAlertsApi as any).mockResolvedValue(apiResponse);
+		vi.mocked(callDonationAlertsApi).mockResolvedValue(apiResponse as any);
 
 		const clientId = 'client-id';
 		const clientSecret = 'client-secret';
-		const refreshToken = 'old-refresh-token';
-		const scopes: string[] = ['scope1', 'scope2'];
+		const refreshTokenValue = 'old-refresh-token';
+		const scopes = ['scope1', 'scope2'];
 
-		const token: AccessToken = await refreshAccessToken(clientId, clientSecret, refreshToken, scopes);
+		const token: AccessToken = await refreshAccessToken(clientId, clientSecret, refreshTokenValue, scopes);
 
-		expect(token).toEqual({
-			accessToken: apiResponse.access_token,
-			refreshToken: apiResponse.refresh_token,
-			expiresIn: apiResponse.expires_in,
-			obtainmentTimestamp: expect.any(Number),
-		});
+		expect(token.accessToken).toBe(apiResponse.access_token);
+		expect(token.refreshToken).toBe(apiResponse.refresh_token);
+		expect(token.expiresIn).toBe(apiResponse.expires_in);
+		expect(token.obtainmentTimestamp).toBeTypeOf('number');
 	});
 });
 
 describe('compareScopes', () => {
-	it('should not throw an error if all requested scopes are contained in the token scopes', () => {
+	it('should not throw when all requested scopes are present', () => {
 		const tokenScopes = ['scope1', 'scope2', 'scope3'];
 		const requestedScopes = ['scope1', 'scope3'];
 
-		// The function should not throw when requestedScopes are included
-		expect(() => {
-			compareScopes(tokenScopes, requestedScopes, 123);
-		}).not.toThrow(MissingScopeError);
+		expect(() => compareScopes(tokenScopes, requestedScopes, 123)).not.toThrow();
 	});
 
-	it('should throw MissingScopeError if any requested scope is missing', () => {
+	it('should throw MissingScopeError when requested scope is missing', () => {
 		const userId = 123;
 		const tokenScopes = ['scope1', 'scope2'];
 		const requestedScopes = ['scope1', 'scope3'];
 
 		try {
 			compareScopes(tokenScopes, requestedScopes, userId);
-			fail('Expected MissingScopeError to be thrown');
+			throw new Error('Expected error');
 		} catch (e) {
 			expect(e).toBeInstanceOf(MissingScopeError);
 			expect((e as MissingScopeError).userId).toBe(userId);
@@ -85,13 +87,13 @@ describe('compareScopes', () => {
 		}
 	});
 
-	it('should throw MissingScopeError without userId if it was not specified', () => {
+	it('should throw MissingScopeError with null userId when userId is not provided', () => {
 		const tokenScopes = ['scope1', 'scope2'];
 		const requestedScopes = ['scope1', 'scope3'];
 
 		try {
 			compareScopes(tokenScopes, requestedScopes);
-			fail('Expected MissingScopeError to be thrown');
+			throw new Error('Expected error');
 		} catch (e) {
 			expect(e).toBeInstanceOf(MissingScopeError);
 			expect((e as MissingScopeError).userId).toBe(null);
@@ -99,13 +101,9 @@ describe('compareScopes', () => {
 		}
 	});
 
-	it('should not throw an error if requestedScopes is undefined', () => {
-		// When no scopes are requested, the function does nothing
+	it('should not throw when requestedScopes is undefined', () => {
 		const tokenScopes = ['scope1', 'scope2'];
-		const requestedScopes = undefined;
 
-		expect(() => {
-			compareScopes(tokenScopes, requestedScopes, 123);
-		}).not.toThrow(MissingScopeError);
+		expect(() => compareScopes(tokenScopes, undefined, 123)).not.toThrow();
 	});
 });

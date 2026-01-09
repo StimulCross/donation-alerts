@@ -1,5 +1,5 @@
 import type * as util from 'node:util';
-import { DataObject } from './data-object';
+import { DataObject } from './data-object.js';
 
 const ANSI_CYAN = '\u001b[36m';
 const ANSI_GRAY = '\u001b[90m';

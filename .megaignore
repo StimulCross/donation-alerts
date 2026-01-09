@@ -1,7 +1,6 @@
 +sync:.megaignore
 -d:node_modules
--d:es
--d:cjs
+-d:lib
 -f:yarn.lock
 -f:yalc.lock
 -f:package-lock.json

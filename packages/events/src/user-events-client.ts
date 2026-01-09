@@ -24,17 +24,17 @@ import Centrifuge from 'centrifuge';
 import {
 	DonationAlertsDonationEvent,
 	type DonationAlertsDonationEventData,
-} from './events/donations/donation-alerts-donation-event';
+} from './events/donations/donation-alerts-donation-event.js';
 import {
 	DonationAlertsGoalUpdateEvent,
 	type DonationAlertsGoalUpdateEventData,
-} from './events/goals/donation-alerts-goal-update-event';
+} from './events/goals/donation-alerts-goal-update-event.js';
 import {
 	DonationAlertsPollUpdateEvent,
 	type DonationAlertsPollUpdateEventData,
-} from './events/polls/donation-alerts-poll-update-event';
-import { EventsListener } from './events-listener';
-import { transformChannel } from './helpers/transform-channel';
+} from './events/polls/donation-alerts-poll-update-event.js';
+import { EventsListener } from './events-listener.js';
+import { transformChannel } from './helpers/transform-channel.js';
 
 /** @internal */
 interface ConnectContext {

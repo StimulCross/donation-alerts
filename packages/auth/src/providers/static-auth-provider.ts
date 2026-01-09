@@ -1,9 +1,10 @@
 import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { nonenumerable } from '@stimulcross/shared-utils';
-import { type AuthProvider } from './auth-provider';
-import { type AccessToken, type AccessTokenWithUserId } from '../access-token';
-import { InvalidTokenError, UnregisteredUserError } from '../errors';
-import { compareScopes } from '../helpers';
+import { type AuthProvider } from './auth-provider.js';
+import { type AccessToken, type AccessTokenWithUserId } from '../access-token.js';
+import { InvalidTokenError } from '../errors/invalid-token.error.js';
+import { UnregisteredUserError } from '../errors/unregistered-user.error.js';
+import { compareScopes } from '../helpers.js';
 
 /**
  * A non-refreshable (static) authentication provider that always returns

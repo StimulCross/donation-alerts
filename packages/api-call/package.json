@@ -1,59 +1,51 @@
 {
 	"name": "@donation-alerts/api-call",
 	"version": "4.0.0",
-	"publishConfig": {
-		"access": "public"
-	},
-	"author": "StimulCross <stimulcross@gmail.com>",
 	"description": "Make calls to Donation Alerts API.",
-	"homepage": "https://github.com/StimulCross/donation-alerts/tree/main/packages/api-call#readme",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/StimulCross/donation-alerts.git",
-		"directory": "packages/api-call"
-	},
-	"engines": {
-		"node": ">=20"
-	},
 	"keywords": [
 		"donation-alerts",
 		"api",
 		"donations",
 		"tips"
 	],
+	"author": "StimulCross <stimulcross@gmail.com>",
 	"license": "MIT",
-	"main": "cjs",
-	"module": "es",
-	"types": "cjs",
+	"homepage": "https://github.com/StimulCross/donation-alerts/tree/main/packages/api-call#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/StimulCross/donation-alerts.git",
+		"directory": "packages/api-call"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"type": "module",
+	"sideEffects": false,
+	"main": "./lib/index.js",
+	"types": "./lib/index.d.ts",
 	"exports": {
 		".": {
-			"types": "./cjs/index.d.ts",
-			"require": "./cjs/index.js",
-			"import": "./es/index.mjs",
-			"default": "./cjs/index.js"
+			"types": "./lib/index.d.ts",
+			"default": "./lib/index.js"
 		}
 	},
 	"scripts": {
-		"build": "tsukuru -c tsconfig.build.json",
-		"rebuild": "tsukuru --clean -c tsconfig.build.json",
-		"clean": "rimraf es && rimraf cjs"
+		"build": "tsc -p tsconfig.json",
+		"rebuild": "pnpm run clean && pnpm run build",
+		"clean": "del-cli lib *.tsbuildinfo",
+		"test": "tsx --test \"tests/**/*.spec.ts\""
 	},
 	"files": [
-		"cjs",
-		"es",
 		"LICENSE",
 		"README.md",
-		"!cjs/**/*.d.ts.map",
-		"!es/**/*.d.ts.map",
-		"!es/**/*.d.ts"
+		"lib",
+		"!lib/**/*.d.ts.map",
+		"!lib/**/*.js.map"
 	],
 	"dependencies": {
-		"@donation-alerts/common": "4.0.0",
-		"qs": "^6.14.0"
-	},
-	"devDependencies": {
-		"@types/qs": "^6.9.18",
-		"rimraf": "^6.0.1",
-		"tsukuru": "^0.8.3"
+		"@donation-alerts/common": "4.0.0"
 	}
 }

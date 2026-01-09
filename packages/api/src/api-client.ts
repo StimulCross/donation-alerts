@@ -17,11 +17,11 @@ import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donati
 import { createLogger, type Logger, type LoggerOptions } from '@stimulcross/logger';
 import { nonenumerable } from '@stimulcross/shared-utils';
 import { Memoize } from 'typescript-memoize';
-import { DonationAlertsCentrifugoApi } from './api/centrifugo/donation-alerts-centrifugo-api';
-import { DonationAlertsCustomAlertsApi } from './api/customAlerts/donation-alerts-custom-alerts-api';
-import { DonationAlertsDonationsApi } from './api/donations/donation-alerts-donations-api';
-import { DonationAlertsMerchandiseApi } from './api/merchandise/donation-alerts-merchandise-api';
-import { DonationAlertsUsersApi } from './api/users/donation-alerts-users-api';
+import { DonationAlertsCentrifugoApi } from './api/centrifugo/donation-alerts-centrifugo-api.js';
+import { DonationAlertsCustomAlertsApi } from './api/customAlerts/donation-alerts-custom-alerts-api.js';
+import { DonationAlertsDonationsApi } from './api/donations/donation-alerts-donations-api.js';
+import { DonationAlertsMerchandiseApi } from './api/merchandise/donation-alerts-merchandise-api.js';
+import { DonationAlertsUsersApi } from './api/users/donation-alerts-users-api.js';
 
 /**
  * Configuration options for the rate limiter.
