@@ -1,13 +1,13 @@
-import { flattenObject } from '@stimulcross/shared-utils';
 import { sha256 } from 'cross-sha256';
+import { flattenValues } from './flatten-values.js';
 
 /** @internal */
 export function createSha256SignatureFromParams(params: Record<PropertyKey, unknown>, secret: string): string {
-	const valuesString = Object.values(flattenObject(params))
+	const sortedValuesString = Object.values(flattenValues(params))
 		.filter(v => v !== undefined)
 		.map(e => String(e))
 		.toSorted()
 		.join('');
 
-	return new sha256().update(valuesString + secret).digest('hex');
+	return new sha256().update(sortedValuesString + secret).digest('hex');
 }
