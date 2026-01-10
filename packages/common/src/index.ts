@@ -2,6 +2,9 @@ export { rawDataSymbol, DataObject, getRawData } from './data-object.js';
 export { CustomError } from './errors/custom-error.js';
 export { locales } from './locales.js';
 export { qsStringify } from './qs-stringify.js';
+export { Memoize } from './memoize.js';
+export { mapNullable } from './map-nullable.js';
+export { mapOptional } from './map-optional.js';
 export {
 	extractUserId,
 	extractUserName,

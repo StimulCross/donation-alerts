@@ -50,9 +50,7 @@
 		"@donation-alerts/api-call": "4.0.0",
 		"@donation-alerts/common": "4.0.0",
 		"@stimulcross/logger": "^7.0.0",
-		"@stimulcross/shared-utils": "^0.2.3",
-		"cross-sha256": "^1.2.0",
-		"typescript-memoize": "^1.1.1"
+		"cross-sha256": "^1.2.0"
 	},
 	"peerDependencies": {
 		"@donation-alerts/auth": "4.0.0"

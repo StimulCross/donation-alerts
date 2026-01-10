@@ -8,7 +8,6 @@ import {
 	type UserIdResolvable,
 } from '@donation-alerts/common';
 import { createLogger, LogLevel, type LoggerOptions, type Logger } from '@stimulcross/logger';
-import { nonenumerable } from '@stimulcross/shared-utils';
 import {
 	type JoinLeaveContext,
 	type PublicationContext,
@@ -74,12 +73,12 @@ export interface UserEventsClientConfig {
  */
 @ReadDocumentation('events')
 export class UserEventsClient extends EventEmitter {
-	@nonenumerable private readonly _logger: Logger;
-	@nonenumerable private readonly _userId: number;
-	@nonenumerable private readonly _apiClient: ApiClient;
-	@nonenumerable private readonly _listeners: Map<string, EventsListener> = new Map();
-	@nonenumerable private readonly _centrifuge: Centrifuge;
-	@nonenumerable private _client: string | null = null;
+	private readonly _logger: Logger;
+	private readonly _userId: number;
+	private readonly _apiClient: ApiClient;
+	private readonly _listeners: Map<string, EventsListener> = new Map();
+	private readonly _centrifuge: Centrifuge;
+	private _client: string | null = null;
 
 	private readonly _subscriptionListeners: SubscriptionEvents = {
 		subscribe: (ctx: SubscribeSuccessContext) => {

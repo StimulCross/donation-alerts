@@ -2,7 +2,6 @@ import { EventEmitter } from '@d-fischer/typed-event-emitter';
 import { type ApiClient } from '@donation-alerts/api';
 import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { type LoggerOptions } from '@stimulcross/logger';
-import { nonenumerable } from '@stimulcross/shared-utils';
 import { type DonationAlertsDonationEvent } from './events/donations/donation-alerts-donation-event.js';
 import { type DonationAlertsGoalUpdateEvent } from './events/goals/donation-alerts-goal-update-event.js';
 import { type DonationAlertsPollUpdateEvent } from './events/polls/donation-alerts-poll-update-event.js';
@@ -33,9 +32,9 @@ export interface EventsClientConfig {
 
 @ReadDocumentation('events')
 export class EventsClient extends EventEmitter {
-	@nonenumerable private readonly _config: EventsClientConfig;
-	@nonenumerable private readonly _apiClient: ApiClient;
-	@nonenumerable private readonly _userClients: Map<number, UserEventsClient> = new Map();
+	private readonly _config: EventsClientConfig;
+	private readonly _apiClient: ApiClient;
+	private readonly _userClients: Map<number, UserEventsClient> = new Map();
 
 	/**
 	 * Fires when a user's client successfully connects to the Centrifugo server.

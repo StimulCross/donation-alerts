@@ -4,7 +4,7 @@
 		"module": "node16",
 		"moduleResolution": "nodenext",
 		"target": "ES2023",
-		"lib": ["ES2023", "DOM"],
+		"lib": ["ES2023", "DOM", "ESNext.Decorators"],
 		"declaration": true,
 		"declarationMap": true,
 		"sourceMap": true,
@@ -12,7 +12,6 @@
 		"noImplicitReturns": true,
 		"strict": true,
 		"noUnusedLocals": true,
-		"experimentalDecorators": true,
 		"isolatedModules": true,
 		"esModuleInterop": true
 	}

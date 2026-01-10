@@ -1,5 +1,4 @@
-import { DataObject, rawDataSymbol, ReadDocumentation } from '@donation-alerts/common';
-import { Memoize } from 'typescript-memoize';
+import { DataObject, Memoize, rawDataSymbol, ReadDocumentation } from '@donation-alerts/common';
 import {
 	DonationAlertsPollOption,
 	type DonationAlertsPollOptionData,

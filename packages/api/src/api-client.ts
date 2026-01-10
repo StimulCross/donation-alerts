@@ -13,10 +13,8 @@ import {
 	transformDonationAlertsResponse,
 } from '@donation-alerts/api-call';
 import { type AccessTokenWithUserId, type AuthProvider } from '@donation-alerts/auth';
-import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
+import { extractUserId, Memoize, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { createLogger, type Logger, type LoggerOptions } from '@stimulcross/logger';
-import { nonenumerable } from '@stimulcross/shared-utils';
-import { Memoize } from 'typescript-memoize';
 import { DonationAlertsCentrifugoApi } from './api/centrifugo/donation-alerts-centrifugo-api.js';
 import { DonationAlertsCustomAlertsApi } from './api/customAlerts/donation-alerts-custom-alerts-api.js';
 import { DonationAlertsDonationsApi } from './api/donations/donation-alerts-donations-api.js';
@@ -102,13 +100,13 @@ export interface DonationAlertsApiCallOptionsInternal {
  */
 @ReadDocumentation('api')
 export class ApiClient {
-	@nonenumerable private readonly _config: ApiConfig;
-	@nonenumerable private readonly _logger: Logger;
-	@nonenumerable private readonly _rateLimiter:
+	private readonly _config: ApiConfig;
+	private readonly _logger: Logger;
+	private readonly _rateLimiter:
 		| TimeBasedRateLimiter<DonationAlertsApiCallOptionsInternal, Response>
 		| TimedPassthruRateLimiter<DonationAlertsApiCallOptionsInternal, Response>;
 
-	@nonenumerable private readonly _limitReachedBehavior: QueueEntryLimitReachedBehavior;
+	private readonly _limitReachedBehavior: QueueEntryLimitReachedBehavior;
 
 	/**
 	 * Creates a new instance of the API client.

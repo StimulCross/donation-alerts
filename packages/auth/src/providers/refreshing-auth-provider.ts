@@ -1,7 +1,6 @@
 import { EventEmitter } from '@d-fischer/typed-event-emitter';
 import { callDonationAlertsApi } from '@donation-alerts/api-call';
 import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
-import { nonenumerable } from '@stimulcross/shared-utils';
 import { type AuthProvider } from './auth-provider.js';
 import { type AccessToken, type AccessTokenWithUserId, isAccessTokenExpired } from '../access-token.js';
 import { InvalidTokenError } from '../errors/invalid-token.error.js';
@@ -48,9 +47,9 @@ export interface RefreshingAuthProviderConfig {
  */
 @ReadDocumentation('events')
 export class RefreshingAuthProvider extends EventEmitter implements AuthProvider {
-	@nonenumerable private readonly _config: RefreshingAuthProviderConfig;
-	@nonenumerable private readonly _registry = new Map<number, AccessToken>();
-	@nonenumerable private readonly _newTokenPromises = new Map<number, Promise<AccessToken>>();
+	private readonly _config: RefreshingAuthProviderConfig;
+	private readonly _registry = new Map<number, AccessToken>();
+	private readonly _newTokenPromises = new Map<number, Promise<AccessToken>>();
 
 	/**
 	 * Fires when a user's token is successfully refreshed.

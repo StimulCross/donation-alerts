@@ -1,5 +1,4 @@
-import { DataObject, rawDataSymbol, ReadDocumentation } from '@donation-alerts/common';
-import { mapNullable } from '@stimulcross/shared-utils';
+import { DataObject, mapNullable, rawDataSymbol, ReadDocumentation } from '@donation-alerts/common';
 
 /** @internal */
 export interface DonationAlertsCustomAlertData {

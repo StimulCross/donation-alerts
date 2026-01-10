@@ -71,7 +71,7 @@ describe('auth', () => {
 		});
 
 		it('should throw MissingScopeError when requested scope is missing', async () => {
-			expect(provider.getAccessTokenForUser(USER_ID, [MISSING_SCOPE])).rejects.toThrow(MissingScopeError);
+			await expect(provider.getAccessTokenForUser(USER_ID, [MISSING_SCOPE])).rejects.toThrow(MissingScopeError);
 		});
 
 		it('should return current scopes for user', () => {

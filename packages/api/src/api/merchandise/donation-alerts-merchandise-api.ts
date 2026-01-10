@@ -4,8 +4,8 @@ import {
 	type DonationAlertsInputCurrency,
 	type DonationAlertsLocaleCode,
 	type UserIdResolvable,
+	mapOptional,
 } from '@donation-alerts/common';
-import { mapOptional } from '@stimulcross/shared-utils';
 import {
 	DonationAlertsMerchandiseSale,
 	type DonationAlertsMerchandiseSaleData,

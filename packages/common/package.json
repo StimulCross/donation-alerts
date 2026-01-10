@@ -46,7 +46,6 @@
 		"!lib/**/*.js.map"
 	],
 	"dependencies": {
-		"@stimulcross/shared-utils": "^0.2.3",
 		"klona": "^2.0.6",
 		"qs": "^6.14.1"
 	},

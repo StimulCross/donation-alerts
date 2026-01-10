@@ -3,8 +3,8 @@ import {
 	rawDataSymbol,
 	ReadDocumentation,
 	type DonationAlertsInputCurrency,
+	mapNullable,
 } from '@donation-alerts/common';
-import { mapNullable } from '@stimulcross/shared-utils';
 
 /** @internal */
 export interface DonationAlertsGoalUpdateEventData {

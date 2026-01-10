@@ -83,15 +83,9 @@ importers:
       '@stimulcross/logger':
         specifier: ^7.0.0
         version: 7.0.0
-      '@stimulcross/shared-utils':
-        specifier: ^0.2.3
-        version: 0.2.3
       cross-sha256:
         specifier: ^1.2.0
         version: 1.2.0
-      typescript-memoize:
-        specifier: ^1.1.1
-        version: 1.1.1
     devDependencies:
       '@donation-alerts/auth':
         specifier: 4.0.0
@@ -114,15 +108,9 @@ importers:
       '@donation-alerts/common':
         specifier: 4.0.0
         version: link:../common
-      '@stimulcross/shared-utils':
-        specifier: ^0.2.3
-        version: 0.2.3
 
   packages/common:
     dependencies:
-      '@stimulcross/shared-utils':
-        specifier: ^0.2.3
-        version: 0.2.3
       klona:
         specifier: ^2.0.6
         version: 2.0.6
@@ -148,15 +136,9 @@ importers:
       '@stimulcross/logger':
         specifier: ^7.0.0
         version: 7.0.0
-      '@stimulcross/shared-utils':
-        specifier: ^0.2.3
-        version: 0.2.3
       centrifuge:
         specifier: 2.8.5
         version: 2.8.5
-      typescript-memoize:
-        specifier: ^1.1.1
-        version: 1.1.1
       ws:
         specifier: ^8.18.1
         version: 8.18.1
@@ -981,9 +963,6 @@ packages:
   '@stimulcross/prettier-config@2.0.0':
     resolution: {integrity: sha512-ArLRUuWQMErMHdcVSYhWcy2qfxcnQSsNNUnKc88X2EgGUcEt+EY0n9ho/Z1kiIj4E2Gv8q4nZ0rAqyw1rcxw2g==}
     engines: {node: '>=20'}
-
-  '@stimulcross/shared-utils@0.2.3':
-    resolution: {integrity: sha512-YyzZ8/f099R40koYWyYhpXDyZYg3Y6os1QvdmqAfUsV/QpEukksrvnJM0Gh8CjlU0ywdBzYbuPe+Lt8svc1cCg==}
 
   '@stylistic/eslint-plugin@3.1.0':
     resolution: {integrity: sha512-pA6VOrOqk0+S8toJYhQGv2MWpQQR0QpeUo9AhNkC49Y26nxBQ/nH1rta9bUU1rPw2fJ1zZEMV5oCX5AazT7J2g==}
@@ -4054,9 +4033,6 @@ packages:
     peerDependencies:
       typescript: 5.0.x || 5.1.x || 5.2.x || 5.3.x || 5.4.x || 5.5.x || 5.6.x || 5.7.x || 5.8.x
 
-  typescript-memoize@1.1.1:
-    resolution: {integrity: sha512-GQ90TcKpIH4XxYTI2F98yEQYZgjNMOGPpOgdjIBhaLaWji5HPWlRnZ4AeA1hfBxtY7bCGDJsqDDHk/KaHOl5bA==}
-
   typescript@5.9.3:
     resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
     engines: {node: '>=14.17'}
@@ -5253,8 +5229,6 @@ snapshots:
       detect-node: 2.1.0
 
   '@stimulcross/prettier-config@2.0.0': {}
-
-  '@stimulcross/shared-utils@0.2.3': {}
 
   '@stylistic/eslint-plugin@3.1.0(eslint@9.21.0(jiti@2.4.2))(typescript@5.9.3)':
     dependencies:
@@ -8741,8 +8715,6 @@ snapshots:
       minimatch: 9.0.5
       typescript: 5.9.3
       yaml: 2.7.0
-
-  typescript-memoize@1.1.1: {}
 
   typescript@5.9.3: {}
 

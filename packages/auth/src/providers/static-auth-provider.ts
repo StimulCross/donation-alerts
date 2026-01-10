@@ -1,5 +1,4 @@
 import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
-import { nonenumerable } from '@stimulcross/shared-utils';
 import { type AuthProvider } from './auth-provider.js';
 import { type AccessToken, type AccessTokenWithUserId } from '../access-token.js';
 import { InvalidTokenError } from '../errors/invalid-token.error.js';
@@ -12,9 +11,9 @@ import { compareScopes } from '../helpers.js';
  */
 @ReadDocumentation('events')
 export class StaticAuthProvider implements AuthProvider {
-	@nonenumerable private readonly _clientId: string;
-	@nonenumerable private readonly _scopes?: string[];
-	@nonenumerable private readonly _registry = new Map<number, AccessToken>();
+	private readonly _clientId: string;
+	private readonly _scopes?: string[];
+	private readonly _registry = new Map<number, AccessToken>();
 
 	/**
 	 * Creates a new instance of StaticAuthProvider.
