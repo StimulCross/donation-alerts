@@ -350,6 +350,18 @@ const alertData: DonationAlertsSendMerchandiseSaleAlertData = {
 await apiClient.merchandise.sendSaleAlert(userId, clientSecret, alertData);
 ```
 
+#### Getting user data from a promocode
+
+Gets user ID from an advertising promocode. This API is a part of the [Merchandise Advertisement API](https://stimulcross.github.io/donation-alerts/classes/api.DonationAlertsMerchandiseApi.html). Can be used to get a user ID and then pass it to the [Send Sale Alerts API](#sending-sale-notifications).
+
+```ts
+// The ID of a user to use the access token of
+const userId = 123456789;
+const promocode = '<PROMOCODE>';
+
+const userData = await apiClient.merchandise.getUserDataFromPromocode(userId, promocode);
+```
+
 For a complete list of available alert data fields, refer to the [DonationAlertsSendMerchandiseSaleAlertData](https://stimulcross.github.io/donation-alerts/interfaces/api.DonationAlertsSendMerchandiseSaleAlertData.html) documentation.
 
 ### Rate Limits

@@ -14,6 +14,10 @@ import { DonationAlertsMerchandise, type DonationAlertsMerchandiseData } from '.
 import { createSha256SignatureFromParams } from '../../utils/create-sha256-signature-from-params.js';
 import { BaseApi } from '../base-api.js';
 import { type DonationAlertsResponseSingleData } from '../donation-alerts-response.js';
+import {
+	DonationAlertsMerchandiseUser,
+	DonationAlertsMerchandiseUserData,
+} from './donation-alerts-merchandise-user.js';
 
 /**
  * Title of the merchandise in different locales.
@@ -159,6 +163,39 @@ export interface DonationAlertsSendMerchandiseSaleAlertData {
  */
 @ReadDocumentation('api')
 export class DonationAlertsMerchandiseApi extends BaseApi {
+	/**
+	 * Retrieves the user data associated with a promocode.
+	 *
+	 * @param user The ID of the user to use the access token of.
+	 *             This user must be registered in the {@link AuthProvider}
+	 * @param promocode The promocode to look up.
+	 * @param rateLimiterOptions Optional rate limiter settings.
+	 */
+	async getUserDataFromPromocode(
+		user: UserIdResolvable,
+		promocode: string,
+		rateLimiterOptions?: RateLimiterRequestOptions,
+	): Promise<DonationAlertsMerchandiseUser | null> {
+		const clientSecret = this._getClientSecret();
+		const formData = { promocode };
+		const signature = createSha256SignatureFromParams(formData, clientSecret);
+
+		const response = await this._apiClient.callApi<
+			DonationAlertsResponseSingleData<DonationAlertsMerchandiseUserData | undefined>
+		>(
+			user,
+			{
+				type: 'api',
+				url: 'merchandise/user',
+				method: 'GET',
+				formBody: { ...formData, signature },
+			},
+			rateLimiterOptions,
+		);
+
+		return response.data ? new DonationAlertsMerchandiseUser(response.data) : null;
+	}
+
 	/**
 	 * Creates a new merchandise item.
 	 *

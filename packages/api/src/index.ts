@@ -54,3 +54,7 @@ export {
 	DonationAlertsMerchandiseMerchant,
 	type DonationAlertsMerchandiseMerchantJson,
 } from './api/merchandise/donation-alerts-merchandise-merchant.js';
+export {
+	DonationAlertsMerchandiseUser,
+	type DonationAlertsMerchandiseUserJson,
+} from './api/merchandise/donation-alerts-merchandise-user.js';
