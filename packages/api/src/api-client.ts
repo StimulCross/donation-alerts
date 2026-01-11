@@ -147,6 +147,13 @@ export class ApiClient {
 	}
 
 	/**
+	 * The authentication provider used by the client.
+	 */
+	get authProvider(): AuthProvider {
+		return this._config.authProvider;
+	}
+
+	/**
 	 * Users API namespace.
 	 *
 	 * This namespace allows you to fetch user details, such as information about the authenticated user.

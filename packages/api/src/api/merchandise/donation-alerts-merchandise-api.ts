@@ -1,10 +1,10 @@
 import { type RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
 import {
-	ReadDocumentation,
 	type DonationAlertsInputCurrency,
 	type DonationAlertsLocaleCode,
-	type UserIdResolvable,
 	mapOptional,
+	ReadDocumentation,
+	type UserIdResolvable,
 } from '@donation-alerts/common';
 import {
 	DonationAlertsMerchandiseSale,
@@ -163,7 +163,6 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	 * Creates a new merchandise item.
 	 *
 	 * @param user The ID of the authorized user.
-	 * @param clientSecret The application client secret associated with the authorized application.
 	 * @param data The details of the merchandise item to create.
 	 * @param rateLimiterOptions Optional rate limiter settings.
 	 *
@@ -174,10 +173,10 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	 */
 	async createMerchandise(
 		user: UserIdResolvable,
-		clientSecret: string,
 		data: DonationAlertsCreateMerchandiseData,
 		rateLimiterOptions?: RateLimiterRequestOptions,
 	): Promise<DonationAlertsMerchandise> {
+		const clientSecret = this._getClientSecret();
 		const formData = {
 			merchant_identifier: data.merchantIdentifier,
 			merchandise_identifier: data.merchandiseIdentifier,
@@ -212,7 +211,6 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	 * Updates an existing merchandise item.
 	 *
 	 * @param user The ID of the authorized user.
-	 * @param clientSecret The application client secret associated with the authorized application.
 	 * @param merchandiseId The ID of the merchandise to update.
 	 * @param data The modified data for the merchandise item.
 	 * @param rateLimiterOptions Optional rate limiter settings.
@@ -224,11 +222,11 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	 */
 	async updateMerchandise(
 		user: UserIdResolvable,
-		clientSecret: string,
 		merchandiseId: number | string,
 		data: DonationAlertsUpdateMerchandiseData,
 		rateLimiterOptions?: RateLimiterRequestOptions,
 	): Promise<DonationAlertsMerchandise> {
+		const clientSecret = this._getClientSecret();
 		const formData = {
 			merchant_identifier: data.merchantIdentifier,
 			merchandise_identifier: data.merchandiseIdentifier,
@@ -267,7 +265,6 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	 * already exist.
 	 *
 	 * @param user The ID of the user to use the access token of.
-	 * @param clientSecret The application client secret.
 	 * This secret must correspond to the application that the user authenticated.
 	 * @param data The merchandise data to create or update.
 	 * @param rateLimiterOptions Optional rate limiter configuration.
@@ -279,10 +276,10 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	 */
 	async createOrUpdateMerchandise(
 		user: UserIdResolvable,
-		clientSecret: string,
 		data: DonationAlertsCreateMerchandiseData,
 		rateLimiterOptions?: RateLimiterRequestOptions,
 	): Promise<DonationAlertsMerchandise> {
+		const clientSecret = this._getClientSecret();
 		const formData = {
 			title: data.title,
 			is_active: mapOptional(data.isActive, (v: boolean) => (v ? '1' : '0')),
@@ -315,7 +312,6 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	 * Sends a sale alert to DonationAlerts.
 	 *
 	 * @param user The ID of the authorized user.
-	 * @param clientSecret The application client secret associated with the authorized application.
 	 * @param data The sale alert data to send.
 	 * @param rateLimiterOptions Optional rate limiter settings.
 	 *
@@ -326,10 +322,10 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	 */
 	async sendSaleAlert(
 		user: UserIdResolvable,
-		clientSecret: string,
 		data: DonationAlertsSendMerchandiseSaleAlertData,
 		rateLimiterOptions?: RateLimiterRequestOptions,
 	): Promise<DonationAlertsMerchandiseSale> {
+		const clientSecret = this._getClientSecret();
 		const formData = {
 			external_id: data.externalId,
 			merchant_identifier: data.merchantIdentifier,
@@ -357,5 +353,17 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 		);
 
 		return new DonationAlertsMerchandiseSale(response.data);
+	}
+
+	private _getClientSecret(): string {
+		const { clientSecret } = this._apiClient.authProvider;
+
+		if (!clientSecret) {
+			throw new Error(
+				'The used authentication provider does not have a client secret. Use RefreshingAuthProvider instead.',
+			);
+		}
+
+		return clientSecret;
 	}
 }
