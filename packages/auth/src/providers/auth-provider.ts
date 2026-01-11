@@ -15,9 +15,14 @@ import { type AccessTokenWithUserId } from '../access-token.js';
  */
 export interface AuthProvider {
 	/**
-	 * The client ID.
+	 * The application's client ID.
 	 */
 	readonly clientId: string;
+
+	/**
+	 * The application's client secret.
+	 */
+	readonly clientSecret: string | null;
 
 	/**
 	 * Retrieves the scopes currently associated with the specified user's access token.

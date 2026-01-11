@@ -30,6 +30,10 @@ export class StaticAuthProvider implements AuthProvider {
 		return this._clientId;
 	}
 
+	get clientSecret(): null {
+		return null;
+	}
+
 	/**
 	 * Checks if the specified user is already registered in this auth provider.
 	 *

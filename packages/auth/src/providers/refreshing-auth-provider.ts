@@ -73,6 +73,10 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 		return this._config.clientId;
 	}
 
+	get clientSecret(): string {
+		return this._config.clientId;
+	}
+
 	/**
 	 * Checks whether the specified user is registered in this provider.
 	 *
