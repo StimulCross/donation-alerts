@@ -74,8 +74,8 @@ describe('auth', () => {
 			await expect(provider.getAccessTokenForUser(USER_ID, [MISSING_SCOPE])).rejects.toThrow(MissingScopeError);
 		});
 
-		it('should return current scopes for user', () => {
-			expect(provider.getScopesForUser(USER_ID)).toStrictEqual(SCOPES);
+		it('should return current scopes for user', async () => {
+			expect(await provider.getScopesForUser(USER_ID)).toStrictEqual(SCOPES);
 		});
 
 		it('should remove user', () => {
@@ -109,7 +109,7 @@ describe('auth', () => {
 			expect(provider.clientId).toBe(CLIENT_ID);
 		});
 
-		it('should add user using addUser', () => {
+		it('should add user using addUser', async () => {
 			const token: AccessToken = {
 				accessToken: ACCESS_TOKEN,
 				refreshToken: REFRESH_TOKEN,
@@ -118,9 +118,9 @@ describe('auth', () => {
 				scopes: SCOPES,
 			};
 
-			provider.addUser(USER_ID, token);
+			await provider.addUser(USER_ID, token);
 
-			expect(provider.hasUser(USER_ID)).toBe(true);
+			expect(await provider.hasUser(USER_ID)).toBe(true);
 		});
 
 		it('should refresh token and emit onRefresh event in addUserForToken', async () => {

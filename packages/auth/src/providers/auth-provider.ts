@@ -33,7 +33,7 @@ export interface AuthProvider {
 	 *
 	 * @throws {@link UnregisteredUserError} - Thrown if the user is not registered with this provider.
 	 */
-	getScopesForUser(user: UserIdResolvable): string[];
+	getScopesForUser(user: UserIdResolvable): Promise<string[]>;
 
 	/**
 	 * Gets the access token data for the specified user.

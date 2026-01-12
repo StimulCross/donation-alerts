@@ -88,7 +88,7 @@ export class StaticAuthProvider implements AuthProvider {
 		this._registry.delete(extractUserId(user));
 	}
 
-	getScopesForUser(user: UserIdResolvable): string[] {
+	async getScopesForUser(user: UserIdResolvable): Promise<string[]> {
 		const userId = extractUserId(user);
 
 		if (!this._registry.has(userId)) {

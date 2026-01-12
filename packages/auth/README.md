@@ -125,6 +125,7 @@ To instantiate a `RefreshingAuthProvider`, configure it with a [RefreshingAuthPr
 - **clientSecret** – Your Donation Alerts application's client secret.
 - **redirectUri** (optional) – Your application's redirect URI, used in the `addUserForCode` method to exchange an authorization code for an access token.
 - **scopes** (optional) – An array of scopes that all registering tokens must be valid for.
+- **storage** (optional) – A storage to store the user's tokens. Can be used to implement distributed storage (e.g., Redis-based). Defaults to in-memory store. This object must implement the [AuthStorage](https://stimulcross.github.io/donation-alerts/interfaces/auth.AuthStorage.html) interface.
 
 ```ts
 import { RefreshingAuthProvider } from '@donation-alerts/auth';
@@ -142,7 +143,7 @@ const authProvider = new RefreshingAuthProvider({
 - **hasUser:** Checks whether a user is already added to the provider.
 
     ```ts
-    const hasUser = authProvider.hasUser(123456789);
+    const hasUser = await authProvider.hasUser(123456789);
     ```
 
     Returns a `boolean`.
@@ -151,7 +152,7 @@ const authProvider = new RefreshingAuthProvider({
 
     ```ts
     const userId = 123456789;
-    authProvider.addUser(userId, {
+    await authProvider.addUser(userId, {
     	accessToken: '<ACCESS_TOKEN>',
     	refreshToken: '<REFRESH_TOKEN>',
     	expiresIn: 0,
@@ -214,7 +215,7 @@ const authProvider = new RefreshingAuthProvider({
     Removes a user from the provider by their user ID:
 
     ```ts
-    authProvider.removeUser(123456789);
+    await authProvider.removeUser(123456789);
     ```
 
 #### Managing Tokens
@@ -259,12 +260,12 @@ For a complete list of available methods and properties, please refer to the [St
 
 This package also provides some utility functions you may find useful if you handle some tasks outside the library:
 
-- **[getExpiryMilliseconds](https://stimulcross.github.io/donation-alerts/functions/auth.getExpiryMilliseconds.html)** - Calculates the expiration time of the access token in milliseconds since UNIX epoch.
-- **[getTokenExpiryDate](https://stimulcross.github.io/donation-alerts/functions/auth.getTokenExpiryDate.html)** - Calculates the expiration date of the access token as a `Date` object.
-- **[isAccessTokenExpired](https://stimulcross.github.io/donation-alerts/functions/auth.isAccessTokenExpired.html)** - Checks whether the given access token is expired.
-- **[getAccessToken](https://stimulcross.github.io/donation-alerts/functions/auth.getAccessToken.html)** - Obtains an access token using client credentials and an authorization code.
-- **[refreshAccessToken](https://stimulcross.github.io/donation-alerts/functions/auth.refreshAccessToken.html)** - Refreshes an expired access token using the refresh token.
-- **[compareScopes](https://stimulcross.github.io/donation-alerts/functions/auth.compareScopes.html)** - Compares and verifies the token's scopes against requested scopes.
+- **[getExpiryMilliseconds](https://stimulcross.github.io/donation-alerts/functions/auth.getExpiryMilliseconds.html)** – Calculates the expiration time of the access token in milliseconds since UNIX epoch.
+- **[getTokenExpiryDate](https://stimulcross.github.io/donation-alerts/functions/auth.getTokenExpiryDate.html)** – Calculates the expiration date of the access token as a `Date` object.
+- **[isAccessTokenExpired](https://stimulcross.github.io/donation-alerts/functions/auth.isAccessTokenExpired.html)** – Checks whether the given access token is expired.
+- **[getAccessToken](https://stimulcross.github.io/donation-alerts/functions/auth.getAccessToken.html)** – Obtains an access token using client credentials and an authorization code.
+- **[refreshAccessToken](https://stimulcross.github.io/donation-alerts/functions/auth.refreshAccessToken.html)** – Refreshes an expired access token using the refresh token.
+- **[compareScopes](https://stimulcross.github.io/donation-alerts/functions/auth.compareScopes.html)** – Compares and verifies the token's scopes against requested scopes.
 
 ---
 

@@ -6,6 +6,8 @@ import { type AccessToken, type AccessTokenWithUserId, isAccessTokenExpired } fr
 import { InvalidTokenError } from '../errors/invalid-token.error.js';
 import { UnregisteredUserError } from '../errors/unregistered-user.error.js';
 import { compareScopes, getAccessToken, refreshAccessToken } from '../helpers.js';
+import { AuthStorage } from './auth-storage.js';
+import { MemoryAuthStorageAdapter } from './memory-auth-storage.adapter.js';
 
 /**
  * Configuration for {@link RefreshingAuthProvider}.
@@ -40,6 +42,15 @@ export interface RefreshingAuthProviderConfig {
 	 * If the token misses any scope from this list then {@link MissingScopeError} exception will be thrown.
 	 */
 	scopes?: string[];
+
+	/**
+	 * The storage adapter to use for storing tokens.
+	 *
+	 * By default, an in-memory storage adapter is used.
+	 *
+	 * If your application is multi-process, you should implement a shared storage adapter such as Redis.
+	 */
+	storage?: AuthStorage;
 }
 
 /**
@@ -48,8 +59,7 @@ export interface RefreshingAuthProviderConfig {
 @ReadDocumentation('events')
 export class RefreshingAuthProvider extends EventEmitter implements AuthProvider {
 	private readonly _config: RefreshingAuthProviderConfig;
-	private readonly _registry = new Map<number, AccessToken>();
-	private readonly _newTokenPromises = new Map<number, Promise<AccessToken>>();
+	private readonly _storage: AuthStorage;
 
 	/**
 	 * Fires when a user's token is successfully refreshed.
@@ -66,7 +76,13 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	 */
 	constructor(config: RefreshingAuthProviderConfig) {
 		super();
+
+		if (!config.clientId || !config.clientSecret) {
+			throw new Error('Donation Alerts client ID and secret are required to create a RefreshingAuthProvider');
+		}
+
 		this._config = config;
+		this._storage = config.storage ?? new MemoryAuthStorageAdapter();
 	}
 
 	get clientId(): string {
@@ -82,8 +98,8 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	 *
 	 * @param user The ID of the user to check.
 	 */
-	hasUser(user: UserIdResolvable): boolean {
-		return this._registry.has(extractUserId(user));
+	async hasUser(user: UserIdResolvable): Promise<boolean> {
+		return Boolean(await this._storage.get(extractUserId(user)));
 	}
 
 	/**
@@ -95,7 +111,7 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	 * @throws {@link InvalidTokenError} if the access or refresh tokens are invalid.
 	 * @throws {@link MissingScopeError} if the token does not match the required scopes.
 	 */
-	addUser(user: UserIdResolvable, token: AccessToken): AccessTokenWithUserId {
+	async addUser(user: UserIdResolvable, token: AccessToken): Promise<AccessTokenWithUserId> {
 		const userId = extractUserId(user);
 
 		this._validateToken(token, userId);
@@ -104,7 +120,7 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 			compareScopes(token.scopes, this._config.scopes, userId);
 		}
 
-		this._registry.set(userId, token);
+		await this._storage.set(userId, token);
 		return { userId, ...token };
 	}
 
@@ -141,7 +157,7 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 			compareScopes(accessToken.scopes, this._config.scopes, userId);
 		}
 
-		this.addUser(userId, accessToken);
+		await this.addUser(userId, accessToken);
 
 		if (isTokenRefreshed) {
 			this.emit(this.onRefresh, userId, accessToken);
@@ -184,7 +200,7 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 			compareScopes(token.scopes, this._config.scopes, user.data.id);
 		}
 
-		this.addUser(user.data.id, token);
+		await this.addUser(user.data.id, token);
 		this.emit(this.onRefresh, user.data.id, token);
 
 		return { ...token, userId: user.data.id };
@@ -195,40 +211,36 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	 *
 	 * @param user The ID of the user to remove.
 	 */
-	removeUser(user: UserIdResolvable): void {
-		this._registry.delete(extractUserId(user));
+	async removeUser(user: UserIdResolvable): Promise<void> {
+		await this._storage.delete(extractUserId(user));
 	}
 
-	getScopesForUser(user: UserIdResolvable): string[] {
+	async getScopesForUser(user: UserIdResolvable): Promise<string[]> {
 		const userId = extractUserId(user);
+		const token = await this._storage.get(userId);
 
-		if (!this._registry.has(userId)) {
+		if (!token) {
 			throw new UnregisteredUserError(
 				userId,
 				`User "${userId}" could not be located in the authentication provider registry. Please add the user first by using one of the following methods: addUser, addUserForToken, or addUserForCode`,
 			);
 		}
 
-		return this._registry.get(userId)!.scopes ?? [];
+		return token.scopes ?? [];
 	}
 
 	async getAccessTokenForUser(user: UserIdResolvable, scopes?: string[]): Promise<AccessTokenWithUserId> {
 		const userId = extractUserId(user);
 
-		if (this._newTokenPromises.has(userId)) {
-			const token = (await this._newTokenPromises.get(userId))!;
-			return { ...token, userId };
-		}
+		const currentToken = await this._storage.get(userId);
 
-		if (!this._registry.has(userId)) {
+		if (!currentToken) {
 			throw new UnregisteredUserError(
 				userId,
 				`User "${userId}" could not be located in the authentication provider registry. Please add the user first by using one of the following methods: addUser, addUserForToken, or addUserForCode.
 `,
 			);
 		}
-
-		const currentToken = this._registry.get(userId)!;
 
 		if (currentToken.accessToken && !isAccessTokenExpired(currentToken)) {
 			if (currentToken.scopes) {
@@ -238,14 +250,14 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 			return { ...currentToken, userId };
 		}
 
-		const token = await this.refreshAccessTokenForUser(userId);
-		token.scopes = currentToken.scopes;
+		const newToken = await this.refreshAccessTokenForUser(userId);
+		newToken.scopes = currentToken.scopes;
 
-		if (token.scopes) {
-			compareScopes(token.scopes, scopes, userId);
+		if (newToken.scopes) {
+			compareScopes(newToken.scopes, scopes, userId);
 		}
 
-		return { ...token, userId };
+		return { ...newToken, userId };
 	}
 
 	/**
@@ -259,14 +271,14 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	async refreshAccessTokenForUser(user: UserIdResolvable): Promise<AccessTokenWithUserId> {
 		const userId = extractUserId(user);
 
-		if (!this._registry.has(userId)) {
+		const currentToken = await this._storage.get(userId);
+
+		if (!currentToken) {
 			throw new UnregisteredUserError(
 				userId,
 				`User "${userId}" could not be located in the authentication provider registry. Please add the user first by using one of the following methods: addUser, addUserForToken, or addUserForCode.`,
 			);
 		}
-
-		const currentToken = this._registry.get(userId)!;
 
 		if (!currentToken.refreshToken) {
 			throw new InvalidTokenError(
@@ -275,20 +287,16 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 			);
 		}
 
-		const newTokenPromise = refreshAccessToken(
+		const newToken = await refreshAccessToken(
 			this._config.clientId,
 			this._config.clientSecret,
 			currentToken.refreshToken,
 		);
-		this._newTokenPromises.set(userId, newTokenPromise);
 
-		const token = await newTokenPromise;
-		this._newTokenPromises.delete(userId);
-		this._registry.set(userId, token);
+		await this._storage.set(userId, newToken);
+		this.emit(this.onRefresh, userId, newToken);
 
-		this.emit(this.onRefresh, userId, token);
-
-		return { ...token, userId };
+		return { ...newToken, userId };
 	}
 
 	private _validateToken(token: AccessToken, userId?: number): void {
