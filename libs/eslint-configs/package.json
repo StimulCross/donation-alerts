@@ -14,7 +14,7 @@
 	"private": true,
 	"type": "module",
 	"main": "index.js",
-	"packageManager": "pnpm@10.5.2",
+	"packageManager": "pnpm@10.28.0",
 	"scripts": {
 		"format:check": "prettier --check \"**/*.{ts,tsx,md,js,mjs,cjs}\"",
 		"format:fix": "prettier --write \"**/*.{ts,tsx,md,js,mjs,cjs}\""

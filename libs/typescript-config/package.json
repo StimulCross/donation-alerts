@@ -15,5 +15,5 @@
 	"private": true,
 	"type": "module",
 	"main": "tsconfig.base.json",
-	"packageManager": "pnpm@10.5.2"
+	"packageManager": "pnpm@10.28.0"
 }
