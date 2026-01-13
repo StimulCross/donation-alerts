@@ -66,6 +66,17 @@ export class DonationAlertsDonationsApi extends BaseApi {
 	}
 
 	/**
+	 * @deprecated
+	 * Use {@link createDonationsPaginator} instead.
+	 *
+	 * Fetching all donations at once is generally a bad idea.
+	 * Prefer using a paginator to request pages sequentially
+	 * and process them as they are received.
+	 *
+	 * If you absolutely must retrieve all donations in a single request,
+	 * use {@link DonationAlertsApiPaginator#getAll}.
+	 *
+	 *
 	 * Fetches **all** donations associated with the specified user.
 	 *
 	 * @remarks
