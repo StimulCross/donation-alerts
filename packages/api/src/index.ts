@@ -1,6 +1,7 @@
 export { ApiClient, type ApiConfig, type RateLimiterOptions } from './api-client.js';
 
 export { type DonationAlertsApiPagination } from './api/donation-alerts-api-pagination.js';
+export type { DonationAlertsResultPagination, DonationAlertsPaginatedResult } from './api/donation-alerts-response.js';
 
 export { DonationAlertsApiPaginator } from './api/donation-alerts-api-paginator.js';
 

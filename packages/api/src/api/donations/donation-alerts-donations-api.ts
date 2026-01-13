@@ -4,7 +4,10 @@ import { DonationAlertsDonation, type DonationAlertsDonationData } from './donat
 import { BaseApi } from '../base-api.js';
 import { type DonationAlertsApiPagination } from '../donation-alerts-api-pagination.js';
 import { DonationAlertsApiPaginator } from '../donation-alerts-api-paginator.js';
-import { type DonationAlertsResponseWithMeta } from '../donation-alerts-response.js';
+import {
+	type DonationAlertsPaginatedResult,
+	type DonationAlertsResponseWithMeta,
+} from '../donation-alerts-response.js';
 
 /**
  * Donation Alerts Donations API.
@@ -46,7 +49,7 @@ export class DonationAlertsDonationsApi extends BaseApi {
 		user: UserIdResolvable,
 		pagination: DonationAlertsApiPagination = {},
 		rateLimiterOptions?: RateLimiterRequestOptions,
-	): Promise<DonationAlertsDonation[]> {
+	): Promise<DonationAlertsPaginatedResult<DonationAlertsDonation>> {
 		const page = typeof pagination.page === 'number' && pagination.page !== 0 ? pagination.page : 1;
 
 		const response = await this._apiClient.callApi<DonationAlertsResponseWithMeta<DonationAlertsDonationData>>(
@@ -62,7 +65,17 @@ export class DonationAlertsDonationsApi extends BaseApi {
 			rateLimiterOptions,
 		);
 
-		return response.data.map(donation => new DonationAlertsDonation(donation));
+		return {
+			data: response.data.map(donation => new DonationAlertsDonation(donation)),
+			pagination: {
+				currentPage: response.meta.current_page,
+				lastPage: response.meta.last_page,
+				perPage: response.meta.per_page,
+				from: response.meta.from,
+				to: response.meta.to,
+				total: response.meta.total,
+			},
+		};
 	}
 
 	/**
