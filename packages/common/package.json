@@ -36,6 +36,10 @@
 		"build": "tsc -p tsconfig.json",
 		"rebuild": "pnpm run clean && pnpm run build",
 		"clean": "del-cli lib *.tsbuildinfo",
+		"lint": "eslint src tests",
+		"lint:fix": "eslint src --fix",
+		"format:check": "prettier --check src",
+		"format:fix": "prettier --write src",
 		"test": "tsx --test \"tests/**/*.spec.ts\""
 	},
 	"files": [
@@ -50,6 +54,7 @@
 		"qs": "^6.14.1"
 	},
 	"devDependencies": {
+		"@donation-alerts/eslint-configs": "workspace:*",
 		"@types/qs": "^6.14.0"
 	}
 }

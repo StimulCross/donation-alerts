@@ -2,22 +2,18 @@ import { describe, it, expect } from 'vitest';
 import { DataObject, getRawData, rawDataSymbol, ReadDocumentation } from '../src/index.js';
 
 class TestDataObject<T> extends DataObject<T> {
-	override toJSON(): object {
+	public override toJSON(): object {
 		return {};
 	}
 }
 
 @ReadDocumentation('common')
 class SerializableDataObject<T extends { id: number }> extends DataObject<T> {
-	constructor(data: T) {
-		super(data);
-	}
-
-	get id(): number {
+	public get id(): number {
 		return this[rawDataSymbol].id;
 	}
 
-	override toJSON(): object {
+	public override toJSON(): object {
 		return { id: this.id };
 	}
 }

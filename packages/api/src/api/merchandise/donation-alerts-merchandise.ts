@@ -69,7 +69,7 @@ export class DonationAlertsMerchandise extends DataObject<
 	/**
 	 * Unique merchandise ID on Donation Alerts.
 	 */
-	get id(): number {
+	public get id(): number {
 		return this[rawDataSymbol].id;
 	}
 
@@ -79,7 +79,7 @@ export class DonationAlertsMerchandise extends DataObject<
 	 * @returns An instance of {@link DonationAlertsMerchandiseMerchant} containing merchant details.
 	 */
 	@Memoize()
-	get merchant(): DonationAlertsMerchandiseMerchant {
+	public get merchant(): DonationAlertsMerchandiseMerchant {
 		return new DonationAlertsMerchandiseMerchant(this[rawDataSymbol].merchant);
 	}
 
@@ -91,7 +91,7 @@ export class DonationAlertsMerchandise extends DataObject<
 	 *
 	 * @returns The merchant's unique merchandise ID as a string.
 	 */
-	get identifier(): string {
+	public get identifier(): string {
 		return this[rawDataSymbol].identifier;
 	}
 
@@ -105,7 +105,7 @@ export class DonationAlertsMerchandise extends DataObject<
 	 * @returns A {@link DonationAlertsMerchandiseTitleData} object containing localized titles for the merchandise
 	 * as values.
 	 */
-	get title(): DonationAlertsMerchandiseTitleData {
+	public get title(): DonationAlertsMerchandiseTitleData {
 		return this[rawDataSymbol].title;
 	}
 
@@ -117,7 +117,7 @@ export class DonationAlertsMerchandise extends DataObject<
 	 *
 	 * @returns `true` if the merchandise is active; otherwise `false`.
 	 */
-	get isActive(): boolean {
+	public get isActive(): boolean {
 		return this[rawDataSymbol].is_active === 1;
 	}
 
@@ -130,7 +130,7 @@ export class DonationAlertsMerchandise extends DataObject<
 	 *
 	 * @returns `true` if pricing is percentage-based; otherwise `false`.
 	 */
-	get isPercentage(): boolean {
+	public get isPercentage(): boolean {
 		return this[rawDataSymbol].is_percentage === 1;
 	}
 
@@ -142,7 +142,7 @@ export class DonationAlertsMerchandise extends DataObject<
 	 *
 	 * @returns The currency code as a string.
 	 */
-	get currency(): DonationAlertsOutputCurrency {
+	public get currency(): DonationAlertsOutputCurrency {
 		return this[rawDataSymbol].currency;
 	}
 
@@ -154,7 +154,7 @@ export class DonationAlertsMerchandise extends DataObject<
 	 *
 	 * @returns The revenue amount as a number.
 	 */
-	get priceUser(): number {
+	public get priceUser(): number {
 		return this[rawDataSymbol].price_user;
 	}
 
@@ -166,7 +166,7 @@ export class DonationAlertsMerchandise extends DataObject<
 	 *
 	 * @returns The revenue amount as a number.
 	 */
-	get priceService(): number {
+	public get priceService(): number {
 		return this[rawDataSymbol].price_service;
 	}
 
@@ -178,7 +178,7 @@ export class DonationAlertsMerchandise extends DataObject<
 	 *
 	 * @returns The URL as a string, or `null` if not set.
 	 */
-	get url(): string | null {
+	public get url(): string | null {
 		return this[rawDataSymbol].url;
 	}
 
@@ -190,7 +190,7 @@ export class DonationAlertsMerchandise extends DataObject<
 	 *
 	 * @returns The URL to the image as a string, or `null` if not set.
 	 */
-	get imageUrl(): string | null {
+	public get imageUrl(): string | null {
 		return this[rawDataSymbol].img_url;
 	}
 
@@ -205,11 +205,11 @@ export class DonationAlertsMerchandise extends DataObject<
 	 *
 	 * @returns A `Date` object indicating the end date, or `null` if not set.
 	 */
-	get endDate(): Date | null {
+	public get endDate(): Date | null {
 		return mapNullable(this[rawDataSymbol].end_at, (v: string) => new Date(v));
 	}
 
-	override toJSON(): DonationAlertsMerchandiseJson {
+	public override toJSON(): DonationAlertsMerchandiseJson {
 		return {
 			id: this.id,
 			merchant: this.merchant.toJSON(),

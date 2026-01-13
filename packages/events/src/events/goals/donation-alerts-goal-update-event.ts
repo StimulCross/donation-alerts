@@ -49,7 +49,7 @@ export class DonationAlertsGoalUpdateEvent extends DataObject<
 	/**
 	 * The unique identifier for the donation goal.
 	 */
-	get id(): number {
+	public get id(): number {
 		return this[rawDataSymbol].id;
 	}
 
@@ -58,14 +58,14 @@ export class DonationAlertsGoalUpdateEvent extends DataObject<
 	 *
 	 * @returns `true` if the goal is active, otherwise `false`.
 	 */
-	get isActive(): boolean {
+	public get isActive(): boolean {
 		return this[rawDataSymbol].is_active === 1;
 	}
 
 	/**
 	 * The title or name of the donation goal.
 	 */
-	get title(): string {
+	public get title(): string {
 		return this[rawDataSymbol].title;
 	}
 
@@ -75,7 +75,7 @@ export class DonationAlertsGoalUpdateEvent extends DataObject<
 	 * @remarks
 	 * The currency code formatted as per ISO 4217 standard
 	 */
-	get currency(): DonationAlertsInputCurrency {
+	public get currency(): DonationAlertsInputCurrency {
 		return this[rawDataSymbol].currency;
 	}
 
@@ -85,7 +85,7 @@ export class DonationAlertsGoalUpdateEvent extends DataObject<
 	 * @remarks
 	 * This value represents the base amount from which the progress begins.
 	 */
-	get startAmount(): number {
+	public get startAmount(): number {
 		return this[rawDataSymbol].start_amount;
 	}
 
@@ -95,14 +95,14 @@ export class DonationAlertsGoalUpdateEvent extends DataObject<
 	 * @remarks
 	 * This value reflects the sum of all donations added to the starting amount.
 	 */
-	get raisedAmount(): number {
+	public get raisedAmount(): number {
 		return this[rawDataSymbol].raised_amount;
 	}
 
 	/**
 	 * The target or goal amount for the donation.
 	 */
-	get goalAmount(): number {
+	public get goalAmount(): number {
 		return this[rawDataSymbol].goal_amount;
 	}
 
@@ -111,7 +111,7 @@ export class DonationAlertsGoalUpdateEvent extends DataObject<
 	 *
 	 * @returns A `Date` object representing the start time of the goal.
 	 */
-	get startDate(): Date {
+	public get startDate(): Date {
 		return new Date(this[rawDataSymbol].started_at);
 	}
 
@@ -124,11 +124,11 @@ export class DonationAlertsGoalUpdateEvent extends DataObject<
 	 * @returns A `Date` object representing the expiry date of the goal,
 	 * or `null` if the goal has no end date.
 	 */
-	get expiryDate(): Date | null {
+	public get expiryDate(): Date | null {
 		return mapNullable(this[rawDataSymbol].expires_at, (v: string) => new Date(v));
 	}
 
-	override toJSON(): DonationAlertsGoalUpdateEventJson {
+	public override toJSON(): DonationAlertsGoalUpdateEventJson {
 		return {
 			id: this.id,
 			isActive: this.isActive,

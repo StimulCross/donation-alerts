@@ -16,7 +16,7 @@ import { BaseApi } from '../base-api.js';
 import { type DonationAlertsResponseSingleData } from '../donation-alerts-response.js';
 import {
 	DonationAlertsMerchandiseUser,
-	DonationAlertsMerchandiseUserData,
+	type DonationAlertsMerchandiseUserData,
 } from './donation-alerts-merchandise-user.js';
 
 /**
@@ -171,7 +171,7 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	 * @param promocode The promocode to look up.
 	 * @param rateLimiterOptions Optional rate limiter settings.
 	 */
-	async getUserDataFromPromocode(
+	public async getUserDataFromPromocode(
 		user: UserIdResolvable,
 		promocode: string,
 		rateLimiterOptions?: RateLimiterRequestOptions,
@@ -208,7 +208,7 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	 * @throws {@link HttpError} if the response status code is not in the 200-299 range.
 	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
 	 */
-	async createMerchandise(
+	public async createMerchandise(
 		user: UserIdResolvable,
 		data: DonationAlertsCreateMerchandiseData,
 		rateLimiterOptions?: RateLimiterRequestOptions,
@@ -257,7 +257,7 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	 * @throws {@link HttpError} if the response status code is not in the 200-299 range.
 	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
 	 */
-	async updateMerchandise(
+	public async updateMerchandise(
 		user: UserIdResolvable,
 		merchandiseId: number | string,
 		data: DonationAlertsUpdateMerchandiseData,
@@ -311,7 +311,7 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	 * @throws {@link HttpError} if the response status code falls outside the 200–299 range.
 	 * @throws {@link UnregisteredUserError} if the specified user is not registered with the authentication provider.
 	 */
-	async createOrUpdateMerchandise(
+	public async createOrUpdateMerchandise(
 		user: UserIdResolvable,
 		data: DonationAlertsCreateMerchandiseData,
 		rateLimiterOptions?: RateLimiterRequestOptions,
@@ -357,7 +357,7 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	 * @throws {@link HttpError} if the response status code is not in the 200-299 range.
 	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
 	 */
-	async sendSaleAlert(
+	public async sendSaleAlert(
 		user: UserIdResolvable,
 		data: DonationAlertsSendMerchandiseSaleAlertData,
 		rateLimiterOptions?: RateLimiterRequestOptions,

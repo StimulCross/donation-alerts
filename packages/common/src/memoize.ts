@@ -1,5 +1,6 @@
 export function Memoize() {
 	return function <T>(value: () => T, context: ClassGetterDecoratorContext) {
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		if (context.kind !== 'getter') {
 			throw new TypeError('Memoize can only be used on getters');
 		}

@@ -1,0 +1,19 @@
+{
+	"name": "@donation-alerts/typescript-config",
+	"version": "1.0.0",
+	"author": "StimulCross <stimulcross@gmail.com>",
+	"license": "MIT",
+	"homepage": "https://github.com/StimulCross/donation-alerts",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/StimulCross/donation-alerts.git",
+		"directory": "packages/common"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"private": true,
+	"type": "module",
+	"main": "tsconfig.base.json",
+	"packageManager": "pnpm@10.5.2"
+}

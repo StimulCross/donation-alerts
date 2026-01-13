@@ -39,12 +39,12 @@ export class EventsClient extends EventEmitter {
 	/**
 	 * Fires when a user's client successfully connects to the Centrifugo server.
 	 */
-	readonly onConnect = this.registerEvent<[userId: number]>();
+	public readonly onConnect = this.registerEvent<[userId: number]>();
 
 	/**
 	 * Fires when a user's client disconnected from the Centrifugo server.
 	 */
-	readonly onDisconnect = this.registerEvent<[userId: number, reason: string, reconnect: boolean]>();
+	public readonly onDisconnect = this.registerEvent<[userId: number, reason: string, reconnect: boolean]>();
 
 	/**
 	 * Initializes the Donation Alerts events client.
@@ -64,7 +64,7 @@ export class EventsClient extends EventEmitter {
 	 * @param user The ID of the user to retrieve the client instance for.
 	 * @throws Error if the user has not been registered in the client.
 	 */
-	getUserClient(user: UserIdResolvable): UserEventsClient {
+	public getUserClient(user: UserIdResolvable): UserEventsClient {
 		const userId = extractUserId(user);
 
 		if (!this._userClients.has(userId)) {
@@ -82,7 +82,7 @@ export class EventsClient extends EventEmitter {
 	 * @param user The user ID to check for registration.
 	 * @returns `true` if the user is registered; otherwise, `false`.
 	 */
-	hasUser(user: UserIdResolvable): boolean {
+	public hasUser(user: UserIdResolvable): boolean {
 		return this._userClients.has(extractUserId(user));
 	}
 
@@ -95,7 +95,7 @@ export class EventsClient extends EventEmitter {
 	 *
 	 * @throws Error if the user is already registered.
 	 */
-	addUser(user: UserIdResolvable): UserEventsClient {
+	public addUser(user: UserIdResolvable): UserEventsClient {
 		const userId = extractUserId(user);
 
 		if (this._userClients.has(userId)) {
@@ -127,7 +127,7 @@ export class EventsClient extends EventEmitter {
 	 *
 	 * @param user The ID of the user to remove.
 	 */
-	async removeUser(user: UserIdResolvable): Promise<void> {
+	public async removeUser(user: UserIdResolvable): Promise<void> {
 		const userId = extractUserId(user);
 
 		if (!this._userClients.has(userId)) {
@@ -150,7 +150,7 @@ export class EventsClient extends EventEmitter {
 	 *
 	 * @returns An {@link EventsListener} instance for managing the subscription.
 	 */
-	async onDonation(
+	public async onDonation(
 		user: UserIdResolvable,
 		callback: (event: DonationAlertsDonationEvent) => void,
 	): Promise<EventsListener> {
@@ -165,7 +165,7 @@ export class EventsClient extends EventEmitter {
 	 *
 	 * @returns An {@link EventsListener} instance for managing the subscription.
 	 */
-	async onGoalUpdate(
+	public async onGoalUpdate(
 		user: UserIdResolvable,
 		callback: (event: DonationAlertsGoalUpdateEvent) => void,
 	): Promise<EventsListener> {
@@ -180,7 +180,7 @@ export class EventsClient extends EventEmitter {
 	 *
 	 * @returns An {@link EventsListener} instance for managing the subscription.
 	 */
-	async onPollUpdate(
+	public async onPollUpdate(
 		user: UserIdResolvable,
 		callback: (event: DonationAlertsPollUpdateEvent) => void,
 	): Promise<EventsListener> {

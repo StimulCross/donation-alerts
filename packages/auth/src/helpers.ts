@@ -1,5 +1,5 @@
 import { callDonationAlertsApi } from '@donation-alerts/api-call';
-import { extractUserId, UserIdResolvable } from '@donation-alerts/common';
+import { extractUserId, type UserIdResolvable } from '@donation-alerts/common';
 import { type AccessToken } from './access-token.js';
 import { MissingScopeError } from './errors/missing-scope.error.js';
 

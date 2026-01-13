@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-shadow
 import { WebSocket } from '@d-fischer/isomorphic-ws';
 import { EventEmitter } from '@d-fischer/typed-event-emitter';
 import { type ApiClient } from '@donation-alerts/api';
@@ -105,12 +106,12 @@ export class UserEventsClient extends EventEmitter {
 	/**
 	 * Fires when the client establishes a connection with Centrifugo server.
 	 */
-	readonly onConnect = this.registerEvent();
+	public readonly onConnect = this.registerEvent();
 
 	/**
 	 * Fires when the client disconnects from the Centrifugo server.
 	 */
-	readonly onDisconnect = this.registerEvent<[reason: string, reconnect: boolean]>();
+	public readonly onDisconnect = this.registerEvent<[reason: string, reconnect: boolean]>();
 
 	/**
 	 * Initializes a client for listening to various Donation Alerts events.
@@ -174,7 +175,7 @@ export class UserEventsClient extends EventEmitter {
 	/**
 	 * Unique identifier of the user associated with this client.
 	 */
-	get userId(): number {
+	public get userId(): number {
 		return this._userId;
 	}
 
@@ -183,7 +184,7 @@ export class UserEventsClient extends EventEmitter {
 	 *
 	 * Returns `null` if the client is not connected.
 	 */
-	get clientId(): string | null {
+	public get clientId(): string | null {
 		return this._client;
 	}
 
@@ -192,7 +193,7 @@ export class UserEventsClient extends EventEmitter {
 	 *
 	 * @returns `true` if the client is connected; otherwise `false`.
 	 */
-	get isConnected(): boolean {
+	public get isConnected(): boolean {
 		return this._centrifuge.isConnected();
 	}
 
@@ -202,7 +203,7 @@ export class UserEventsClient extends EventEmitter {
 	 * @param restoreExistingListeners Specifies whether existing listeners should be restored after connection.
 	 *                                 Defaults to `true`.
 	 */
-	async connect(restoreExistingListeners: boolean = true): Promise<void> {
+	public async connect(restoreExistingListeners: boolean = true): Promise<void> {
 		for (const [, listener] of this._listeners) {
 			if (restoreExistingListeners) {
 				this._logger.info(`[USER:${this._userId}] Restoring previously registered listeners...`);
@@ -223,7 +224,7 @@ export class UserEventsClient extends EventEmitter {
 	 *                        If set to `false`, the listeners will be restored on the next connection.
 	 *                        Default to `false`.
 	 */
-	async disconnect(removeListeners: boolean = false): Promise<void> {
+	public async disconnect(removeListeners: boolean = false): Promise<void> {
 		if (removeListeners) {
 			this._logger.info(`[USER:${this._userId}] Removing listeners...`);
 
@@ -242,7 +243,7 @@ export class UserEventsClient extends EventEmitter {
 	 *                        If `false`, all listeners will be restored automatically after reconnection.
 	 *                        Defaults to `false`.
 	 */
-	async reconnect(removeListeners: boolean = false): Promise<void> {
+	public async reconnect(removeListeners: boolean = false): Promise<void> {
 		await this.disconnect(removeListeners);
 		await this.connect(!removeListeners);
 	}
@@ -254,7 +255,7 @@ export class UserEventsClient extends EventEmitter {
 	 *                 The callback receives an instance of {@link DonationAlertsDonationEvent}.
 	 * @returns An {@link EventsListener} instance that manages the subscription.
 	 */
-	async onDonation(callback: (event: DonationAlertsDonationEvent) => void): Promise<EventsListener> {
+	public async onDonation(callback: (event: DonationAlertsDonationEvent) => void): Promise<EventsListener> {
 		return await this._createListener<DonationAlertsDonationEventData, DonationAlertsDonationEvent>(
 			'$alerts:donation',
 			DonationAlertsDonationEvent,
@@ -269,7 +270,7 @@ export class UserEventsClient extends EventEmitter {
 	 *                 The callback receives an instance of {@link DonationAlertsGoalUpdateEvent}.
 	 * @returns An {@link EventsListener} instance that manages the subscription.
 	 */
-	async onGoalUpdate(callback: (event: DonationAlertsGoalUpdateEvent) => void): Promise<EventsListener> {
+	public async onGoalUpdate(callback: (event: DonationAlertsGoalUpdateEvent) => void): Promise<EventsListener> {
 		return await this._createListener<DonationAlertsGoalUpdateEventData, DonationAlertsGoalUpdateEvent>(
 			'$goals:goal',
 			DonationAlertsGoalUpdateEvent,
@@ -284,7 +285,7 @@ export class UserEventsClient extends EventEmitter {
 	 *                 The callback receives an instance of {@link DonationAlertsPollUpdateEvent}.
 	 * @returns An {@link EventsListener} instance that manages the subscription.
 	 */
-	async onPollUpdate(callback: (event: DonationAlertsPollUpdateEvent) => void): Promise<EventsListener> {
+	public async onPollUpdate(callback: (event: DonationAlertsPollUpdateEvent) => void): Promise<EventsListener> {
 		return await this._createListener<DonationAlertsPollUpdateEventData, DonationAlertsPollUpdateEvent>(
 			'$polls:poll',
 			DonationAlertsPollUpdateEvent,
@@ -300,7 +301,7 @@ export class UserEventsClient extends EventEmitter {
 	 *
 	 * @param listener The {@link EventsListener} instance to be removed.
 	 */
-	async removeEventsListener(listener: EventsListener): Promise<void> {
+	public async removeEventsListener(listener: EventsListener): Promise<void> {
 		if (this._listeners.has(listener.channelName)) {
 			const existingListener = this._listeners.get(listener.channelName)!;
 			this._unsubscribe(existingListener._subscription);

@@ -39,21 +39,21 @@ export class DonationAlertsApiPaginator<D, T> {
 	 * @remarks
 	 * This represents the path currently associated with the pagination request.
 	 */
-	get path(): string | undefined {
+	public get path(): string | undefined {
 		return this._path;
 	}
 
 	/**
 	 * The index of the first element in the currently fetched page.
 	 */
-	get from(): number | null | undefined {
+	public get from(): number | null | undefined {
 		return this._from;
 	}
 
 	/**
 	 * The index of the last element in the currently fetched page.
 	 */
-	get to(): number | null | undefined {
+	public get to(): number | null | undefined {
 		return this._to;
 	}
 
@@ -63,28 +63,28 @@ export class DonationAlertsApiPaginator<D, T> {
 	 * @remarks
 	 * This value is updated after each retrieval of a specific page.
 	 */
-	get currentPage(): number | undefined {
+	public get currentPage(): number | undefined {
 		return this._currentPage;
 	}
 
 	/**
 	 * The total number of pages.
 	 */
-	get totalPages(): number | undefined {
+	public get totalPages(): number | undefined {
 		return this._totalPages;
 	}
 
 	/**
 	 * Number of items per page.
 	 */
-	get perPage(): number | undefined {
+	public get perPage(): number | undefined {
 		return this._perPage;
 	}
 
 	/**
 	 * The total number of items in the dataset.
 	 */
-	get total(): number | undefined {
+	public get total(): number | undefined {
 		return this._total;
 	}
 
@@ -94,7 +94,7 @@ export class DonationAlertsApiPaginator<D, T> {
 	 * @remarks
 	 * When this flag is `true`, calling `getNext()` will return an empty array without making additional API requests.
 	 */
-	get isFinished(): boolean {
+	public get isFinished(): boolean {
 		return this._isFinished;
 	}
 
@@ -103,7 +103,7 @@ export class DonationAlertsApiPaginator<D, T> {
 	 *
 	 * @returns The full API response for the most recently fetched page, or `undefined` if no request has been made yet.
 	 */
-	get rawData(): DonationAlertsResponseWithMeta<D> | undefined {
+	public get rawData(): DonationAlertsResponseWithMeta<D> | undefined {
 		return this._currentData;
 	}
 
@@ -113,7 +113,7 @@ export class DonationAlertsApiPaginator<D, T> {
 	 * @remarks
 	 * After calling this method, the paginator will appear as if it has not yet fetched any data.
 	 */
-	reset(): void {
+	public reset(): void {
 		this._isFinished = false;
 		this._path = undefined;
 		this._currentPage = undefined;
@@ -143,7 +143,7 @@ export class DonationAlertsApiPaginator<D, T> {
 	 * const data = await paginator.getPage(42);
 	 * ```
 	 */
-	async getPage(page: number = 1): Promise<T[]> {
+	public async getPage(page: number = 1): Promise<T[]> {
 		if (this._totalPages && page > this._totalPages) {
 			return [];
 		}
@@ -165,7 +165,7 @@ export class DonationAlertsApiPaginator<D, T> {
 	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
 	 * @throws {@link MissingScopeError} if the access token does not include the required scope.
 	 */
-	async getNext(): Promise<T[]> {
+	public async getNext(): Promise<T[]> {
 		if (this._isFinished) {
 			return [];
 		}
@@ -197,7 +197,7 @@ export class DonationAlertsApiPaginator<D, T> {
 	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
 	 * @throws {@link MissingScopeError} if the access token does not include the required scope.
 	 */
-	async getPrev(): Promise<T[]> {
+	public async getPrev(): Promise<T[]> {
 		let page = 1;
 
 		if (this._currentPage && this._currentPage > 1) {
@@ -224,7 +224,7 @@ export class DonationAlertsApiPaginator<D, T> {
 	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
 	 * @throws {@link MissingScopeError} if the access token does not include the required scope.
 	 */
-	async getAll(): Promise<T[]> {
+	public async getAll(): Promise<T[]> {
 		this.reset();
 		const result: T[] = [];
 
@@ -258,7 +258,7 @@ export class DonationAlertsApiPaginator<D, T> {
 	 * }
 	 * ```
 	 */
-	async *[Symbol.asyncIterator](): AsyncGenerator<T[], void, undefined> {
+	public async *[Symbol.asyncIterator](): AsyncGenerator<T[], void, undefined> {
 		this.reset();
 
 		while (!this._isFinished) {
@@ -301,9 +301,18 @@ export class DonationAlertsApiPaginator<D, T> {
 			return [];
 		}
 
-		return data.data.reduce((acc: T[], elem: D) => {
+		const result: T[] = [];
+
+		for (const elem of data.data) {
 			const mapped = this._mapper(elem);
-			return Array.isArray(mapped) ? [...acc, ...mapped] : [...acc, mapped];
-		}, []);
+
+			if (Array.isArray(mapped)) {
+				result.push(...mapped);
+			} else {
+				result.push(mapped);
+			}
+		}
+
+		return result;
 	}
 }

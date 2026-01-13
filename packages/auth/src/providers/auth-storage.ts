@@ -1,4 +1,4 @@
-import { AccessToken } from '../access-token.js';
+import { type AccessToken } from '../access-token.js';
 
 /**
  * An abstraction over a storage mechanism for access tokens.

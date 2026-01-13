@@ -68,7 +68,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 	 * );
 	 * ```
 	 */
-	async subscribeUserToPrivateChannels(
+	public async subscribeUserToPrivateChannels(
 		user: UserIdResolvable,
 		clientId: string,
 		channels: Array<CentrifugoChannel | string>,
@@ -115,7 +115,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 	 * console.log(`Subscribed to channel: ${channel.channel}; token: ${channel.token}`);
 	 * ```
 	 */
-	async subscribeUserToDonationAlertEvents(
+	public async subscribeUserToDonationAlertEvents(
 		user: UserIdResolvable,
 		clientId: string,
 		options?: DonationAlertsCentrifugoSubscribeOptions,
@@ -162,7 +162,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 	 * console.log(`Subscribed to channel: ${channel.channel}; token: ${channel.token}`);
 	 * ```
 	 */
-	async subscribeUserToGoalUpdateEvents(
+	public async subscribeUserToGoalUpdateEvents(
 		user: UserIdResolvable,
 		clientId: string,
 		options?: DonationAlertsCentrifugoSubscribeOptions,
@@ -209,7 +209,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 	 * console.log(`Subscribed to channel: ${channel.channel}; token: ${channel.token}`);
 	 * ```
 	 */
-	async subscribeUserToPollUpdateEvents(
+	public async subscribeUserToPollUpdateEvents(
 		user: UserIdResolvable,
 		clientId: string,
 		options?: DonationAlertsCentrifugoSubscribeOptions,

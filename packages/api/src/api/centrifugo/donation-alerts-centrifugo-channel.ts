@@ -37,7 +37,7 @@ export class DonationAlertsCentrifugoChannel extends DataObject<
 	 * @example
 	 * `$alerts:donation_12345`.
 	 */
-	get channel(): string {
+	public get channel(): string {
 		return this[rawDataSymbol].channel;
 	}
 
@@ -47,11 +47,11 @@ export class DonationAlertsCentrifugoChannel extends DataObject<
 	 * @remarks
 	 * This token is required to establish a connection to the respective private channel.
 	 */
-	get token(): string {
+	public get token(): string {
 		return this[rawDataSymbol].token;
 	}
 
-	override toJSON(): DonationAlertsCentrifugoChannelJson {
+	public override toJSON(): DonationAlertsCentrifugoChannelJson {
 		return {
 			channel: this.channel,
 			token: this.token,

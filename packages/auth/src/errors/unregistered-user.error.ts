@@ -15,7 +15,7 @@ export class UnregisteredUserError extends CustomError {
 	/**
 	 * The ID of the unregistered user.
 	 */
-	get userId(): number {
+	public get userId(): number {
 		return this._userId;
 	}
 }

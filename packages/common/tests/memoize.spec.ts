@@ -7,7 +7,7 @@ describe('Memoize', () => {
 
 		class TestClass {
 			@Memoize()
-			get value(): number {
+			public get value(): number {
 				calls++;
 				return 42;
 			}
@@ -25,7 +25,7 @@ describe('Memoize', () => {
 
 		class TestClass {
 			@Memoize()
-			get value(): number {
+			public get value(): number {
 				calls++;
 				return Math.random();
 			}
@@ -50,7 +50,7 @@ describe('Memoize', () => {
 			constructor(private readonly base: number) {}
 
 			@Memoize()
-			get value(): number {
+			public get value(): number {
 				return this.base * 2;
 			}
 		}
@@ -65,11 +65,11 @@ describe('Memoize', () => {
 			private counter = 1;
 
 			@Memoize()
-			get value(): number {
+			public get value(): number {
 				return this.counter;
 			}
 
-			increment(): void {
+			public increment(): void {
 				this.counter++;
 			}
 		}
@@ -87,9 +87,9 @@ describe('Memoize', () => {
 	it('should throw TypeError when applied to non-getter', () => {
 		expect(() => {
 			class TestClass {
-				// @ts-expect-error
+				// @ts-expect-error should throw error because the method is not a getter
 				@Memoize()
-				method(): number {
+				public method(): number {
 					return 1;
 				}
 			}

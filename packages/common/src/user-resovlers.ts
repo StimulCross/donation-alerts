@@ -54,7 +54,7 @@ export function extractUserId(user: UserIdResolvable): number {
 		return user;
 	} else if (typeof user === 'string') {
 		if (NUMERIC_STRING_REGEX.test(user)) {
-			return parseInt(user, 10);
+			return Number.parseInt(user, 10);
 		}
 
 		throw new TypeError('User ID must be integer or numeric string');
@@ -64,7 +64,7 @@ export function extractUserId(user: UserIdResolvable): number {
 		}
 
 		if (NUMERIC_STRING_REGEX.test(user.id)) {
-			return parseInt(user.id, 10);
+			return Number.parseInt(user.id, 10);
 		}
 
 		throw new TypeError('User ID must be integer or numeric string');

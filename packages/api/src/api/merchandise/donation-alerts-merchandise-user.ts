@@ -31,11 +31,11 @@ export class DonationAlertsMerchandiseUser extends DataObject<
 	 *
 	 * @returns The user ID as a number.
 	 */
-	get userId(): number {
+	public get userId(): number {
 		return this[rawDataSymbol].user_id;
 	}
 
-	override toJSON(): DonationAlertsMerchandiseUserJson {
+	public override toJSON(): DonationAlertsMerchandiseUserJson {
 		return {
 			userId: this.userId,
 		};

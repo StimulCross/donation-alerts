@@ -62,7 +62,7 @@ export class DonationAlertsMerchandiseSale extends DataObject<
 	 *
 	 * @returns The alert ID as a number.
 	 */
-	get id(): number {
+	public get id(): number {
 		return this[rawDataSymbol].id;
 	}
 
@@ -71,7 +71,7 @@ export class DonationAlertsMerchandiseSale extends DataObject<
 	 *
 	 * @returns A string representing the alert type, e.g., `'merchandise-sale'`.
 	 */
-	get name(): DonationAlertsMerchandiseSaleAlertType | string {
+	public get name(): DonationAlertsMerchandiseSaleAlertType {
 		return this[rawDataSymbol].name;
 	}
 
@@ -84,7 +84,7 @@ export class DonationAlertsMerchandiseSale extends DataObject<
 	 *
 	 * @returns The external sale ID as a string.
 	 */
-	get externalId(): string {
+	public get externalId(): string {
 		return this[rawDataSymbol].external_id;
 	}
 
@@ -96,7 +96,7 @@ export class DonationAlertsMerchandiseSale extends DataObject<
 	 *
 	 * @returns The customer's username as a string, or `null` if unknown.
 	 */
-	get username(): string | null {
+	public get username(): string | null {
 		return this[rawDataSymbol].username;
 	}
 
@@ -108,7 +108,7 @@ export class DonationAlertsMerchandiseSale extends DataObject<
 	 *
 	 * @returns The customer's message as a string, or `null` if not provided.
 	 */
-	get message(): string | null {
+	public get message(): string | null {
 		return this[rawDataSymbol].message;
 	}
 
@@ -120,7 +120,7 @@ export class DonationAlertsMerchandiseSale extends DataObject<
 	 *
 	 * @returns The total sale amount as a number.
 	 */
-	get amount(): number {
+	public get amount(): number {
 		return this[rawDataSymbol].amount;
 	}
 
@@ -132,7 +132,7 @@ export class DonationAlertsMerchandiseSale extends DataObject<
 	 *
 	 * @returns A string representing the currency code.
 	 */
-	get currency(): DonationAlertsOutputCurrency {
+	public get currency(): DonationAlertsOutputCurrency {
 		return this[rawDataSymbol].currency;
 	}
 
@@ -141,7 +141,7 @@ export class DonationAlertsMerchandiseSale extends DataObject<
 	 *
 	 * @returns The number of purchased items as a number.
 	 */
-	get boughtAmount(): number {
+	public get boughtAmount(): number {
 		return this[rawDataSymbol].bought_amount;
 	}
 
@@ -150,7 +150,7 @@ export class DonationAlertsMerchandiseSale extends DataObject<
 	 *
 	 * @returns `true` if the alert was shown; otherwise, `false`.
 	 */
-	get isShown(): boolean {
+	public get isShown(): boolean {
 		return this[rawDataSymbol].is_shown === 1;
 	}
 
@@ -159,7 +159,7 @@ export class DonationAlertsMerchandiseSale extends DataObject<
 	 *
 	 * @returns A `Date` object representing the creation date of the sale alert.
 	 */
-	get creationDate(): Date {
+	public get creationDate(): Date {
 		return new Date(this[rawDataSymbol].created_at);
 	}
 
@@ -172,11 +172,11 @@ export class DonationAlertsMerchandiseSale extends DataObject<
 	 * @returns A `Date` object representing the time the alert was shown, or `null`.
 	 */
 
-	get showDate(): Date | null {
+	public get showDate(): Date | null {
 		return mapNullable(this[rawDataSymbol].shown_at, (v: string) => new Date(v));
 	}
 
-	override toJSON(): DonationAlertsMerchandiseSaleJson {
+	public override toJSON(): DonationAlertsMerchandiseSaleJson {
 		return {
 			id: this.id,
 			name: this.name,

@@ -36,14 +36,14 @@ export class EventsListener {
 	/**
 	 * ID of the user associated with this listener.
 	 */
-	get userId(): number {
+	public get userId(): number {
 		return this._userId;
 	}
 
 	/**
 	 * Name of the Centrifugo channel associated with this listener.
 	 */
-	get channelName(): string {
+	public get channelName(): string {
 		return this._channelName;
 	}
 
@@ -53,19 +53,19 @@ export class EventsListener {
 	 * @remarks
 	 * Combines the base channel name and the user ID to construct the complete channel string.
 	 */
-	get channel(): string {
+	public get channel(): string {
 		return this._centrifugoSubscription.channel;
 	}
 
 	/** @internal */
-	get _subscription(): Subscription {
+	public get _subscription(): Subscription {
 		return this._centrifugoSubscription;
 	}
 
 	/**
 	 * Removes this listener from the client.
 	 */
-	async remove(): Promise<void> {
+	public async remove(): Promise<void> {
 		await this._client.removeEventsListener(this);
 	}
 }

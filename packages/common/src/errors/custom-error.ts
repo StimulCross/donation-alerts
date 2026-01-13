@@ -5,10 +5,11 @@ export class CustomError extends Error {
 
 		// restore prototype chain
 		Reflect.setPrototypeOf(this, new.target.prototype);
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		Error.captureStackTrace?.(this, new.target.constructor);
 	}
 
-	get name(): string {
+	public get name(): string {
 		return this.constructor.name;
 	}
 }

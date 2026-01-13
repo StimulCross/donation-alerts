@@ -64,7 +64,7 @@ export class DonationAlertsDonationEvent extends DataObject<
 	/**
 	 * The unique identifier for the donation alert.
 	 */
-	get id(): number {
+	public get id(): number {
 		return this[rawDataSymbol].id;
 	}
 
@@ -74,7 +74,7 @@ export class DonationAlertsDonationEvent extends DataObject<
 	 * @remarks
 	 * Always returns `Donations` in this context.
 	 */
-	get name(): DonationEventNameType {
+	public get name(): DonationEventNameType {
 		return this[rawDataSymbol].name;
 	}
 
@@ -84,7 +84,7 @@ export class DonationAlertsDonationEvent extends DataObject<
 	 * @remarks
 	 * This is the name that the user who sent the donation chose to display publicly.
 	 */
-	get username(): string {
+	public get username(): string {
 		return this[rawDataSymbol].username;
 	}
 
@@ -96,21 +96,21 @@ export class DonationAlertsDonationEvent extends DataObject<
 	 * - `text` — A plain text message sent with the donation.
 	 * - `audio` — A message that includes an audio component.
 	 */
-	get messageType(): DonationEventMessageType {
+	public get messageType(): DonationEventMessageType {
 		return this[rawDataSymbol].message_type;
 	}
 
 	/**
 	 * The message sent by the donor along with the donation.
 	 */
-	get message(): string {
+	public get message(): string {
 		return this[rawDataSymbol].message;
 	}
 
 	/**
 	 * The donated amount.
 	 */
-	get amount(): number {
+	public get amount(): number {
 		return this[rawDataSymbol].amount;
 	}
 
@@ -120,7 +120,7 @@ export class DonationAlertsDonationEvent extends DataObject<
 	 * @remarks
 	 * This value represents the currency code in ISO 4217 format (e.g., `USD`, `EUR`, `RUB`).
 	 */
-	get currency(): DonationAlertsOutputCurrency {
+	public get currency(): DonationAlertsOutputCurrency {
 		return this[rawDataSymbol].currency;
 	}
 
@@ -129,7 +129,7 @@ export class DonationAlertsDonationEvent extends DataObject<
 	 *
 	 * @returns `true` if the donation alert has been displayed; otherwise, `false`.
 	 */
-	get isShown(): boolean {
+	public get isShown(): boolean {
 		return this[rawDataSymbol].is_shown === 1;
 	}
 
@@ -138,7 +138,7 @@ export class DonationAlertsDonationEvent extends DataObject<
 	 *
 	 * @returns A `Date` object representing the donation creation time.
 	 */
-	get creationDate(): Date {
+	public get creationDate(): Date {
 		return new Date(this[rawDataSymbol].created_at);
 	}
 
@@ -147,11 +147,11 @@ export class DonationAlertsDonationEvent extends DataObject<
 	 *
 	 * @returns A `Date` object if the alert was shown; `null` otherwise.
 	 */
-	get showDate(): Date | null {
+	public get showDate(): Date | null {
 		return mapNullable(this[rawDataSymbol].shown_at, (v: string) => new Date(v));
 	}
 
-	override toJSON(): DonationAlertsDonationEventJson {
+	public override toJSON(): DonationAlertsDonationEventJson {
 		return {
 			id: this.id,
 			name: this.name,

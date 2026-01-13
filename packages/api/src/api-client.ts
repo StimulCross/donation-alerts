@@ -115,6 +115,7 @@ export class ApiClient {
 	 * @throws Error if the `authProvider` is not supplied in the configuration.
 	 */
 	constructor(config: ApiConfig) {
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		if (!config.authProvider) {
 			throw new Error('No auth provider given. Please supply the `authProvider` option.');
 		}
@@ -122,26 +123,25 @@ export class ApiClient {
 		this._config = config;
 		this._limitReachedBehavior = config.rateLimiterOptions?.limitReachedBehavior ?? 'enqueue';
 
-		if (config.rateLimiterOptions?.limitToOneRequestPerSecond ?? true) {
-			this._rateLimiter = new TimedPassthruRateLimiter(
-				new TimeBasedRateLimiter({
-					timeFrame: 1000,
-					bucketSize: 1,
-					doRequest: async (req): Promise<Response> =>
-						await callDonationAlertsApiRaw(req.options, req.accessToken, req.fetchOptions),
-					logger: { minLevel: 'ERROR' },
-				}),
-				{ bucketSize: 60, timeFrame: 60_000 },
-			);
-		} else {
-			this._rateLimiter = new TimeBasedRateLimiter<DonationAlertsApiCallOptionsInternal, Response>({
-				bucketSize: 60,
-				timeFrame: 60_000,
-				doRequest: async (req): Promise<Response> =>
-					await callDonationAlertsApiRaw(req.options, req.accessToken, req.fetchOptions),
-				logger: { minLevel: 'ERROR' },
-			});
-		}
+		this._rateLimiter =
+			(config.rateLimiterOptions?.limitToOneRequestPerSecond ?? true)
+				? new TimedPassthruRateLimiter(
+						new TimeBasedRateLimiter({
+							timeFrame: 1000,
+							bucketSize: 1,
+							doRequest: async (req): Promise<Response> =>
+								await callDonationAlertsApiRaw(req.options, req.accessToken, req.fetchOptions),
+							logger: { minLevel: 'ERROR' },
+						}),
+						{ bucketSize: 60, timeFrame: 60_000 },
+					)
+				: new TimeBasedRateLimiter<DonationAlertsApiCallOptionsInternal, Response>({
+						bucketSize: 60,
+						timeFrame: 60_000,
+						doRequest: async (req): Promise<Response> =>
+							await callDonationAlertsApiRaw(req.options, req.accessToken, req.fetchOptions),
+						logger: { minLevel: 'ERROR' },
+					});
 
 		this._logger = createLogger({ context: 'da:api', ...config.logger });
 	}
@@ -149,7 +149,7 @@ export class ApiClient {
 	/**
 	 * The authentication provider used by the client.
 	 */
-	get authProvider(): AuthProvider {
+	public get authProvider(): AuthProvider {
 		return this._config.authProvider;
 	}
 
@@ -159,7 +159,7 @@ export class ApiClient {
 	 * This namespace allows you to fetch user details, such as information about the authenticated user.
 	 */
 	@Memoize()
-	get users(): DonationAlertsUsersApi {
+	public get users(): DonationAlertsUsersApi {
 		return new DonationAlertsUsersApi(this);
 	}
 
@@ -169,7 +169,7 @@ export class ApiClient {
 	 * This namespace provides methods for retrieving donation data.
 	 */
 	@Memoize()
-	get donations(): DonationAlertsDonationsApi {
+	public get donations(): DonationAlertsDonationsApi {
 		return new DonationAlertsDonationsApi(this);
 	}
 
@@ -179,7 +179,7 @@ export class ApiClient {
 	 * This namespace provides methods for sending custom alerts.
 	 */
 	@Memoize()
-	get customAlerts(): DonationAlertsCustomAlertsApi {
+	public get customAlerts(): DonationAlertsCustomAlertsApi {
 		return new DonationAlertsCustomAlertsApi(this);
 	}
 
@@ -190,7 +190,7 @@ export class ApiClient {
 	 * This namespace provides methods for subscribing to Centrifugo channels.
 	 */
 	@Memoize()
-	get centrifugo(): DonationAlertsCentrifugoApi {
+	public get centrifugo(): DonationAlertsCentrifugoApi {
 		return new DonationAlertsCentrifugoApi(this);
 	}
 
@@ -200,7 +200,7 @@ export class ApiClient {
 	 * This namespace allows managing merchandise-related data.
 	 */
 	@Memoize()
-	get merchandise(): DonationAlertsMerchandiseApi {
+	public get merchandise(): DonationAlertsMerchandiseApi {
 		return new DonationAlertsMerchandiseApi(this);
 	}
 
@@ -215,7 +215,7 @@ export class ApiClient {
 	 * @throws {@link UnregisteredUserError} If the specified user is not registered in the authentication provider.
 	 * @throws {@link MissingScopeError} If the access token lacks the required scope to complete the request.
 	 */
-	async callApi<T = unknown>(
+	public async callApi<T = unknown>(
 		user: UserIdResolvable,
 		options: DonationAlertsApiCallOptions,
 		rateLimiterOptions: RateLimiterRequestOptions = {},

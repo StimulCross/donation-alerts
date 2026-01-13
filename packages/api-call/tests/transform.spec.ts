@@ -2,25 +2,25 @@ import { describe, it, expect } from 'vitest';
 import { handleDonationAlertsApiResponseError, HttpError, transformDonationAlertsResponse } from '../src/index.js';
 
 class MockResponse {
+	public headers = {
+		get: (header: string): string | null => this.headersMap[header] ?? null,
+	};
+
 	constructor(
-		private body: string,
+		private readonly body: string,
 		public status: number,
 		public statusText: string,
-		private headersMap: Record<string, string>,
+		private readonly headersMap: Record<string, string>,
 		public ok: boolean,
 	) {}
 
-	async text(): Promise<string> {
+	public async text(): Promise<string> {
 		return this.body;
 	}
 
-	async json(): Promise<unknown> {
+	public async json(): Promise<unknown> {
 		return JSON.parse(this.body);
 	}
-
-	headers = {
-		get: (header: string): string | null => this.headersMap[header] ?? null,
-	};
 }
 
 describe('handleDonationAlertsApiResponseError', () => {

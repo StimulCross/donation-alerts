@@ -36,6 +36,10 @@
 		"build": "tsc -p tsconfig.json",
 		"rebuild": "pnpm run clean && pnpm run build",
 		"clean": "del-cli lib *.tsbuildinfo",
+		"lint": "eslint src tests",
+		"lint:fix": "eslint src tests --fix",
+		"format:check": "prettier --check src",
+		"format:fix": "prettier --write src",
 		"test": "tsx --test \"tests/**/*.spec.ts\""
 	},
 	"files": [
@@ -56,6 +60,8 @@
 		"@donation-alerts/auth": "4.0.0"
 	},
 	"devDependencies": {
-		"@donation-alerts/auth": "4.0.0"
+		"@donation-alerts/auth": "4.0.0",
+		"@donation-alerts/eslint-configs": "workspace:*",
+		"@donation-alerts/typescript-config": "workspace:*"
 	}
 }

@@ -23,7 +23,7 @@ export function getRawData<T>(data: DataObject<T>): T {
 /** @internal */
 export abstract class DataObject<T, J extends object = object> {
 	/** @internal */
-	declare readonly [rawDataSymbol]: T;
+	declare public readonly [rawDataSymbol]: T;
 
 	/** @internal */
 	constructor(data: T) {
@@ -42,5 +42,5 @@ export abstract class DataObject<T, J extends object = object> {
 	 *
 	 * In Node.js, it's also used when the instance is logged via `console.log()` (via the `util.inspect` mechanism).
 	 */
-	abstract toJSON(): J;
+	public abstract toJSON(): J;
 }

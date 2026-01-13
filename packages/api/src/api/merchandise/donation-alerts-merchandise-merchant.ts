@@ -34,7 +34,7 @@ export class DonationAlertsMerchandiseMerchant extends DataObject<
 	 *
 	 * @returns The merchant's unique identifier as a string.
 	 */
-	get identifier(): string {
+	public get identifier(): string {
 		return this[rawDataSymbol].identifier;
 	}
 
@@ -46,11 +46,11 @@ export class DonationAlertsMerchandiseMerchant extends DataObject<
 	 *
 	 * @returns The merchant's name as a string.
 	 */
-	get name(): string {
+	public get name(): string {
 		return this[rawDataSymbol].name;
 	}
 
-	override toJSON(): DonationAlertsMerchandiseMerchantJson {
+	public override toJSON(): DonationAlertsMerchandiseMerchantJson {
 		return {
 			identifier: this.identifier,
 			name: this.name,

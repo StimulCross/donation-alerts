@@ -31,28 +31,28 @@ export class HttpError extends CustomError {
 	/**
 	 * The HTTP status code of the error.
 	 */
-	get status(): number {
+	public get status(): number {
 		return this._status;
 	}
 
 	/**
 	 * The HTTP status text associated with the error.
 	 */
-	get statusText(): string {
+	public get statusText(): string {
 		return this._statusText;
 	}
 
 	/**
 	 * The URL of the request that caused the error.
 	 */
-	get url(): string {
+	public get url(): string {
 		return this._url;
 	}
 
 	/**
 	 * The HTTP method used in the request.
 	 */
-	get method(): string {
+	public get method(): string {
 		return this._method;
 	}
 
@@ -64,7 +64,7 @@ export class HttpError extends CustomError {
 	 * in the error message for readability. Use this property to access the full
 	 * response body if needed.
 	 */
-	get body(): string {
+	public get body(): string {
 		return this._body;
 	}
 }

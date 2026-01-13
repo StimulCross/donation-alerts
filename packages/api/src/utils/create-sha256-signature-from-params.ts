@@ -5,7 +5,7 @@ import { flattenValues } from './flatten-values.js';
 export function createSha256SignatureFromParams(params: Record<PropertyKey, unknown>, secret: string): string {
 	const sortedValuesString = Object.values(flattenValues(params))
 		.filter(v => v !== undefined)
-		.map(e => String(e))
+		.map(String)
 		.toSorted()
 		.join('');
 

@@ -2,11 +2,11 @@ import { DataObject, Memoize, rawDataSymbol, ReadDocumentation } from '@donation
 import {
 	DonationAlertsPollOption,
 	type DonationAlertsPollOptionData,
-	DonationAlertsPollOptionJson,
+	type DonationAlertsPollOptionJson,
 } from './donation-alerts-poll-option.js';
 
 /**
- * The type of a poll, which determines the way the winner is calculated:
+ * The type of poll, which determines the way the winner is calculated:
  * - `count`: The winner is the option with the most number of donations.
  * - `sum`: The winner is the option with the highest total sum of donations.
  */
@@ -49,7 +49,7 @@ export class DonationAlertsPollUpdateEvent extends DataObject<
 	/**
 	 * The unique identifier of the poll.
 	 */
-	get id(): number {
+	public get id(): number {
 		return this[rawDataSymbol].id;
 	}
 
@@ -58,14 +58,14 @@ export class DonationAlertsPollUpdateEvent extends DataObject<
 	 *
 	 * @returns `true` if the poll is active, otherwise `false`.
 	 */
-	get isActive(): boolean {
+	public get isActive(): boolean {
 		return this[rawDataSymbol].is_active === 1;
 	}
 
 	/**
 	 * The title of the poll.
 	 */
-	get title(): string {
+	public get title(): string {
 		return this[rawDataSymbol].title;
 	}
 
@@ -74,7 +74,7 @@ export class DonationAlertsPollUpdateEvent extends DataObject<
 	 *
 	 * @returns `true` if custom options are allowed, otherwise `false`.
 	 */
-	get allowUserOptions(): boolean {
+	public get allowUserOptions(): boolean {
 		return this[rawDataSymbol].allow_user_options === 1;
 	}
 
@@ -85,7 +85,7 @@ export class DonationAlertsPollUpdateEvent extends DataObject<
 	 * - `count`: The option with the most donations wins.
 	 * - `sum`: The option with the highest total donation sum wins.
 	 */
-	get type(): DonationAlertsPollType {
+	public get type(): DonationAlertsPollType {
 		return this[rawDataSymbol].type;
 	}
 
@@ -96,11 +96,11 @@ export class DonationAlertsPollUpdateEvent extends DataObject<
 	 * Each option is represented as an instance of {@link DonationAlertsPollOption}.
 	 */
 	@Memoize()
-	get options(): DonationAlertsPollOption[] {
+	public get options(): DonationAlertsPollOption[] {
 		return this[rawDataSymbol].options.map(option => new DonationAlertsPollOption(option));
 	}
 
-	override toJSON(): DonationAlertsPollUpdateEventJson {
+	public override toJSON(): DonationAlertsPollUpdateEventJson {
 		return {
 			id: this.id,
 			isActive: this.isActive,

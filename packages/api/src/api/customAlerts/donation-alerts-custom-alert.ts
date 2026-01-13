@@ -43,7 +43,7 @@ export class DonationAlertsCustomAlert extends DataObject<
 	/**
 	 * The unique custom alert identifier.
 	 */
-	get id(): number {
+	public get id(): number {
 		return this[rawDataSymbol].id;
 	}
 
@@ -53,60 +53,60 @@ export class DonationAlertsCustomAlert extends DataObject<
 	 * @remarks
 	 * This value can be used to track or manage custom alerts within external systems.
 	 */
-	get externalId(): string | null {
+	public get externalId(): string | null {
 		return this[rawDataSymbol].external_id;
 	}
 
 	/**
 	 * The header text of the custom alert, or `null` if no header was set.
 	 */
-	get header(): string | null {
+	public get header(): string | null {
 		return this[rawDataSymbol].header;
 	}
 
 	/**
 	 * The message text of the custom alert, or `null` if no message was set.
 	 */
-	get message(): string | null {
+	public get message(): string | null {
 		return this[rawDataSymbol].message;
 	}
 
 	/**
 	 * The URL of the image to be displayed with the custom alert, or `null` if no URL was set.
 	 */
-	get imageUrl(): string | null {
+	public get imageUrl(): string | null {
 		return this[rawDataSymbol].image_url;
 	}
 
 	/**
 	 * The URL of the sound file to be played when the custom alert is shown, or `null` if no URL was set.
 	 */
-	get soundUrl(): string | null {
+	public get soundUrl(): string | null {
 		return this[rawDataSymbol].sound_url;
 	}
 
 	/**
 	 * Indicates whether the alert has been shown in the streamer's widget.
 	 */
-	get isShown(): boolean {
+	public get isShown(): boolean {
 		return this[rawDataSymbol].is_shown === 1;
 	}
 
 	/**
 	 * The date and time when the custom alert was created.
 	 */
-	get creationDate(): Date {
+	public get creationDate(): Date {
 		return new Date(this[rawDataSymbol].created_at);
 	}
 
 	/**
 	 * The date and time when the custom alert was shown, or `null` if the alert has not yet been shown.
 	 */
-	get showDate(): Date | null {
+	public get showDate(): Date | null {
 		return mapNullable(this[rawDataSymbol].shown_at, (v: string) => new Date(v));
 	}
 
-	override toJSON(): DonationAlertsCustomAlertJson {
+	public override toJSON(): DonationAlertsCustomAlertJson {
 		return {
 			id: this.id,
 			externalId: this.externalId,

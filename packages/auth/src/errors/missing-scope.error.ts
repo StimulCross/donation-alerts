@@ -16,14 +16,14 @@ export class MissingScopeError extends CustomError {
 	/**
 	 * The ID of the user associated with the token, or `null` if user is not known.
 	 */
-	get userId(): number | null {
+	public get userId(): number | null {
 		return this._userId;
 	}
 
 	/**
 	 * The list of missing scopes.
 	 */
-	get scopes(): string[] {
+	public get scopes(): string[] {
 		return this._scopes;
 	}
 }

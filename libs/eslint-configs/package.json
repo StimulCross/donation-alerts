@@ -1,0 +1,29 @@
+{
+	"name": "@donation-alerts/eslint-configs",
+	"version": "1.0.0",
+	"author": "StimulCross <stimulcross@gmail.com>",
+	"license": "MIT",
+	"homepage": "https://github.com/StimulCross/donation-alerts",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/StimulCross/donation-alerts.git"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"private": true,
+	"type": "module",
+	"main": "index.js",
+	"packageManager": "pnpm@10.5.2",
+	"scripts": {
+		"format:check": "prettier --check \"**/*.{ts,tsx,md,js,mjs,cjs}\"",
+		"format:fix": "prettier --write \"**/*.{ts,tsx,md,js,mjs,cjs}\""
+	},
+	"devDependencies": {
+		"@leancodepl/resolve-eslint-flat-config": "^9.7.0",
+		"@stimulcross/eslint-config-node": "^2.0.0",
+		"@stimulcross/eslint-config-typescript": "^2.0.0",
+		"eslint": "^9.39.2",
+		"globals": "^17.0.0"
+	}
+}

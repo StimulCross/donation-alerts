@@ -32,14 +32,14 @@ export class DonationAlertsPollOption extends DataObject<DonationAlertsPollOptio
 	/**
 	 * The unique identifier of the poll option.
 	 */
-	get id(): number {
+	public get id(): number {
 		return this[rawDataSymbol].id;
 	}
 
 	/**
 	 * The title of the poll option.
 	 */
-	get title(): string {
+	public get title(): string {
 		return this[rawDataSymbol].title;
 	}
 
@@ -50,7 +50,7 @@ export class DonationAlertsPollOption extends DataObject<DonationAlertsPollOptio
 	 * Depending on the poll's type, the `amountValue` represents either the total number of donations
 	 * or the total sum of donations for this option.
 	 */
-	get amountValue(): number {
+	public get amountValue(): number {
 		return this[rawDataSymbol].amount_value;
 	}
 
@@ -60,7 +60,7 @@ export class DonationAlertsPollOption extends DataObject<DonationAlertsPollOptio
 	 * @remarks
 	 * This percentage reflects the option's share of the total amount across all poll options.
 	 */
-	get amountPercent(): number {
+	public get amountPercent(): number {
 		return this[rawDataSymbol].amount_percent;
 	}
 
@@ -72,11 +72,11 @@ export class DonationAlertsPollOption extends DataObject<DonationAlertsPollOptio
 	 *
 	 * @returns `true` if the poll option is a winner, otherwise `false`.
 	 */
-	get isWinner(): boolean {
+	public get isWinner(): boolean {
 		return this[rawDataSymbol].is_winner === 1;
 	}
 
-	override toJSON(): DonationAlertsPollOptionJson {
+	public override toJSON(): DonationAlertsPollOptionJson {
 		return {
 			id: this.id,
 			title: this.title,

@@ -2,8 +2,8 @@ import * as apiCall from '@donation-alerts/api-call';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import * as helpers from '../src/helpers.js';
 import {
-	AccessToken,
-	AccessTokenWithUserId,
+	type AccessToken,
+	type AccessTokenWithUserId,
 	InvalidTokenError,
 	MissingScopeError,
 	RefreshingAuthProvider,

@@ -90,7 +90,7 @@ export class DonationAlertsCustomAlertsApi extends BaseApi {
 	 * console.log(`Custom alert sent! Header: ${customAlert.header}; Message: ${customAlert.message}`);
 	 * ```
 	 */
-	async sendCustomAlert(
+	public async sendCustomAlert(
 		user: UserIdResolvable,
 		data: DonationAlertsSendCustomAlertData,
 		rateLimiterOptions?: RateLimiterRequestOptions,

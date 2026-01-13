@@ -19,7 +19,7 @@ export class InvalidTokenError extends CustomError {
 	 *
 	 * Returns `null` if the user is unknown.
 	 */
-	get userId(): number | null {
+	public get userId(): number | null {
 		return this._userId;
 	}
 }

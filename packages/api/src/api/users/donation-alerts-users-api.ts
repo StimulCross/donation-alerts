@@ -34,7 +34,10 @@ export class DonationAlertsUsersApi extends BaseApi {
 	 * console.log(`User ID: ${user.id}, Name: ${user.name}`);
 	 * ```
 	 */
-	async getUser(user: UserIdResolvable, rateLimiterOptions?: RateLimiterRequestOptions): Promise<DonationAlertsUser> {
+	public async getUser(
+		user: UserIdResolvable,
+		rateLimiterOptions?: RateLimiterRequestOptions,
+	): Promise<DonationAlertsUser> {
 		const response = await this._apiClient.callApi<DonationAlertsResponseSingleData<DonationAlertsUserData>>(
 			user,
 			{
@@ -73,10 +76,11 @@ export class DonationAlertsUsersApi extends BaseApi {
 	 * console.log(`Socket connection token: ${token}`);
 	 * ```
 	 */
-	async getSocketConnectionToken(
+	public async getSocketConnectionToken(
 		user: UserIdResolvable,
 		rateLimiterOptions?: RateLimiterRequestOptions,
 	): Promise<string> {
-		return (await this.getUser(user, rateLimiterOptions)).socketConnectionToken;
+		const userData = await this.getUser(user, rateLimiterOptions);
+		return userData.socketConnectionToken;
 	}
 }

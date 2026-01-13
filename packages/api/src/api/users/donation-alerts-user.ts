@@ -36,7 +36,7 @@ export class DonationAlertsUser extends DataObject<DonationAlertsUserData, Donat
 	 *
 	 * @returns The user ID as a number.
 	 */
-	get id(): number {
+	public get id(): number {
 		return this[rawDataSymbol].id;
 	}
 
@@ -45,7 +45,7 @@ export class DonationAlertsUser extends DataObject<DonationAlertsUserData, Donat
 	 *
 	 * @returns The user's unique code as a string.
 	 */
-	get code(): string {
+	public get code(): string {
 		return this[rawDataSymbol].code;
 	}
 
@@ -57,7 +57,7 @@ export class DonationAlertsUser extends DataObject<DonationAlertsUserData, Donat
 	 *
 	 * @returns The display name as a string.
 	 */
-	get name(): string {
+	public get name(): string {
 		return this[rawDataSymbol].name;
 	}
 
@@ -66,7 +66,7 @@ export class DonationAlertsUser extends DataObject<DonationAlertsUserData, Donat
 	 *
 	 * @returns The URL to the user's avatar as a string.
 	 */
-	get avatar(): string {
+	public get avatar(): string {
 		return this[rawDataSymbol].avatar;
 	}
 
@@ -75,7 +75,7 @@ export class DonationAlertsUser extends DataObject<DonationAlertsUserData, Donat
 	 *
 	 * @returns The user's email as a string.
 	 */
-	get email(): string {
+	public get email(): string {
 		return this[rawDataSymbol].email;
 	}
 
@@ -87,11 +87,11 @@ export class DonationAlertsUser extends DataObject<DonationAlertsUserData, Donat
 	 *
 	 * @returns The Centrifugo connection token as a string.
 	 */
-	get socketConnectionToken(): string {
+	public get socketConnectionToken(): string {
 		return this[rawDataSymbol].socket_connection_token;
 	}
 
-	override toJSON(): DonationAlertsUserJson {
+	public override toJSON(): DonationAlertsUserJson {
 		return {
 			id: this.id,
 			code: this.code,

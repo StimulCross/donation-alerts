@@ -42,7 +42,7 @@ export class DonationAlertsDonationsApi extends BaseApi {
 	 * donations.forEach(donation => console.log(donation.username, donation.amount, donation.currency));
 	 * ```
 	 */
-	async getDonations(
+	public async getDonations(
 		user: UserIdResolvable,
 		pagination: DonationAlertsApiPagination = {},
 		rateLimiterOptions?: RateLimiterRequestOptions,
@@ -90,7 +90,7 @@ export class DonationAlertsDonationsApi extends BaseApi {
 	 * console.log(`Retrieved ${allDonations.length} donations.`);
 	 * ```
 	 */
-	async getAllDonations(
+	public async getAllDonations(
 		user: UserIdResolvable,
 		rateLimiterOptions?: RateLimiterRequestOptions,
 	): Promise<DonationAlertsDonation[]> {
@@ -131,7 +131,7 @@ export class DonationAlertsDonationsApi extends BaseApi {
 	 * }
 	 * ```
 	 */
-	createDonationsPaginator(
+	public createDonationsPaginator(
 		user: UserIdResolvable,
 		rateLimiterOptions?: RateLimiterRequestOptions,
 	): DonationAlertsApiPaginator<DonationAlertsDonationData, DonationAlertsDonation> {

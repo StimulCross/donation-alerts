@@ -36,10 +36,10 @@ describe('MemoryAuthStorageAdapter', () => {
 		const t = token('A');
 
 		await storage.set(1, t);
-		const deleted = await storage.delete(1);
+		const isDeleted = await storage.delete(1);
 		const result = await storage.get(1);
 
-		expect(deleted).toBe(true);
+		expect(isDeleted).toBe(true);
 		expect(result).toBeNull();
 	});
 
@@ -83,7 +83,7 @@ describe('MemoryAuthStorageAdapter', () => {
 
 		await Promise.all([p1, p2]);
 
-		expect(order.sort()).toEqual([1, 2]);
+		expect(order.sort((a, b) => a - b)).toEqual([1, 2]);
 	});
 
 	it('should isolate queues per user', async () => {
@@ -106,7 +106,8 @@ describe('MemoryAuthStorageAdapter', () => {
 	it('should continue processing queue after a failed operation', async () => {
 		const storage = new MemoryAuthStorageAdapter();
 
-		const failing = async () => {
+		// eslint-disable-next-line unicorn/consistent-function-scoping
+		const failing = async (): Promise<never> => {
 			throw new Error('fail');
 		};
 

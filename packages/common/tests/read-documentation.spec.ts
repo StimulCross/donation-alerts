@@ -33,7 +33,7 @@ describe('ReadDocumentation', () => {
 
 	it('should include serialized data for DataObject instance', () => {
 		class TestDataObject extends DataObject<{ id: number }> {
-			override toJSON() {
+			public override toJSON(): { id: number } {
 				return { id: 123 };
 			}
 		}
@@ -53,7 +53,7 @@ describe('ReadDocumentation', () => {
 
 	it('should throw TypeError when applied to non class target', () => {
 		expect(() => {
-			// @ts-expect-error
+			// @ts-expect-error should throw
 			ReadDocumentation('common')(() => {}, { kind: 'method' } as any);
 		}).toThrow(TypeError);
 	});

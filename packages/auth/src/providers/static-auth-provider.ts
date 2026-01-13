@@ -26,11 +26,11 @@ export class StaticAuthProvider implements AuthProvider {
 		this._scopes = scopes;
 	}
 
-	get clientId(): string {
+	public get clientId(): string {
 		return this._clientId;
 	}
 
-	get clientSecret(): null {
+	public get clientSecret(): null {
 		return null;
 	}
 
@@ -40,7 +40,7 @@ export class StaticAuthProvider implements AuthProvider {
 	 * @param user The ID of the user to look for.
 	 * @returns A boolean indicating whether the user is registered.
 	 */
-	hasUser(user: UserIdResolvable): boolean {
+	public hasUser(user: UserIdResolvable): boolean {
 		return this._registry.has(extractUserId(user));
 	}
 
@@ -56,7 +56,7 @@ export class StaticAuthProvider implements AuthProvider {
 	 * @throws {@link InvalidTokenError} if the access token is empty or undefined.
 	 * @throws {@link MissingScopeError} if the token scopes miss required scopes.
 	 */
-	addUser(user: UserIdResolvable, accessToken: string, scopes?: string[]): void {
+	public addUser(user: UserIdResolvable, accessToken: string, scopes?: string[]): void {
 		const userId = extractUserId(user);
 
 		if (!accessToken) {
@@ -84,11 +84,11 @@ export class StaticAuthProvider implements AuthProvider {
 	 *
 	 * @param user The ID of the user to remove.
 	 */
-	removeUser(user: UserIdResolvable): void {
+	public removeUser(user: UserIdResolvable): void {
 		this._registry.delete(extractUserId(user));
 	}
 
-	async getScopesForUser(user: UserIdResolvable): Promise<string[]> {
+	public async getScopesForUser(user: UserIdResolvable): Promise<string[]> {
 		const userId = extractUserId(user);
 
 		if (!this._registry.has(userId)) {
@@ -101,7 +101,7 @@ export class StaticAuthProvider implements AuthProvider {
 		return this._registry.get(userId)!.scopes ?? [];
 	}
 
-	async getAccessTokenForUser(user: UserIdResolvable, scopes?: string[]): Promise<AccessTokenWithUserId> {
+	public async getAccessTokenForUser(user: UserIdResolvable, scopes?: string[]): Promise<AccessTokenWithUserId> {
 		const userId = extractUserId(user);
 
 		if (!this._registry.has(userId)) {
