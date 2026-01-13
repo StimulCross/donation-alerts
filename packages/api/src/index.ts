@@ -18,11 +18,11 @@ export {
 export {
 	DonationAlertsCustomAlertsApi,
 	type DonationAlertsSendCustomAlertData,
-} from './api/customAlerts/donation-alerts-custom-alerts-api.js';
+} from './api/custom-alerts/donation-alerts-custom-alerts-api.js';
 export {
 	DonationAlertsCustomAlert,
 	type DonationAlertsCustomAlertJson,
-} from './api/customAlerts/donation-alerts-custom-alert.js';
+} from './api/custom-alerts/donation-alerts-custom-alert.js';
 
 export {
 	DonationAlertsCentrifugoApi,

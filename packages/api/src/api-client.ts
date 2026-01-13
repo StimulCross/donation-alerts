@@ -16,7 +16,7 @@ import { type AccessTokenWithUserId, type AuthProvider } from '@donation-alerts/
 import { extractUserId, Memoize, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { createLogger, type Logger, type LoggerOptions } from '@stimulcross/logger';
 import { DonationAlertsCentrifugoApi } from './api/centrifugo/donation-alerts-centrifugo-api.js';
-import { DonationAlertsCustomAlertsApi } from './api/customAlerts/donation-alerts-custom-alerts-api.js';
+import { DonationAlertsCustomAlertsApi } from './api/custom-alerts/donation-alerts-custom-alerts-api.js';
 import { DonationAlertsDonationsApi } from './api/donations/donation-alerts-donations-api.js';
 import { DonationAlertsMerchandiseApi } from './api/merchandise/donation-alerts-merchandise-api.js';
 import { DonationAlertsUsersApi } from './api/users/donation-alerts-users-api.js';
