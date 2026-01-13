@@ -8,7 +8,7 @@
 		},
 		"rebuild": {
 			"dependsOn": ["^rebuild"],
-			"cache": true,
+			"cache": false,
 			"outputs": ["lib/**"]
 		},
 		"clean": {},
