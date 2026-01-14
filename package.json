@@ -19,6 +19,7 @@
 		"lint:fix": "eslint . --fix",
 		"format:check": "prettier --config \".prettierrc.js\" --check packages",
 		"format:fix": "prettier --config \".prettierrc.js\" --write packages",
+		"check-types": "turbo run check-types",
 		"prepare": "husky",
 		"preversion": "pnpm run rebuild && pnpm run format:check && pnpm run lint",
 		"postversion": "pnpm i",
