@@ -1,5 +1,5 @@
-import { type AuthStorage } from './auth-storage.js';
-import { type AccessToken } from '../access-token.js';
+import { type AccessToken } from '../interfaces/access-token.js';
+import { type AuthStorage } from '../interfaces/auth-storage.js';
 
 /** @internal */
 export class MemoryAuthStorageAdapter implements AuthStorage {
@@ -24,13 +24,11 @@ export class MemoryAuthStorageAdapter implements AuthStorage {
 	private _enqueue<T>(userId: number, fn: () => T | Promise<T>): Promise<T> {
 		const previous = this._queues.get(userId) ?? Promise.resolve();
 
-		const task = async (): Promise<T> => await fn();
-
 		const next = previous
 			.catch(() => {
 				// empty
 			})
-			.then(task);
+			.then(fn);
 
 		this._queues.set(
 			userId,

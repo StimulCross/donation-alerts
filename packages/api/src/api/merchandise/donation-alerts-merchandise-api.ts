@@ -10,14 +10,14 @@ import {
 	DonationAlertsMerchandiseSale,
 	type DonationAlertsMerchandiseSaleData,
 } from './donation-alerts-merchandise-sale.js';
-import { DonationAlertsMerchandise, type DonationAlertsMerchandiseData } from './donation-alerts-merchandise.js';
-import { createSha256SignatureFromParams } from '../../utils/create-sha256-signature-from-params.js';
-import { BaseApi } from '../base-api.js';
-import { type DonationAlertsResponseSingleData } from '../donation-alerts-response.js';
 import {
 	DonationAlertsMerchandiseUser,
 	type DonationAlertsMerchandiseUserData,
 } from './donation-alerts-merchandise-user.js';
+import { DonationAlertsMerchandise, type DonationAlertsMerchandiseData } from './donation-alerts-merchandise.js';
+import { type DonationAlertsResponseSingleData } from '../../interfaces/donation-alerts-response-data.js';
+import { createSha256SignatureFromParams } from '../../utils/create-sha256-signature-from-params.js';
+import { BaseApi } from '../base-api.js';
 
 /**
  * Title of the merchandise in different locales.

@@ -1,6 +1,6 @@
 import { qsStringify } from '@donation-alerts/common';
-import { type DonationAlertsApiCallOptions } from '../donation-alerts-api-call-options.js';
 import { HttpError } from '../errors/http.error.js';
+import { type DonationAlertsApiCallOptions } from '../interfaces/donation-alerts-api-call-options.js';
 
 /** @internal */
 export async function handleDonationAlertsApiResponseError(

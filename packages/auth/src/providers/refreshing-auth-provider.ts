@@ -1,13 +1,14 @@
 import { EventEmitter } from '@d-fischer/typed-event-emitter';
 import { callDonationAlertsApi } from '@donation-alerts/api-call';
 import { extractUserId, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
-import { type AuthProvider } from './auth-provider.js';
-import { type AccessToken, type AccessTokenWithUserId, isAccessTokenExpired } from '../access-token.js';
 import { InvalidTokenError } from '../errors/invalid-token.error.js';
 import { UnregisteredUserError } from '../errors/unregistered-user.error.js';
-import { compareScopes, getAccessToken, refreshAccessToken } from '../helpers.js';
-import { type AuthStorage } from './auth-storage.js';
-import { MemoryAuthStorageAdapter } from './memory-auth-storage.adapter.js';
+import { type AccessToken, type AccessTokenWithUserId } from '../interfaces/access-token.js';
+import { type AuthProvider } from '../interfaces/auth-provider.js';
+import { type AuthStorage } from '../interfaces/auth-storage.js';
+import { MemoryAuthStorageAdapter } from '../storages/memory-auth-storage.adapter.js';
+import { getAccessToken, isAccessTokenExpired, refreshAccessToken } from '../utils/access-token-utils.js';
+import { compareScopes } from '../utils/scope-utils.js';
 
 /**
  * Configuration for {@link RefreshingAuthProvider}.

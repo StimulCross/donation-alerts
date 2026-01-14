@@ -1,9 +1,6 @@
 import { callDonationAlertsApi } from '@donation-alerts/api-call';
-import { extractUserId, type UserIdResolvable } from '@donation-alerts/common';
-import { type AccessToken } from './access-token.js';
-import { MissingScopeError } from './errors/missing-scope.error.js';
+import { type AccessToken } from '../interfaces/access-token.js';
 
-/** @internal */
 interface AccessTokenData {
 	access_token: string;
 	refresh_token: string;
@@ -17,6 +14,47 @@ function createAccessTokenFromData(data: AccessTokenData): AccessToken {
 		expiresIn: data.expires_in,
 		obtainmentTimestamp: Date.now(),
 	};
+}
+
+/**
+ * Calculates the expiration time of the access token in milliseconds since UNIX epoch.
+ *
+ * @remarks
+ * This function computes the approximate time when the token will expire by adding
+ * the `expiresIn` value (in seconds) to the `obtainmentTimestamp`.
+ *
+ * @param token The access token whose expiration time should be calculated.
+ *
+ * @returns The expiration time in milliseconds since UNIX epoch.
+ */
+export function getExpiryMilliseconds(token: AccessToken): number {
+	return token.obtainmentTimestamp + token.expiresIn * 1000;
+}
+
+/**
+ * Calculates the expiration date of the access token as a `Date` object.
+ *
+ * @param token The access token whose expiration date should be calculated.
+ *
+ * @returns A `Date` object representing the token expiration date.
+ */
+export function getTokenExpiryDate(token: AccessToken): Date {
+	return new Date(getExpiryMilliseconds(token));
+}
+
+/**
+ * Checks whether the given access token is expired.
+ *
+ * @remarks
+ * To handle potential latency issues between the API and the client,
+ * this function applies a one-minute grace period when determining expiry.
+ *
+ * @param token The access token to evaluate.
+ *
+ * @returns A boolean indicating whether the token has expired (`true`) or not (`false`).
+ */
+export function isAccessTokenExpired(token: AccessToken): boolean {
+	return Date.now() >= getExpiryMilliseconds(token);
 }
 
 /**
@@ -129,52 +167,4 @@ export async function refreshAccessToken(
 			auth: false,
 		}),
 	);
-}
-
-/**
- * c.
- *
- * @remarks
- * This function checks if the provided token has all the necessary scopes for an operation.
- * If the token does not contain any of the requested scopes, a {@link MissingScopeError} is thrown
- * for the caller to handle.
- *
- * @param scopesToCompare The list of scopes present in the token.
- * @param requestedScopes The scopes needed for the operation. Default to an empty array.
- * @param user The user ID associated with the token. This is used in the error message if scopes are missing.
- *
- * @throws {@link MissingScopeError} If the token does not include the required scopes.
- *
- * @example
- * ```ts
- * try {
- *     compareScopes(['oauth-user-show', 'oauth-donation-index'], ['oauth-custom_alert-store'], 12345);
- * } catch (error) {
- *     if (error instanceof MissingScopeError) {
- *         console.error('Missing scopes:', error.missingScopes);
- *     }
- * }
- * ```
- */
-export function compareScopes(
-	scopesToCompare: string[],
-	requestedScopes: string[] = [],
-	user?: UserIdResolvable,
-): void {
-	const scopes = new Set<string>(scopesToCompare);
-	const missingScopes: string[] = [];
-
-	for (const scope of requestedScopes) {
-		if (!scopes.has(scope)) {
-			missingScopes.push(scope);
-		}
-	}
-
-	if (missingScopes.length > 0) {
-		throw new MissingScopeError(
-			user ? extractUserId(user) : null,
-			missingScopes,
-			`The token does not have the requested scopes: ${requestedScopes.join(', ')}`,
-		);
-	}
 }

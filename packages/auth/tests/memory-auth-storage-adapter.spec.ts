@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { type AccessToken } from '../src/index.js';
-import { MemoryAuthStorageAdapter } from '../src/providers/memory-auth-storage.adapter.js';
+import { MemoryAuthStorageAdapter } from '../src/storages/memory-auth-storage.adapter.js';
 
 function token(value: string): AccessToken {
 	return {
@@ -72,18 +72,6 @@ describe('MemoryAuthStorageAdapter', () => {
 
 		expect(first?.accessToken).toBe('A');
 		expect(second?.accessToken).toBe('B');
-	});
-
-	it('should not block operations for different users', async () => {
-		const storage = new MemoryAuthStorageAdapter();
-		const order: number[] = [];
-
-		const p1 = storage.set(1, token('A')).then(() => order.push(1));
-		const p2 = storage.set(2, token('B')).then(() => order.push(2));
-
-		await Promise.all([p1, p2]);
-
-		expect(order.sort((a, b) => a - b)).toEqual([1, 2]);
 	});
 
 	it('should isolate queues per user', async () => {

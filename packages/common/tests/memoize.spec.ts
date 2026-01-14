@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { Memoize } from '../src/memoize.js';
+import { Memoize } from '../src/index.js';
 
 describe('Memoize', () => {
 	it('should cache getter result per instance', () => {

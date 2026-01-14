@@ -8,92 +8,19 @@ import {
 	callDonationAlertsApi,
 	callDonationAlertsApiRaw,
 	type DonationAlertsApiCallOptions,
-	type DonationAlertsCallFetchOptions,
 	handleDonationAlertsApiResponseError,
 	transformDonationAlertsResponse,
 } from '@donation-alerts/api-call';
 import { type AccessTokenWithUserId, type AuthProvider } from '@donation-alerts/auth';
 import { extractUserId, Memoize, ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
-import { createLogger, type Logger, type LoggerOptions } from '@stimulcross/logger';
+import { createLogger, type Logger } from '@stimulcross/logger';
 import { DonationAlertsCentrifugoApi } from './api/centrifugo/donation-alerts-centrifugo-api.js';
 import { DonationAlertsCustomAlertsApi } from './api/custom-alerts/donation-alerts-custom-alerts-api.js';
 import { DonationAlertsDonationsApi } from './api/donations/donation-alerts-donations-api.js';
 import { DonationAlertsMerchandiseApi } from './api/merchandise/donation-alerts-merchandise-api.js';
 import { DonationAlertsUsersApi } from './api/users/donation-alerts-users-api.js';
-
-/**
- * Configuration options for the rate limiter.
- */
-export interface RateLimiterOptions {
-	/**
-	 * Whether to limit the number of requests to 1 per second.
-	 *
-	 * @remarks
-	 * According to the official documentation, the Donation Alerts API allows up to 60 requests per minute per
-	 * application, which translates to 1 request per second.
-	 *
-	 * By default, the library enforces this rate limit, ensuring that requests are executed sequentially at 1 request
-	 * per second. For example, if you initiate 60 simultaneous requests, they will be queued and executed one by one.
-	 *
-	 * If set to `false`, you can exceed the limit in a short period (e.g., 10 seconds), but subsequent requests
-	 * will fail for the remaining duration of the 60-second window due to the API's rate limit.
-	 *
-	 * Requests exceeding the limit are enqueued and executed later by default. You can customize this behavior
-	 * using the {@link RateLimiterOptions#limitReachedBehavior} property.
-	 *
-	 * @defaultValue `true`
-	 */
-	limitToOneRequestPerSecond?: boolean;
-
-	/**
-	 * Behavior to apply when the rate limit is reached.
-	 *
-	 * @remarks
-	 * Specifies what happens if the number of requests exceeds the rate limit. The available options are:
-	 * - `enqueue` - Adds the request to a queue to be executed when possible.
-	 * - `throw` - Throws a `RateLimitReachedError` when the limit is exceeded.
-	 * - `null` - Returns `null` instead of executing the request.
-	 *
-	 * @defaultValue `enqueue`
-	 */
-	limitReachedBehavior?: QueueEntryLimitReachedBehavior;
-}
-
-/**
- * Configuration options for creating an {@link ApiClient}.
- */
-export interface ApiConfig {
-	/**
-	 * The authentication provider responsible for supplying access tokens to the client.
-	 *
-	 * @remarks
-	 * The client uses this provider to authorize requests to the Donation Alerts API.
-	 * For more details, refer to the {@link AuthProvider} documentation.
-	 */
-	authProvider: AuthProvider;
-
-	/**
-	 * Custom options to pass to the fetch method used for API requests.
-	 */
-	fetchOptions?: DonationAlertsCallFetchOptions;
-
-	/**
-	 * Configuration options for logging within the client.
-	 */
-	logger?: Partial<LoggerOptions>;
-
-	/**
-	 * Settings for the rate limiter that controls the request rate to the API.
-	 */
-	rateLimiterOptions?: RateLimiterOptions;
-}
-
-/** @internal */
-export interface DonationAlertsApiCallOptionsInternal {
-	options: DonationAlertsApiCallOptions;
-	accessToken?: string;
-	fetchOptions?: DonationAlertsCallFetchOptions;
-}
+import { type ApiConfig } from './interfaces/api-config.js';
+import { type DonationAlertsApiCallOptionsInternal } from './interfaces/donation-alerts-api-call-options-internal.js';
 
 /**
  * The client for interacting with the Donation Alerts API.

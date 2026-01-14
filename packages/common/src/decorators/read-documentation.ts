@@ -1,4 +1,4 @@
-import { DataObject } from './data-object.js';
+import { DataObject } from '../utils/data-object.js';
 
 const ANSI_CYAN = '\u001B[36m';
 const ANSI_GRAY = '\u001B[90m';
@@ -13,9 +13,6 @@ const PACKAGE_MAP: Record<DocumentationPackage, string> = {
 	common: 'common',
 	events: 'events',
 };
-
-/** @internal */
-type Inspect = (depth: number | null, options: object, inspect: Function) => string;
 
 /** @internal */
 export type DocumentationPackage = 'api' | 'api-call' | 'auth' | 'common' | 'events';
@@ -47,7 +44,7 @@ export function ReadDocumentation(pkg: DocumentationPackage) {
 						'- see docs to explore all members: ' +
 						`${BASE_URL}/classes/${PACKAGE_MAP[pkg]}.${cls.name}.html`
 					);
-				} satisfies Inspect,
+				},
 				enumerable: false,
 			});
 		});

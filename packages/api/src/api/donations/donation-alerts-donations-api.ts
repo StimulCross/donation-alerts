@@ -1,13 +1,11 @@
 import { type RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
 import { ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { DonationAlertsDonation, type DonationAlertsDonationData } from './donation-alerts-donation.js';
+import { type DonationAlertsApiPagination } from '../../interfaces/donation-alerts-api-pagination.js';
+import { type DonationAlertsPaginatedResult } from '../../interfaces/donation-alerts-paginated-result.js';
+import { type DonationAlertsResponseWithMeta } from '../../interfaces/donation-alerts-response-data.js';
 import { BaseApi } from '../base-api.js';
-import { type DonationAlertsApiPagination } from '../donation-alerts-api-pagination.js';
 import { DonationAlertsApiPaginator } from '../donation-alerts-api-paginator.js';
-import {
-	type DonationAlertsPaginatedResult,
-	type DonationAlertsResponseWithMeta,
-} from '../donation-alerts-response.js';
 
 /**
  * Donation Alerts Donations API.

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getDonationAlertsApiUrl } from '../src/helpers/url.js';
+import { getDonationAlertsApiUrl } from '../src/utils/det-donation-alerts-api-url.js';
 
 describe('getDonationAlertsApiUrl', () => {
 	it('should return API URL for type "api" when path starts with slash', () => {

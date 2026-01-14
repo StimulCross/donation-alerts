@@ -1,10 +1,9 @@
-export { rawDataSymbol, DataObject, getRawData } from './data-object.js';
+export { rawDataSymbol, DataObject, getRawData } from './utils/data-object.js';
 export { CustomError } from './errors/custom-error.js';
-export { locales } from './locales.js';
-export { qsStringify } from './qs-stringify.js';
-export { Memoize } from './memoize.js';
-export { mapNullable } from './map-nullable.js';
-export { mapOptional } from './map-optional.js';
+export { qsStringify } from './utils/qs-stringify.js';
+export { Memoize } from './decorators/memoize.js';
+export { mapNullable } from './utils/map-nullable.js';
+export { mapOptional } from './utils/map-optional.js';
 export {
 	extractUserId,
 	extractUserName,
@@ -12,10 +11,10 @@ export {
 	type UserIdResolvable,
 	type UserNameResolvable,
 	type UserNameResolvableType,
-} from './user-resovlers.js';
-export { type DonationAlertsLocale, type DonationAlertsLocaleCode } from './locales.js';
-export { type DonationAlertsInputCurrency, type DonationAlertsOutputCurrency } from './currencies.js';
-export { type CentrifugoChannel } from './centrifugo-channels.js';
-export { type DonationAlertsApiScope } from './scopes.js';
-export { type DocumentationPackage } from './read-documentation.js';
-export { ReadDocumentation } from './read-documentation.js';
+} from './utils/user-resovlers.js';
+export { type DonationAlertsLocale, type DonationAlertsLocaleCode, locales } from './locales.js';
+export { type DonationAlertsInputCurrency, type DonationAlertsOutputCurrency } from './types/currencies.js';
+export { type CentrifugoChannel } from './types/centrifugo-channels.js';
+export { type DonationAlertsApiScope } from './types/scopes.js';
+export { type DocumentationPackage } from './decorators/read-documentation.js';
+export { ReadDocumentation } from './decorators/read-documentation.js';

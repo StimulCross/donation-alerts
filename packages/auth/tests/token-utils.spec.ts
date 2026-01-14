@@ -1,10 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import {
-	type AccessToken,
-	getExpiryMilliseconds,
-	getTokenExpiryDate,
-	isAccessTokenExpired,
-} from '../src/access-token.js';
+import { type AccessToken, getExpiryMilliseconds, getTokenExpiryDate, isAccessTokenExpired } from '../src/index.js';
 
 describe('getExpiryMilliseconds', () => {
 	it('should return correct expiry timestamp in milliseconds', () => {

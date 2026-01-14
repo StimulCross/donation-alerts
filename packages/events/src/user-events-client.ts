@@ -34,7 +34,7 @@ import {
 	type DonationAlertsPollUpdateEventData,
 } from './events/polls/donation-alerts-poll-update-event.js';
 import { EventsListener } from './events-listener.js';
-import { transformChannel } from './helpers/transform-channel.js';
+import { transformChannel } from './utils/transform-channel.js';
 
 /** @internal */
 interface ConnectContext {

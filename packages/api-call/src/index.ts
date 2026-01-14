@@ -2,7 +2,8 @@ export type {
 	DonationAlertsCallFetchOptions,
 	DonationAlertsCallType,
 	DonationAlertsApiCallOptions,
-} from './donation-alerts-api-call-options.js';
-export { callDonationAlertsApiRaw, callDonationAlertsApi } from './api-call.js';
+} from './interfaces/donation-alerts-api-call-options.js';
+export { callDonationAlertsApiRaw } from './call-donation-alerts-api-raw.js';
+export { callDonationAlertsApi } from './call-donation-alerts-api.js';
 export { HttpError } from './errors/http.error.js';
-export { handleDonationAlertsApiResponseError, transformDonationAlertsResponse } from './helpers/transform.js';
+export { handleDonationAlertsApiResponseError, transformDonationAlertsResponse } from './utils/transform-response.js';
