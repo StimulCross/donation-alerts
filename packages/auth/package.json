@@ -54,7 +54,8 @@
 	"dependencies": {
 		"@d-fischer/typed-event-emitter": "^3.3.3",
 		"@donation-alerts/api-call": "4.0.0",
-		"@donation-alerts/common": "4.0.0"
+		"@donation-alerts/common": "4.0.0",
+		"@stimulcross/ds-deque": "^0.1.0"
 	},
 	"devDependencies": {
 		"@donation-alerts/eslint-configs": "workspace:*",

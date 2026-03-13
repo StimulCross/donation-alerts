@@ -20,10 +20,11 @@ export interface AuthStorage {
 	 *
 	 * @param userId The ID of the user for which to set the token.
 	 * @param token The token data to set.
+	 * @param ttlMs The time-to-live for the token, in milliseconds.
 	 *
 	 * @returns `true` if the operation was successful, `false` otherwise.
 	 */
-	set(userId: number, token: AccessToken): Promise<boolean>;
+	set(userId: number, token: AccessToken, ttlMs?: number): Promise<boolean>;
 
 	/**
 	 * Deletes an access token for the given user ID.
@@ -33,4 +34,27 @@ export interface AuthStorage {
 	 * @returns `true` if the operation was successful, `false` otherwise.
 	 */
 	delete(userId: number): Promise<boolean>;
+
+	/**
+	 * Clears all stored access tokens.
+	 */
+	clear(): Promise<void>;
+
+	/**
+	 * Destroys the storage.
+	 *
+	 * @remarks
+	 * This method cleans resources for graceful shutdown. It should not be used for any other purpose.
+	 */
+	destroy?(): Promise<void>;
+
+	/**
+	 * Acquires a lock to prevent concurrent access to the storage.
+	 */
+	acquireLock?(userId: number): Promise<void>;
+
+	/**
+	 * Releases the lock acquired by {@link acquireLock}.
+	 */
+	releaseLock?(userId: number): Promise<void>;
 }

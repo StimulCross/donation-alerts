@@ -232,14 +232,12 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 
 	public async getAccessTokenForUser(user: UserIdResolvable, scopes?: string[]): Promise<AccessTokenWithUserId> {
 		const userId = extractUserId(user);
-
 		const currentToken = await this._storage.get(userId);
 
 		if (!currentToken) {
 			throw new UnregisteredUserError(
 				userId,
-				`User "${userId}" could not be located in the authentication provider registry. Please add the user first by using one of the following methods: addUser, addUserForToken, or addUserForCode.
-`,
+				`User "${userId}" was not found in the authentication provider. Please add the user first by using one of the following methods: "addUser", "addUserForToken", or "addUserForCode".`,
 			);
 		}
 
@@ -251,14 +249,7 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 			return { ...currentToken, userId };
 		}
 
-		const newToken = await this.refreshAccessTokenForUser(userId);
-		newToken.scopes = currentToken.scopes;
-
-		if (newToken.scopes) {
-			compareScopes(newToken.scopes, scopes, userId);
-		}
-
-		return { ...newToken, userId };
+		return await this._refreshWithLock(userId, scopes);
 	}
 
 	/**
@@ -271,33 +262,68 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	 */
 	public async refreshAccessTokenForUser(user: UserIdResolvable): Promise<AccessTokenWithUserId> {
 		const userId = extractUserId(user);
+		return await this._refreshWithLock(userId, undefined, true);
+	}
 
-		const currentToken = await this._storage.get(userId);
-
-		if (!currentToken) {
-			throw new UnregisteredUserError(
-				userId,
-				`User "${userId}" could not be located in the authentication provider registry. Please add the user first by using one of the following methods: addUser, addUserForToken, or addUserForCode.`,
-			);
+	private async _refreshWithLock(
+		userId: number,
+		scopes?: string[],
+		forceRefresh = false,
+	): Promise<AccessTokenWithUserId> {
+		if (this._storage.acquireLock) {
+			await this._storage.acquireLock(userId);
 		}
 
-		if (!currentToken.refreshToken) {
-			throw new InvalidTokenError(
-				userId,
-				`Unable to refresh access token for user "${userId}". Refresh token is not specified.`,
+		try {
+			const token = await this._storage.get(userId);
+
+			if (!token) {
+				throw new UnregisteredUserError(
+					userId,
+					`User "${userId}" was not found in the authentication provider. Please add the user first by using one of the following methods: "addUser", "addUserForToken", or "addUserForCode".`,
+				);
+			}
+
+			if (!forceRefresh && token.accessToken && !isAccessTokenExpired(token)) {
+				if (token.scopes) {
+					compareScopes(token.scopes, scopes, userId);
+				}
+
+				return { ...token, userId };
+			}
+
+			if (!token.refreshToken) {
+				throw new InvalidTokenError(
+					userId,
+					`Unable to refresh access token for user "${userId}". Refresh token is not specified.`,
+				);
+			}
+
+			const newToken = await refreshAccessToken(
+				this._config.clientId,
+				this._config.clientSecret,
+				token.refreshToken,
 			);
+
+			const tokenToStore: AccessToken = {
+				...newToken,
+				scopes: token.scopes,
+			};
+
+			await this._storage.set(userId, tokenToStore);
+			this.emit(this.onRefresh, userId, tokenToStore);
+
+			if (tokenToStore.scopes) {
+				compareScopes(tokenToStore.scopes, scopes, userId);
+			}
+
+			return { ...tokenToStore, userId };
+		} finally {
+			// Гарантированное снятие блокировки при любом исходе
+			if (this._storage.releaseLock) {
+				await this._storage.releaseLock(userId);
+			}
 		}
-
-		const newToken = await refreshAccessToken(
-			this._config.clientId,
-			this._config.clientSecret,
-			currentToken.refreshToken,
-		);
-
-		await this._storage.set(userId, newToken);
-		this.emit(this.onRefresh, userId, newToken);
-
-		return { ...newToken, userId };
 	}
 
 	private _validateToken(token: AccessToken, userId?: number): void {
