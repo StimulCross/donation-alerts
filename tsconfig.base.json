@@ -4,7 +4,7 @@
 		"module": "node16",
 		"moduleResolution": "nodenext",
 		"target": "ES2023",
-		"lib": ["ES2023", "DOM", "ESNext.Decorators"],
+		"lib": ["ES2023", "DOM", "ESNext.Decorators", "ES2024.Promise"],
 		"declaration": true,
 		"declarationMap": true,
 		"sourceMap": true,

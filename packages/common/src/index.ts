@@ -4,6 +4,7 @@ export { qsStringify } from './utils/qs-stringify.js';
 export { Memoize } from './decorators/memoize.js';
 export { mapNullable } from './utils/map-nullable.js';
 export { mapOptional } from './utils/map-optional.js';
+export { promiseWithResolvers, type PromiseWithResolvers } from './utils/promise-with-resolvers.js';
 export {
 	extractUserId,
 	extractUserName,
