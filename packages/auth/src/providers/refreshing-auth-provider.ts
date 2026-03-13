@@ -91,7 +91,7 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	}
 
 	public get clientSecret(): string {
-		return this._config.clientId;
+		return this._config.clientSecret;
 	}
 
 	/**
