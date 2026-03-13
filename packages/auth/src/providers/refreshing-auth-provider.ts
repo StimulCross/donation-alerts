@@ -259,6 +259,7 @@ export class RefreshingAuthProvider extends EventEmitter implements AuthProvider
 	 *
 	 * @throws {@link UnregisteredUserError} if the user is not registered in this provider.
 	 * @throws {@link InvalidTokenError} if the refresh token is missing or invalid.
+	 * @throws {@link MissingScopeError} if the token does not match the required scopes.
 	 */
 	public async refreshAccessTokenForUser(user: UserIdResolvable): Promise<AccessTokenWithUserId> {
 		const userId = extractUserId(user);

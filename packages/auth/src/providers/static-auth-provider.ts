@@ -19,7 +19,7 @@ export class StaticAuthProvider implements AuthProvider {
 	 * Creates a new instance of StaticAuthProvider.
 	 *
 	 * @param clientId The client ID associated with your application.
-	 * @param scopes An optional list of required scopes to validate against.
+	 * @param scopes An optional list of required scopes to validate the token against.
 	 */
 	constructor(clientId: string, scopes?: string[]) {
 		this._clientId = clientId;
@@ -94,7 +94,7 @@ export class StaticAuthProvider implements AuthProvider {
 		if (!this._registry.has(userId)) {
 			throw new UnregisteredUserError(
 				userId,
-				`User "${userId}" could not be located in the authentication provider registry. Please add the user first by using addUser method.`,
+				`User "${userId}" was not found in the authentication provider. Please add the user first by using the "addUser" method.`,
 			);
 		}
 
@@ -107,7 +107,7 @@ export class StaticAuthProvider implements AuthProvider {
 		if (!this._registry.has(userId)) {
 			throw new UnregisteredUserError(
 				userId,
-				`User "${userId}" could not be located in the authentication provider registry. Please add the user first by using addUser method.`,
+				`User "${userId}" could was not found in the authentication provider. Please add the user first by using the "addUser" method.`,
 			);
 		}
 
