@@ -105,7 +105,7 @@ export class EventsClient extends EventEmitter {
 		const userEventsClient = new UserEventsClient({
 			user: userId,
 			apiClient: this._apiClient,
-			logger: this._config.logger,
+			loggerOptions: this._config.logger,
 		});
 
 		userEventsClient.onConnect(() => this.emit(this.onConnect, userId));

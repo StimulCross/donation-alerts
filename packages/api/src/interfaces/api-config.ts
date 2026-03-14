@@ -24,7 +24,7 @@ export interface ApiConfig {
 	/**
 	 * Configuration options for logging within the client.
 	 */
-	logger?: Partial<LoggerOptions>;
+	loggerOptions?: Partial<LoggerOptions>;
 
 	/**
 	 * Settings for the rate limiter that controls the request rate to the API.

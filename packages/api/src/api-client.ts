@@ -70,7 +70,7 @@ export class ApiClient {
 						logger: { minLevel: 'ERROR' },
 					});
 
-		this._logger = createLogger({ context: 'da:api', ...config.logger });
+		this._logger = createLogger({ context: 'da:api', ...config.loggerOptions });
 	}
 
 	/**

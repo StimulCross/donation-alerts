@@ -59,7 +59,7 @@ interface DisconnectContext {
 export interface UserEventsClientConfig {
 	user: UserIdResolvable;
 	apiClient: ApiClient;
-	logger?: Partial<LoggerOptions>;
+	loggerOptions?: Partial<LoggerOptions>;
 }
 
 /**
@@ -126,7 +126,7 @@ export class UserEventsClient extends EventEmitter {
 	constructor(config: UserEventsClientConfig) {
 		super();
 
-		this._logger = createLogger({ context: 'da:events', minLevel: LogLevel.SUCCESS, ...config.logger });
+		this._logger = createLogger({ context: 'da:events', minLevel: LogLevel.SUCCESS, ...config.loggerOptions });
 		this._userId = extractUserId(config.user);
 		this._apiClient = config.apiClient;
 
