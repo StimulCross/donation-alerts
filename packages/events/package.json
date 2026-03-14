@@ -55,16 +55,16 @@
 	"dependencies": {
 		"@d-fischer/isomorphic-ws": "^7.0.2",
 		"@d-fischer/typed-event-emitter": "^3.3.3",
-		"@donation-alerts/common": "4.0.0",
-		"@stimulcross/logger": "^7.0.0",
+		"@donation-alerts/common": "workspace:*",
+		"@stimulcross/logger": "^8.0.0",
 		"centrifuge": "2.8.5",
-		"ws": "^8.18.1"
+		"ws": "^8.19.0"
 	},
 	"peerDependencies": {
-		"@donation-alerts/api": "4.0.0"
+		"@donation-alerts/api": "workspace:*"
 	},
 	"devDependencies": {
-		"@donation-alerts/api": "4.0.0",
+		"@donation-alerts/api": "workspace:*",
 		"@donation-alerts/eslint-configs": "workspace:*",
 		"@donation-alerts/typescript-config": "workspace:*",
 		"@types/ws": "^8.5.14"

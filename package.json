@@ -39,26 +39,26 @@
 		"events": "pnpm --filter=@donation-alerts/events"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^19.7.1",
+		"@commitlint/cli": "^20.4.4",
 		"@stimulcross/commitlint-config": "^2.0.0",
 		"@stimulcross/eslint-config-base": "^2.0.0",
 		"@stimulcross/eslint-config-node": "^2.0.0",
 		"@stimulcross/eslint-config-typescript": "^2.0.0",
 		"@stimulcross/prettier-config": "^2.0.0",
-		"@types/node": "^25.0.3",
-		"@vitest/coverage-v8": "^4.0.16",
+		"@types/node": "^25.5.0",
+		"@vitest/coverage-v8": "^4.1.0",
 		"del-cli": "^7.0.0",
-		"eslint": "^9.39.2",
-		"globals": "^17.0.0",
+		"eslint": "^9.39.4",
+		"globals": "^17.4.0",
 		"husky": "^9.1.7",
-		"lerna": "^8.2.0",
-		"lint-staged": "^15.4.3",
-		"node-html-parser": "^7.0.1",
-		"prettier": "^3.5.2",
+		"lerna": "^9.0.7",
+		"lint-staged": "^16.4.0",
+		"node-html-parser": "^7.1.0",
+		"prettier": "^3.8.1",
 		"tsx": "^4.21.0",
-		"turbo": "^2.4.4",
-		"typedoc": "~0.27.9",
+		"turbo": "^2.8.17",
+		"typedoc": "~0.28.17",
 		"typescript": "^5.9.3",
-		"vitest": "^4.0.16"
+		"vitest": "^4.1.0"
 	}
 }

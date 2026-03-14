@@ -52,7 +52,7 @@
 		"!lib/**/*.js.map"
 	],
 	"dependencies": {
-		"@donation-alerts/common": "4.0.0"
+		"@donation-alerts/common": "workspace:*"
 	},
 	"devDependencies": {
 		"@donation-alerts/eslint-configs": "workspace:*",
