@@ -39,7 +39,7 @@
 		"events": "pnpm --filter=@donation-alerts/events"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^20.4.4",
+		"@commitlint/cli": "^20.5.0",
 		"@stimulcross/commitlint-config": "^2.0.0",
 		"@stimulcross/eslint-config-base": "^2.0.0",
 		"@stimulcross/eslint-config-node": "^2.0.0",

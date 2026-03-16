@@ -20,10 +20,10 @@
 		"format:fix": "prettier --write \"**/*.{ts,tsx,md,js,mjs,cjs}\""
 	},
 	"devDependencies": {
-		"@leancodepl/resolve-eslint-flat-config": "^9.7.0",
+		"@leancodepl/resolve-eslint-flat-config": "^9.7.4",
 		"@stimulcross/eslint-config-node": "^2.0.0",
 		"@stimulcross/eslint-config-typescript": "^2.0.0",
-		"eslint": "^9.39.2",
-		"globals": "^17.0.0"
+		"eslint": "^9.39.4",
+		"globals": "^17.4.0"
 	}
 }

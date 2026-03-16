@@ -53,10 +53,10 @@
 	],
 	"dependencies": {
 		"klona": "^2.0.6",
-		"qs": "^6.14.1"
+		"qs": "^6.15.0"
 	},
 	"devDependencies": {
 		"@donation-alerts/eslint-configs": "workspace:*",
-		"@types/qs": "^6.14.0"
+		"@types/qs": "^6.15.0"
 	}
 }
