@@ -1,5 +1,6 @@
 {
 	"extends": ["../../typedoc.base.json"],
 	"entryPoints": ["src"],
-	"name": "api-call"
+	"name": "api-call",
+	"externalSymbolLinkMappings": { "typescript": { "Response": "#" } }
 }

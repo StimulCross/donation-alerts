@@ -24,7 +24,7 @@
 		"preversion": "pnpm run rebuild && pnpm run format:check && pnpm run lint && pnpm run test",
 		"postversion": "pnpm i",
 		"prepublishOnly": "pnpm run rebuild && pnpm run format:check && pnpm run lint && pnpm run test",
-		"docs": "typedoc && node fix-docs.mjs",
+		"docs": "del-cli docs && typedoc && node fix-docs.mjs",
 		"clean:docs": "rimraf ./docs",
 		"test": "vitest run",
 		"test:verbose": "vitest --reporter verbose --logHeapUsage",
