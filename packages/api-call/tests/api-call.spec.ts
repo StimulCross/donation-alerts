@@ -89,7 +89,7 @@ describe('callDonationAlertsApiRaw', () => {
 
 		const [, requestOptions] = fetchCalls[0];
 
-		expect(requestOptions?.body).toBeNull();
+		expect(requestOptions?.body).toBeUndefined();
 	});
 });
 

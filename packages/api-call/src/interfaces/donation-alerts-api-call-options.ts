@@ -112,4 +112,4 @@ export interface DonationAlertsApiCallOptions {
  * These options extend the native `RequestInit` type, excluding `headers`, `method`, and `body` as
  * those are managed separately by `DonationAlertsApiCallOptions`.
  */
-export type DonationAlertsCallFetchOptions = Omit<RequestInit, 'headers' | 'method' | 'body'>;
+export type DonationAlertsCallFetchOptions = Omit<RequestInit, 'headers' | 'method' | 'body' | 'window'>;

@@ -61,7 +61,7 @@ export async function callDonationAlertsApiRaw(
 		...fetchOptions,
 		method: options.method ?? 'GET',
 		headers,
-		body: body ?? null,
+		body,
 	};
 
 	return await fetch(`${url}${params}`, requestOptions);
