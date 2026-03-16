@@ -10,6 +10,7 @@ import {
 import {
 	DonationAlertsMerchandiseMerchant,
 	type DonationAlertsMerchandiseMerchantData,
+	type DonationAlertsMerchandiseMerchantJson,
 } from './donation-alerts-merchandise-merchant.js';
 
 /**
@@ -40,7 +41,7 @@ export interface DonationAlertsMerchandiseData {
  */
 export interface DonationAlertsMerchandiseJson {
 	id: number;
-	merchant: DonationAlertsMerchandiseMerchantData;
+	merchant: DonationAlertsMerchandiseMerchantJson;
 	identifier: string;
 	title: DonationAlertsMerchandiseTitleData;
 	isActive: boolean;
