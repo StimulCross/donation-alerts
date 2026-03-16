@@ -35,7 +35,8 @@ describe('handleDonationAlertsApiResponseError', () => {
 			method: 'GET',
 		} as any;
 
-		await expect(handleDonationAlertsApiResponseError(response as any, options)).rejects.toBeInstanceOf(HttpError);
+		// @ts-expect-error mock response
+		await expect(handleDonationAlertsApiResponseError(response, options)).rejects.toBeInstanceOf(HttpError);
 	});
 
 	it('should throw HttpError with text body when content-type is not application/json', async () => {
@@ -55,7 +56,8 @@ describe('handleDonationAlertsApiResponseError', () => {
 			method: 'POST',
 		} as any;
 
-		await expect(handleDonationAlertsApiResponseError(response as any, options)).rejects.toMatchObject({
+		// @ts-expect-error mock response
+		await expect(handleDonationAlertsApiResponseError(response, options)).rejects.toMatchObject({
 			status: 500,
 			statusText: 'Internal Server Error',
 			method: 'POST',
@@ -67,26 +69,25 @@ describe('handleDonationAlertsApiResponseError', () => {
 describe('transformDonationAlertsResponse', () => {
 	it('should return undefined for response with status 204', async () => {
 		const response = new MockResponse('', 204, 'No Content', {}, true);
-
-		const result = await transformDonationAlertsResponse(response as any);
+		// @ts-expect-error mock response
+		const result = await transformDonationAlertsResponse(response);
 
 		expect(result).toBeUndefined();
 	});
 
 	it('should return undefined when response text is empty', async () => {
 		const response = new MockResponse('', 200, 'OK', {}, true);
-
-		const result = await transformDonationAlertsResponse(response as any);
+		// @ts-expect-error mock response
+		const result = await transformDonationAlertsResponse(response);
 
 		expect(result).toBeUndefined();
 	});
 
 	it('should parse and return JSON when response has valid text', async () => {
 		const data = { success: true };
-
 		const response = new MockResponse(JSON.stringify(data), 200, 'OK', {}, true);
-
-		const result = await transformDonationAlertsResponse(response as any);
+		// @ts-expect-error mock response
+		const result = await transformDonationAlertsResponse(response);
 
 		expect(result).toEqual(data);
 	});

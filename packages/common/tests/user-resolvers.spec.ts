@@ -36,13 +36,13 @@ describe('extractUserId', () => {
 	});
 
 	it('should throw when a non-numeric string is provided', () => {
-		expect(() => extractUserId('abc')).toThrowError(new TypeError('User ID must be integer or numeric string'));
+		expect(() => extractUserId('abc')).toThrow(new TypeError('User ID must be integer or numeric string'));
 	});
 
 	it('should throw when an object contains a non-numeric id', () => {
 		const user: UserIdResolvableType = { id: 'abc' };
 
-		expect(() => extractUserId(user)).toThrowError(new TypeError('User ID must be integer or numeric string'));
+		expect(() => extractUserId(user)).toThrow(new TypeError('User ID must be integer or numeric string'));
 	});
 });
 

@@ -71,7 +71,7 @@ describe('RefreshingAuthProvider', () => {
 			await expect(provider.getAccessTokenForUser(123)).rejects.toThrow(UnregisteredUserError);
 		});
 
-		it('should return cached token if it is not expired (Fast Path)', async () => {
+		it('should return cached token if it is not expired', async () => {
 			const token = createToken();
 			await provider.addUser(USER_ID, token);
 
@@ -82,7 +82,7 @@ describe('RefreshingAuthProvider', () => {
 			expect(refreshSpy).not.toHaveBeenCalled();
 		});
 
-		it('should trigger refresh if token is expired (Slow Path)', async () => {
+		it('should trigger refresh if token is expired', async () => {
 			const expiredToken = createToken({ obtainmentTimestamp: Date.now() - 10_000, expiresIn: 5 });
 			await provider.addUser(USER_ID, expiredToken);
 
@@ -92,7 +92,7 @@ describe('RefreshingAuthProvider', () => {
 			const result = await provider.getAccessTokenForUser(USER_ID);
 
 			expect(refreshSpy).toHaveBeenCalledTimes(1);
-			expect(result.accessToken).toBe('NEW_ACCESS');
+			expect(result).toEqual({ ...refreshedToken, userId: USER_ID });
 		});
 	});
 

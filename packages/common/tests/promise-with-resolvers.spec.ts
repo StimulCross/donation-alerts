@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { promiseWithResolvers } from '../src/utils/promise-with-resolvers.js';
+import { promiseWithResolvers } from '../src/index.js';
 
 describe('promiseWithResolvers', () => {
 	it('should return an object with promise, resolve and reject', () => {

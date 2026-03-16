@@ -9,14 +9,16 @@ describe('Memoize', () => {
 			@Memoize()
 			public get value(): number {
 				calls++;
-				return 42;
+				return Math.random();
 			}
 		}
 
 		const instance = new TestClass();
 
-		expect(instance.value).toBe(42);
-		expect(instance.value).toBe(42);
+		const result = instance.value;
+		const result2 = instance.value;
+
+		expect(result).toBe(result2);
 		expect(calls).toBe(1);
 	});
 
@@ -87,7 +89,7 @@ describe('Memoize', () => {
 	it('should throw TypeError when applied to non-getter', () => {
 		expect(() => {
 			class TestClass {
-				// @ts-expect-error should throw error because the method is not a getter
+				// @ts-expect-error should throw error because it is not a getter
 				@Memoize()
 				public method(): number {
 					return 1;

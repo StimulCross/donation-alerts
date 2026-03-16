@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { callDonationAlertsApi, callDonationAlertsApiRaw, type DonationAlertsApiCallOptions } from '../src/index.js';
 
 describe('callDonationAlertsApiRaw', () => {
@@ -94,23 +94,18 @@ describe('callDonationAlertsApiRaw', () => {
 });
 
 describe('callDonationAlertsApi', () => {
-	let fetchCalls: Array<[RequestInfo, RequestInit | undefined]>;
-
 	beforeEach(() => {
-		fetchCalls = [];
-
 		vi.stubGlobal(
 			'fetch',
-			vi.fn(async (input: RequestInfo, init?: RequestInit): Promise<Response> => {
-				fetchCalls.push([input, init]);
-
-				return {
-					ok: true,
-					status: 200,
-					text: async () => '{"result":"1"}',
-					headers: new Headers({ 'Content-Type': 'application/json' }),
-				} as Response;
-			}),
+			vi.fn(
+				async (): Promise<Response> =>
+					({
+						ok: true,
+						status: 200,
+						text: async () => '{"result":"1"}',
+						headers: new Headers({ 'Content-Type': 'application/json' }),
+					}) as Response,
+			),
 		);
 	});
 

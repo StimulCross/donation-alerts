@@ -79,12 +79,15 @@ describe('compareScopes', () => {
 
 		try {
 			compareScopes(tokenScopes, requestedScopes, userId);
-			throw new Error('Expected error');
 		} catch (e) {
 			expect(e).toBeInstanceOf(MissingScopeError);
 			expect((e as MissingScopeError).userId).toBe(userId);
 			expect((e as MissingScopeError).scopes).toEqual(['scope3']);
+
+			return;
 		}
+
+		throw new Error('Error should have been thrown');
 	});
 
 	it('should throw MissingScopeError with null userId when userId is not provided', () => {
@@ -93,12 +96,15 @@ describe('compareScopes', () => {
 
 		try {
 			compareScopes(tokenScopes, requestedScopes);
-			throw new Error('Expected error');
 		} catch (e) {
 			expect(e).toBeInstanceOf(MissingScopeError);
 			expect((e as MissingScopeError).userId).toBe(null);
 			expect((e as MissingScopeError).scopes).toEqual(['scope3']);
+
+			return;
 		}
+
+		throw new Error('Error should have been thrown');
 	});
 
 	it('should not throw when requestedScopes is undefined', () => {
