@@ -1,7 +1,7 @@
-import { type RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
 import { ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { DonationAlertsDonation, type DonationAlertsDonationData } from './donation-alerts-donation.js';
 import { type DonationAlertsApiPagination } from '../../interfaces/donation-alerts-api-pagination.js';
+import { type DonationAlertsApiRequestOptions } from '../../interfaces/donation-alerts-api-request-options.js';
 import { type DonationAlertsPaginatedResult } from '../../interfaces/donation-alerts-paginated-result.js';
 import { type DonationAlertsResponseWithMeta } from '../../interfaces/donation-alerts-response-data.js';
 import { BaseApi } from '../base-api.js';
@@ -29,13 +29,15 @@ export class DonationAlertsDonationsApi extends BaseApi {
 	 *
 	 * @param user The ID of the user to fetch donations for.
 	 * @param pagination Pagination options (e.g., page number to retrieve).
-	 * @param rateLimiterOptions Optional Rate Limiter configuration.
+	 * @param requestOptions Additional request options, such as fetch options and rate limiting,
+	 * that can be used to control the request rate.
 	 *
 	 * @returns A promise that resolves to an array of {@link DonationAlertsDonation} objects.
 	 *
 	 * @throws {@link HttpError} if the HTTP status code is outside the range of 200–299.
 	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
 	 * @throws {@link MissingScopeError} if the access token lacks the `oauth-donation-index` scope.
+	 * @throws {@link RateLimitError} If the Donation Alerts API rate limit is exceeded.
 	 *
 	 * @example
 	 * ```typescript
@@ -46,7 +48,7 @@ export class DonationAlertsDonationsApi extends BaseApi {
 	public async getDonations(
 		user: UserIdResolvable,
 		pagination: DonationAlertsApiPagination = {},
-		rateLimiterOptions?: RateLimiterRequestOptions,
+		requestOptions?: DonationAlertsApiRequestOptions,
 	): Promise<DonationAlertsPaginatedResult<DonationAlertsDonation>> {
 		const page = typeof pagination.page === 'number' && pagination.page !== 0 ? pagination.page : 1;
 
@@ -60,7 +62,7 @@ export class DonationAlertsDonationsApi extends BaseApi {
 				query: { page },
 				auth: true,
 			},
-			rateLimiterOptions,
+			requestOptions,
 		);
 
 		return {
@@ -98,13 +100,15 @@ export class DonationAlertsDonationsApi extends BaseApi {
 	 * using the {@link DonationAlertsDonationsApi#createDonationsPaginator} method to fetch data in chunks.
 	 *
 	 * @param user The ID of the user to fetch all donations for.
-	 * @param rateLimiterOptions Optional Rate Limiter configuration.
+	 * @param requestOptions Additional request options, such as fetch options and rate limiting,
+	 * that can be used to control the request rate.
 	 *
 	 * @returns A promise that resolves to an array of {@link DonationAlertsDonation} objects.
 	 *
 	 * @throws {@link HttpError} if the API response returns a non-200 status code.
 	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
 	 * @throws {@link MissingScopeError} if the access token lacks the `oauth-donation-index` scope.
+	 * @throws {@link RateLimitError} If the Donation Alerts API rate limit is exceeded.
 	 *
 	 * @example
 	 * ```ts
@@ -114,9 +118,9 @@ export class DonationAlertsDonationsApi extends BaseApi {
 	 */
 	public async getAllDonations(
 		user: UserIdResolvable,
-		rateLimiterOptions?: RateLimiterRequestOptions,
+		requestOptions?: DonationAlertsApiRequestOptions,
 	): Promise<DonationAlertsDonation[]> {
-		return await this.createDonationsPaginator(user, rateLimiterOptions).getAll();
+		return await this.createDonationsPaginator(user, requestOptions).getAll();
 	}
 
 	/**
@@ -129,9 +133,15 @@ export class DonationAlertsDonationsApi extends BaseApi {
 	 * Requires the `oauth-donation-index` scope.
 	 *
 	 * @param user The ID of the user to fetch donations for.
-	 * @param rateLimiterOptions Optional Rate Limiter configuration.
+	 * @param requestOptions Additional request options, such as fetch options and rate limiting,
+	 * that can be used to control the request rate.
 	 *
 	 * @returns A {@link DonationAlertsApiPaginator} instance for donations.
+	 *
+	 * @throws {@link HttpError} if the API response returns a non-200 status code.
+	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
+	 * @throws {@link MissingScopeError} if the access token lacks the `oauth-donation-index` scope.
+	 * @throws {@link RateLimitError} If the Donation Alerts API rate limit is exceeded.
 	 *
 	 * @example
 	 * Fetch the next page
@@ -155,7 +165,7 @@ export class DonationAlertsDonationsApi extends BaseApi {
 	 */
 	public createDonationsPaginator(
 		user: UserIdResolvable,
-		rateLimiterOptions?: RateLimiterRequestOptions,
+		requestOptions?: DonationAlertsApiRequestOptions,
 	): DonationAlertsApiPaginator<DonationAlertsDonationData, DonationAlertsDonation> {
 		return new DonationAlertsApiPaginator<DonationAlertsDonationData, DonationAlertsDonation>(
 			this._apiClient,
@@ -168,7 +178,7 @@ export class DonationAlertsDonationsApi extends BaseApi {
 				auth: true,
 			},
 			donation => new DonationAlertsDonation(donation),
-			rateLimiterOptions,
+			requestOptions,
 		);
 	}
 }

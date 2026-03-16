@@ -366,37 +366,172 @@ For a complete list of available alert data fields, refer to the [DonationAlerts
 
 ### Rate Limits
 
-According to the [official documentation](https://www.donationalerts.com/apidoc#introduction__http_api_requests__limitations), the Donation Alerts API restricts each application to 60 requests per minute — essentially, 1 request per second.
+According to the [official documentation](https://www.donationalerts.com/apidoc#introduction__http_api_requests__limitations), Donation Alerts API allows up to 60 requests per minute per application, which translates to 1 request
+per second.
 
-By default, the library enforces this limit, so even if you initiate 60 concurrent requests, they will be executed one by one at a rate of 1 per second.
+By default, the library enforces this limit, so even if you initiate 60 concurrent requests, they will be scheduled to execute one by one at a rate of 1 per second.
 
-You can adjust rate the limiter behavior by providing [rateLimiterOptions](https://stimulcross.github.io/donation-alerts/interfaces/api.ApiConfig.html#rateLimiterOptions) to the `ApiClient` constructor:
+The library uses a token bucket rate limiter implementation from the [`@stimulcross/rate-limiter`](https://github.com/StimulCross/rate-limiter) package with the following default settings:
 
 ```ts
-import { ApiClient } from '@donation-alerts/api';
-
-const apiClient = new ApiClient({
-	authProvider: authProvider,
-	rateLimiterOptions: {
-		limitToOneRequestPerSecond: true,
-		limitReachedBehavior: 'enqueue',
+new TokenBucketLimiter({
+	capacity: 1,
+	refillRate: 0.95,
+	limitBehavior: 'enqueue',
+	loggerOptions: { ...config.loggerOptions, context: 'da:api:limiter' },
+	queue: {
+		capacity: 10,
+		maxWaitMs: 10_000,
 	},
 });
 ```
 
-Setting [limitToOneRequestPerSecond](https://stimulcross.github.io/donation-alerts/interfaces/api.RateLimiterOptions.html#limitToOneRequestPerSecond) to `false` means that you might reach the rate limit sooner (for example, 60 requests in 10 seconds), after which the library will be idle until the next 60-second window. By default, this option is enabled.
+- All requests are enqueued and executed one by one at a rate of 1 per second
+- A maximum of 10 requests can be enqueued at a time. If more requests are submitted, a [RateLimitError](https://stimulcross.github.io/donation-alerts/classes/api.RateLimitError.html) with [QUEUE_OVERFLOW](https://stimulcross.github.io/donation-alerts/enums/api.RateLimitErrorCode.html#queueoverflow) code will be thrown
+- Each request expires after 10 seconds of waiting in the queue. When a request expires, a a [RateLimitError](https://stimulcross.github.io/donation-alerts/classes/api.RateLimitError.html) with [EXPIRED](https://stimulcross.github.io/donation-alerts/enums/api.RateLimitErrorCode.html#expired) code is thrown
 
-Furthermore, you can specify the behavior when the rate limit is reached using [limitReachedBehavior](https://stimulcross.github.io/donation-alerts/interfaces/api.RateLimiterOptions.html#limitReachedBehavior). The default is `enqueue`, which queues requests that exceed the rate limit until they can be sent. Other options include `throw` and `null`. For more details, refer to the [documentation](https://stimulcross.github.io/donation-alerts/interfaces/api.RateLimiterOptions.html).
-
-These settings define the default behavior at the API client level; however, you can override them on a per-request basis. For instance:
+If you have different requirements (for example, you have greater limits, or you need a distributed limiter across multiple processes), you can provide a custom rate limiter to the library via the [rateLimiter](https://stimulcross.github.io/donation-alerts/interfaces/api.ApiConfig.html#rateLimiter) option. The rate limiter **must** implement the [RateLimiter](https://stimulcross.github.io/donation-alerts/interfaces/api.RateLimiter.html) interface.
 
 ```ts
-const user = await apiClient.users.getUser(123456789, {
-	limitReachedBehavior: 'throw',
-});
+// All optional
+export interface RateLimiterRunOptions {
+	limitBehavior?: LimitBehavior;
+	priority?: Priority;
+	signal?: AbortSignal;
+	maxWaitMs?: number;
+}
+
+export interface RateLimiter<TStatus extends object = object> {
+	run<T>(task: () => T | Promise<T>, options?: RateLimiterRunOptions): Promise<T>;
+	clear(key?: string): Promise<void>;
+	getStatus?(key?: string): Promise<TStatus>;
+	destroy?(): Promise<void>;
+}
 ```
 
-In this scenario, the method will throw a `RateLimitReachedError` if the rate limit is exceeded.
+Alternatively, you can use any suitable limiter from the [`@stimulcross/rate-limiter`](https://github.com/StimulCross/rate-limiter) package. All of them are already implementing the [RateLimiter](https://stimulcross.github.io/donation-alerts/interfaces/api.RateLimiter.html) interface.
+
+### Request Options
+
+Each API method accepts additional options as the last argument.
+
+##### Fetch options
+
+You can pass additional options to the underlying [fetch](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch) call via the `fetchOptions` property. For example, you can set an abort signal to cancel the request:
+
+```ts
+const abortController = new AbortController();
+const userId = 123456789;
+
+try {
+	const result = await apiClient.donationAlerts.getDonationAlerts(userId, {
+		fetchOptions: {
+			signal: abortController.signal,
+		},
+	});
+} catch (e) {
+	if (e instanceof DOMException && e.name === 'AbortError') {
+		// handle abort error
+	}
+}
+
+// somewhere else
+abortController.abort();
+```
+
+Another trick is to set timeout and combine it with abort controller signal:
+
+```ts
+const abortController = new AbortController();
+const userId = 123456789;
+const timeoutMs = 10_000;
+
+try {
+	const result = await apiClient.donationAlerts.getDonationAlerts(userId, {
+		fetchOptions: {
+			// apply both timeout signal and abort controller signal for manual cancellation
+			signal: AbortSignal.any([AbortSignal.timeout(timeoutMs), abortController.signal]),
+		},
+	});
+} catch (e) {
+	if (e instanceof DOMException) {
+		switch (e.name) {
+			case 'AbortError':
+				// handle abort error
+				break;
+
+			case 'TimeoutError':
+				// handle timeout error
+				break;
+
+			default:
+				// handle other errors
+				break;
+		}
+	}
+
+	throw e;
+}
+
+// somewhere else
+abortController.abort();
+```
+
+#### Rate limiter options
+
+The default rate limiter implementation supports the following options for all API methods:
+
+- `limitBehavior` - overrides the default limit behavior. Can be set to `enqueue` (default) or `reject`. If set to `reject`, the rate limiter will throw a [RateLimitError](https://stimulcross.github.io/donation-alerts/classes/api.RateLimitError.html) with [LIMIT_EXCEEDED](https://stimulcross.github.io/donation-alerts/enums/api.RateLimitErrorCode.html#queueoverflow) code when the limit is reached.
+- `priority` - sets the priority of the request. Can be set to:
+    - `Priority.Highest` or `5`
+    - `Priority.High` or `4`
+    - `Priority.Normal` or `3` (default)
+    - `Priority.Low` or `2`
+    - `Priority.Lowest` or `1`
+- `signal` - an optional [AbortSignal](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal) to cancel the request. Throws a [RateLimitError](https://stimulcross.github.io/donation-alerts/classes/api.RateLimitError.html) with [CANCELLED](https://stimulcross.github.io/donation-alerts/enums/api.RateLimitErrorCode.html#cancelled) code when the request is cancelled. **Note:** this applies only to the time spent waiting in the queue and does not affect execution time. Pass the signal to the [Fetch options](#fetch-options) if you want to cancel the request itself.
+- `maxWaitMs` - an optional maximum time to wait for the request to be processed. This does not affect execution time, but only the time spent waiting in the queue. Throws a [RateLimitError](https://stimulcross.github.io/donation-alerts/classes/api.RateLimitError.html) with [EXPIRED](https://stimulcross.github.io/donation-alerts/enums/api.RateLimitErrorCode.html#expired) code when the request expires. Defaults to `10 seconds`.
+
+##### Example
+
+```ts
+import { Priority, RateLimitError, RateLimitErrorCode } from '@donation-alerts/api';
+
+const abortController = new AbortController();
+const userId = 123456789;
+
+try {
+	// Rate limiter options as the last argument
+	const connectionToken = await apiClient.users.getSocketConnectionToken(userId, {
+		rateLimiterOptions: {
+			priority: Priority.Highest,
+			signal: abortController.signal,
+			maxWaitMs: 5000,
+		},
+	});
+} catch (e) {
+	if (e instanceof RateLimitError) {
+		switch (e.code) {
+			case RateLimitErrorCode.LIMIT_EXCEEDED:
+				// Handle rate limit exceeded
+				break;
+
+			case RateLimitErrorCode.QUEUE_OVERFLOW:
+				// Handle queue overflow
+				break;
+
+			case RateLimitErrorCode.EXPIRED:
+				// Handle request expired
+				break;
+
+			case RateLimitErrorCode.CANCELLED:
+				// Handle request expired
+				break;
+
+			default:
+		}
+	}
+}
+```
 
 ### Serialization
 

@@ -1,15 +1,15 @@
-import { type RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
 import {
-	extractUserId,
-	ReadDocumentation,
 	type CentrifugoChannel,
 	type DonationAlertsApiScope,
+	extractUserId,
+	ReadDocumentation,
 	type UserIdResolvable,
 } from '@donation-alerts/common';
 import {
 	DonationAlertsCentrifugoChannel,
 	type DonationAlertsCentrifugoChannelsResponseData,
 } from './donation-alerts-centrifugo-channel.js';
+import { type DonationAlertsApiRequestOptions } from '../../interfaces/donation-alerts-api-request-options.js';
 import { BaseApi } from '../base-api.js';
 
 /**
@@ -30,7 +30,6 @@ export interface DonationAlertsCentrifugoSubscribeOptions {
  * Provides methods to manage user subscriptions to Centrifugo private channels.
  * These channels allow receiving real-time updates about specific events such as donations, goals, and polls.
  */
-
 @ReadDocumentation('api')
 export class DonationAlertsCentrifugoApi extends BaseApi {
 	/**
@@ -50,12 +49,14 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 	 * @param channels List of private channel names to subscribe the user to. Channel names should not include the
 	 * user ID – the library will format them automatically if needed.
 	 * @param options Additional options for subscription, such as formatting channel names.
-	 * @param rateLimiterOptions Options for controlling the request rate using a rate limiter.
+	 * @param requestOptions Additional request options, such as fetch options and rate limiting,
+	 * that can be used to control the request rate.
 	 *
 	 * @returns A promise resolving with a list of {@link DonationAlertsCentrifugoChannel}.
 	 *
 	 * @throws {@link HttpError} If the HTTP status code is outside the range of 200–299.
 	 * @throws {@link UnregisteredUserError} If the user provided is not registered in the auth provider.
+	 * @throws {@link RateLimitError} If the Donation Alerts API rate limit is exceeded.
 	 *
 	 * @example
 	 * ```ts
@@ -73,15 +74,9 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 		clientId: string,
 		channels: Array<CentrifugoChannel | string>,
 		options?: DonationAlertsCentrifugoSubscribeOptions,
-		rateLimiterOptions?: RateLimiterRequestOptions,
+		requestOptions?: DonationAlertsApiRequestOptions,
 	): Promise<DonationAlertsCentrifugoChannel[]> {
-		return await this._genericSubscribeToMultiplePrivateChannels(
-			user,
-			clientId,
-			channels,
-			options,
-			rateLimiterOptions,
-		);
+		return await this._genericSubscribeToMultiplePrivateChannels(user, clientId, channels, options, requestOptions);
 	}
 
 	/**
@@ -102,12 +97,14 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 	 * @param user The Donation Alerts user ID.
 	 * @param clientId The Client ID obtained beforehand.
 	 * @param options Additional options for subscription, such as formatting channel names.
-	 * @param rateLimiterOptions Options for rate limiting during the subscription.
+	 * @param requestOptions Additional request options, such as fetch options and rate limiting,
+	 * that can be used to control the request rate.
 	 *
 	 * @returns A promise resolving with the {@link DonationAlertsCentrifugoChannel} object.
 	 *
 	 * @throws {@link HttpError} If the HTTP status code is outside the range of 200–299.
 	 * @throws {@link UnregisteredUserError} If the user provided is not registered in the auth provider.
+	 * @throws {@link RateLimitError} If the Donation Alerts API rate limit is exceeded.
 	 *
 	 * @example
 	 * ```ts
@@ -119,7 +116,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 		user: UserIdResolvable,
 		clientId: string,
 		options?: DonationAlertsCentrifugoSubscribeOptions,
-		rateLimiterOptions?: RateLimiterRequestOptions,
+		requestOptions?: DonationAlertsApiRequestOptions,
 	): Promise<DonationAlertsCentrifugoChannel> {
 		return await this._genericSubscribeToPrivateChannel(
 			user,
@@ -127,7 +124,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 			'$alerts:donation',
 			'oauth-donation-subscribe',
 			options,
-			rateLimiterOptions,
+			requestOptions,
 		);
 	}
 
@@ -149,12 +146,14 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 	 * @param user The Donation Alerts user ID.
 	 * @param clientId The Client ID obtained beforehand.
 	 * @param options Additional options for subscription, such as formatting channel names.
-	 * @param rateLimiterOptions Options for rate limiting during the subscription.
+	 * @param requestOptions Additional request options, such as fetch options and rate limiting,
+	 * that can be used to control the request rate.
 	 *
 	 * @returns A promise resolving with the successfully subscribed channel object.
 	 *
 	 * @throws {@link HttpError} If the HTTP status code is outside the range of 200–299.
-	 * @throws {@link UnregisteredUserError} If the user provided is not registered in the auth.
+	 * @throws {@link UnregisteredUserError} If the user provided is not registered in the auth provider.
+	 * @throws {@link RateLimitError} If the Donation Alerts API rate limit is exceeded.
 	 *
 	 * @example
 	 * ```ts
@@ -166,7 +165,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 		user: UserIdResolvable,
 		clientId: string,
 		options?: DonationAlertsCentrifugoSubscribeOptions,
-		rateLimiterOptions?: RateLimiterRequestOptions,
+		requestOptions?: DonationAlertsApiRequestOptions,
 	): Promise<DonationAlertsCentrifugoChannel> {
 		return await this._genericSubscribeToPrivateChannel(
 			user,
@@ -174,7 +173,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 			'$goals:goal',
 			'oauth-goal-subscribe',
 			options,
-			rateLimiterOptions,
+			requestOptions,
 		);
 	}
 
@@ -196,12 +195,14 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 	 * @param user The Donation Alerts user ID.
 	 * @param clientId The Client ID obtained beforehand.
 	 * @param options Additional options for subscription, such as formatting channel names.
-	 * @param rateLimiterOptions Options for rate limiting during the subscription.
+	 * @param requestOptions Additional request options, such as fetch options and rate limiting,
+	 * that can be used to control the request rate.
 	 *
 	 * @returns A promise resolving with the successfully subscribed channel object.
 	 *
 	 * @throws {@link HttpError} If the HTTP status code is outside the range of 200–299.
 	 * @throws {@link UnregisteredUserError} If the user provided is not registered in the auth provider.
+	 * @throws {@link RateLimitError} If the Donation Alerts API rate limit is exceeded.
 	 *
 	 * @example
 	 * ```ts
@@ -213,7 +214,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 		user: UserIdResolvable,
 		clientId: string,
 		options?: DonationAlertsCentrifugoSubscribeOptions,
-		rateLimiterOptions?: RateLimiterRequestOptions,
+		requestOptions?: DonationAlertsApiRequestOptions,
 	): Promise<DonationAlertsCentrifugoChannel> {
 		return await this._genericSubscribeToPrivateChannel(
 			user,
@@ -221,7 +222,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 			'$polls:poll',
 			'oauth-poll-subscribe',
 			options,
-			rateLimiterOptions,
+			requestOptions,
 		);
 	}
 
@@ -230,7 +231,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 		clientId: string,
 		channels: Array<CentrifugoChannel | string>,
 		options?: DonationAlertsCentrifugoSubscribeOptions,
-		rateLimiterOptions?: RateLimiterRequestOptions,
+		requestOptions?: DonationAlertsApiRequestOptions,
 	): Promise<DonationAlertsCentrifugoChannel[]> {
 		const response = await this._apiClient.callApi<DonationAlertsCentrifugoChannelsResponseData>(
 			user,
@@ -246,7 +247,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 							: channels,
 				},
 			},
-			rateLimiterOptions,
+			requestOptions,
 		);
 
 		return response.channels.map(channel => new DonationAlertsCentrifugoChannel(channel));
@@ -258,7 +259,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 		channel: CentrifugoChannel | string,
 		scope?: DonationAlertsApiScope,
 		options?: DonationAlertsCentrifugoSubscribeOptions,
-		rateLimiterOptions?: RateLimiterRequestOptions,
+		requestOptions?: DonationAlertsApiRequestOptions,
 	): Promise<DonationAlertsCentrifugoChannel> {
 		const response = await this._apiClient.callApi<DonationAlertsCentrifugoChannelsResponseData>(
 			user,
@@ -274,7 +275,7 @@ export class DonationAlertsCentrifugoApi extends BaseApi {
 					],
 				},
 			},
-			rateLimiterOptions,
+			requestOptions,
 		);
 
 		if (response.channels.length === 0) {

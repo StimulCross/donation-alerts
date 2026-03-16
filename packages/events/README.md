@@ -171,7 +171,6 @@ You can monitor the connection status by subscribing to [onConnect](https://stim
     ```
 
 - **onDisconnect**: Triggered whenever the client disconnects from the server. The callback provides two arguments:
-
     - `reason`: A string describing the reason for the disconnection.
     - `reconnect`: A boolean indicating whether the client will attempt to reconnect automatically.
 

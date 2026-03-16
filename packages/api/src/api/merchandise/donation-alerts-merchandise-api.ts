@@ -1,4 +1,3 @@
-import { type RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
 import {
 	type DonationAlertsInputCurrency,
 	type DonationAlertsLocaleCode,
@@ -15,6 +14,7 @@ import {
 	type DonationAlertsMerchandiseUserData,
 } from './donation-alerts-merchandise-user.js';
 import { DonationAlertsMerchandise, type DonationAlertsMerchandiseData } from './donation-alerts-merchandise.js';
+import { type DonationAlertsApiRequestOptions } from '../../interfaces/donation-alerts-api-request-options.js';
 import { type DonationAlertsResponseSingleData } from '../../interfaces/donation-alerts-response-data.js';
 import { createSha256SignatureFromParams } from '../../utils/create-sha256-signature-from-params.js';
 import { BaseApi } from '../base-api.js';
@@ -169,12 +169,20 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	 * @param user The ID of the user to use the access token of.
 	 *             This user must be registered in the {@link AuthProvider}
 	 * @param promocode The promocode to look up.
-	 * @param rateLimiterOptions Optional rate limiter settings.
+	 * @param requestOptions Additional request options, such as fetch options and rate limiting,
+	 * that can be used to control the request rate.
+	 *
+	 * @returns An instance of {@link DonationAlertsMerchandiseUser} associated with the promocode,
+	 *          or `null` if the response is empty.
+	 *
+	 * @throws {@link HttpError} If the HTTP status code is outside the range of 200–299.
+	 * @throws {@link UnregisteredUserError} If the user provided is not registered in the auth provider.
+	 * @throws {@link RateLimitError} If the Donation Alerts API rate limit is exceeded.
 	 */
 	public async getUserDataFromPromocode(
 		user: UserIdResolvable,
 		promocode: string,
-		rateLimiterOptions?: RateLimiterRequestOptions,
+		requestOptions?: DonationAlertsApiRequestOptions,
 	): Promise<DonationAlertsMerchandiseUser | null> {
 		const clientSecret = this._getClientSecret();
 		const formData = { promocode };
@@ -190,7 +198,7 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 				method: 'GET',
 				formBody: { ...formData, signature },
 			},
-			rateLimiterOptions,
+			requestOptions,
 		);
 
 		return response.data ? new DonationAlertsMerchandiseUser(response.data) : null;
@@ -201,17 +209,19 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	 *
 	 * @param user The ID of the authorized user.
 	 * @param data The details of the merchandise item to create.
-	 * @param rateLimiterOptions Optional rate limiter settings.
+	 * @param requestOptions Additional request options, such as fetch options and rate limiting,
+	 * that can be used to control the request rate.
 	 *
 	 * @returns An instance of {@link DonationAlertsMerchandise} representing the created item.
 	 *
-	 * @throws {@link HttpError} if the response status code is not in the 200-299 range.
-	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
+	 * @throws {@link HttpError} If the HTTP status code is outside the range of 200–299.
+	 * @throws {@link UnregisteredUserError} If the user provided is not registered in the auth provider.
+	 * @throws {@link RateLimitError} If the Donation Alerts API rate limit is exceeded.
 	 */
 	public async createMerchandise(
 		user: UserIdResolvable,
 		data: DonationAlertsCreateMerchandiseData,
-		rateLimiterOptions?: RateLimiterRequestOptions,
+		requestOptions?: DonationAlertsApiRequestOptions,
 	): Promise<DonationAlertsMerchandise> {
 		const clientSecret = this._getClientSecret();
 		const formData = {
@@ -238,7 +248,7 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 				method: 'POST',
 				formBody: { ...formData, signature },
 			},
-			rateLimiterOptions,
+			requestOptions,
 		);
 
 		return new DonationAlertsMerchandise(response.data);
@@ -250,18 +260,20 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	 * @param user The ID of the authorized user.
 	 * @param merchandiseId The ID of the merchandise to update.
 	 * @param data The modified data for the merchandise item.
-	 * @param rateLimiterOptions Optional rate limiter settings.
+	 * @param requestOptions Additional request options, such as fetch options and rate limiting,
+	 * that can be used to control the request rate.
 	 *
 	 * @returns An updated instance of `DonationAlertsMerchandise`.
 	 *
 	 * @throws {@link HttpError} if the response status code is not in the 200-299 range.
 	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
+	 * @throws {@link RateLimitError} If the Donation Alerts API rate limit is exceeded.
 	 */
 	public async updateMerchandise(
 		user: UserIdResolvable,
 		merchandiseId: number | string,
 		data: DonationAlertsUpdateMerchandiseData,
-		rateLimiterOptions?: RateLimiterRequestOptions,
+		requestOptions?: DonationAlertsApiRequestOptions,
 	): Promise<DonationAlertsMerchandise> {
 		const clientSecret = this._getClientSecret();
 		const formData = {
@@ -288,7 +300,7 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 				method: 'PUT',
 				formBody: { ...formData, signature },
 			},
-			rateLimiterOptions,
+			requestOptions,
 		);
 
 		return new DonationAlertsMerchandise(response.data);
@@ -304,17 +316,19 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	 * @param user The ID of the user to use the access token of.
 	 * This secret must correspond to the application that the user authenticated.
 	 * @param data The merchandise data to create or update.
-	 * @param rateLimiterOptions Optional rate limiter configuration.
+	 * @param requestOptions Additional request options, such as fetch options and rate limiting,
+	 * that can be used to control the request rate.
 	 *
 	 * @returns An instance of {@link DonationAlertsMerchandise} representing the created or updated merchandise item.
 	 *
 	 * @throws {@link HttpError} if the response status code falls outside the 200–299 range.
 	 * @throws {@link UnregisteredUserError} if the specified user is not registered with the authentication provider.
+	 * @throws {@link RateLimitError} If the Donation Alerts API rate limit is exceeded.
 	 */
 	public async createOrUpdateMerchandise(
 		user: UserIdResolvable,
 		data: DonationAlertsCreateMerchandiseData,
-		rateLimiterOptions?: RateLimiterRequestOptions,
+		requestOptions?: DonationAlertsApiRequestOptions,
 	): Promise<DonationAlertsMerchandise> {
 		const clientSecret = this._getClientSecret();
 		const formData = {
@@ -339,7 +353,7 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 				method: 'POST',
 				formBody: { ...formData, signature },
 			},
-			rateLimiterOptions,
+			requestOptions,
 		);
 
 		return new DonationAlertsMerchandise(response.data);
@@ -350,17 +364,19 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 	 *
 	 * @param user The ID of the authorized user.
 	 * @param data The sale alert data to send.
-	 * @param rateLimiterOptions Optional rate limiter settings.
+	 * @param requestOptions Additional request options, such as fetch options and rate limiting,
+	 * that can be used to control the request rate.
 	 *
 	 * @returns An instance of {@link DonationAlertsMerchandiseSale} representing the sale alert.
 	 *
 	 * @throws {@link HttpError} if the response status code is not in the 200-299 range.
 	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
+	 * @throws {@link RateLimitError} If the Donation Alerts API rate limit is exceeded.
 	 */
 	public async sendSaleAlert(
 		user: UserIdResolvable,
 		data: DonationAlertsSendMerchandiseSaleAlertData,
-		rateLimiterOptions?: RateLimiterRequestOptions,
+		requestOptions?: DonationAlertsApiRequestOptions,
 	): Promise<DonationAlertsMerchandiseSale> {
 		const clientSecret = this._getClientSecret();
 		const formData = {
@@ -386,7 +402,7 @@ export class DonationAlertsMerchandiseApi extends BaseApi {
 				method: 'POST',
 				formBody: { ...formData, signature },
 			},
-			rateLimiterOptions,
+			requestOptions,
 		);
 
 		return new DonationAlertsMerchandiseSale(response.data);

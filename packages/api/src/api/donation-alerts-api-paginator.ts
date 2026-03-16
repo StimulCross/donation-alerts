@@ -1,7 +1,7 @@
-import { type RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
 import { type DonationAlertsApiCallOptions } from '@donation-alerts/api-call';
 import { ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { type ApiClient } from '../api-client.js';
+import { type DonationAlertsApiRequestOptions } from '../interfaces/donation-alerts-api-request-options.js';
 import { type DonationAlertsResponseWithMeta } from '../interfaces/donation-alerts-response-data.js';
 
 /**
@@ -30,7 +30,7 @@ export class DonationAlertsApiPaginator<D, T> {
 		private readonly _user: UserIdResolvable,
 		private readonly _callOptions: DonationAlertsApiCallOptions,
 		private readonly _mapper: (data: D) => T | T[],
-		private readonly _rateLimiterOptions?: RateLimiterRequestOptions,
+		private readonly _requestOptions?: DonationAlertsApiRequestOptions,
 	) {}
 
 	/**
@@ -137,6 +137,7 @@ export class DonationAlertsApiPaginator<D, T> {
 	 * @throws {@link HttpError} if the response status code is not within the `200-299` range.
 	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
 	 * @throws {@link MissingScopeError} if the access token does not include the required scope.
+	 * @throws {@link RateLimitError} if the rate limit is exceeded.
 	 *
 	 * @example
 	 * ```ts
@@ -164,6 +165,7 @@ export class DonationAlertsApiPaginator<D, T> {
 	 * @throws {@link HttpError} if the response status code is not within the `200-299` range.
 	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
 	 * @throws {@link MissingScopeError} if the access token does not include the required scope.
+	 * @throws {@link RateLimitError} if the rate limit is exceeded.
 	 */
 	public async getNext(): Promise<T[]> {
 		if (this._isFinished) {
@@ -196,6 +198,7 @@ export class DonationAlertsApiPaginator<D, T> {
 	 * @throws {@link HttpError} if the response status code is not within the `200-299` range.
 	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
 	 * @throws {@link MissingScopeError} if the access token does not include the required scope.
+	 * @throws {@link RateLimitError} if the rate limit is exceeded.
 	 */
 	public async getPrev(): Promise<T[]> {
 		let page = 1;
@@ -223,6 +226,7 @@ export class DonationAlertsApiPaginator<D, T> {
 	 * @throws {@link HttpError} if the response status code is not within the `200-299` range.
 	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
 	 * @throws {@link MissingScopeError} if the access token does not include the required scope.
+	 * @throws {@link RateLimitError} if the rate limit is exceeded.
 	 */
 	public async getAll(): Promise<T[]> {
 		this.reset();
@@ -248,6 +252,7 @@ export class DonationAlertsApiPaginator<D, T> {
 	 * @throws {@link HttpError} if the response status code is not within the `200-299` range.
 	 * @throws {@link UnregisteredUserError} if the user is not registered in the authentication provider.
 	 * @throws {@link MissingScopeError} if the access token does not include the required scope.
+	 * @throws {@link RateLimitError} if the rate limit is exceeded.
 	 *
 	 * @example
 	 * ```ts
@@ -279,7 +284,7 @@ export class DonationAlertsApiPaginator<D, T> {
 				query: { page },
 				...this._callOptions,
 			},
-			this._rateLimiterOptions,
+			this._requestOptions,
 		);
 	}
 

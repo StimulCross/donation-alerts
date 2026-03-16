@@ -3,13 +3,13 @@ import { WebSocket } from '@d-fischer/isomorphic-ws';
 import { EventEmitter } from '@d-fischer/typed-event-emitter';
 import { type ApiClient } from '@donation-alerts/api';
 import {
+	type CentrifugoChannel,
 	extractUserId,
 	ReadDocumentation,
-	type CentrifugoChannel,
 	type UserIdResolvable,
 } from '@donation-alerts/common';
-import { createLogger, LogLevel, type LoggerOptions, type Logger } from '@stimulcross/logger';
-import {
+import { createLogger, type Logger, type LoggerOptions, LogLevel } from '@stimulcross/logger';
+import Centrifuge, {
 	type JoinLeaveContext,
 	type PublicationContext,
 	type SubscribeErrorContext,
@@ -20,7 +20,6 @@ import {
 	type SubscriptionEvents,
 	type UnsubscribeContext,
 } from 'centrifuge';
-import Centrifuge from 'centrifuge';
 import {
 	DonationAlertsDonationEvent,
 	type DonationAlertsDonationEventData,
@@ -146,6 +145,13 @@ export class UserEventsClient extends EventEmitter {
 						ctx.data.client,
 						ctx.data.channels as CentrifugoChannel[],
 						{ transformChannel: false },
+						{
+							rateLimiterOptions: {
+								limitBehavior: 'enqueue',
+								priority: 5,
+								shouldForceEnqueue: true,
+							},
+						},
 					)
 					.then(channels => {
 						callback({
@@ -316,7 +322,13 @@ export class UserEventsClient extends EventEmitter {
 
 	private async _connect(): Promise<void> {
 		if (!this.isConnected) {
-			const token = await this._apiClient.users.getSocketConnectionToken(this._userId);
+			const token = await this._apiClient.users.getSocketConnectionToken(this._userId, {
+				rateLimiterOptions: {
+					limitBehavior: 'enqueue',
+					priority: 5,
+					shouldForceEnqueue: true,
+				},
+			});
 
 			return await new Promise<void>((resolve, reject) => {
 				try {

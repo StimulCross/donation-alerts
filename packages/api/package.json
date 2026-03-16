@@ -55,6 +55,7 @@
 		"@donation-alerts/api-call": "workspace:*",
 		"@donation-alerts/common": "workspace:*",
 		"@stimulcross/logger": "^8.0.0",
+		"@stimulcross/rate-limiter": "~0.0.7",
 		"cross-sha256": "^1.2.0"
 	},
 	"peerDependencies": {

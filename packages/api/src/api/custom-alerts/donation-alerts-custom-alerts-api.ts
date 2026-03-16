@@ -1,6 +1,6 @@
-import { type RateLimiterRequestOptions } from '@d-fischer/rate-limiter';
 import { ReadDocumentation, type UserIdResolvable } from '@donation-alerts/common';
 import { DonationAlertsCustomAlert, type DonationAlertsCustomAlertData } from './donation-alerts-custom-alert.js';
+import { type DonationAlertsApiRequestOptions } from '../../interfaces/donation-alerts-api-request-options.js';
 import { type DonationAlertsResponseSingleData } from '../../interfaces/donation-alerts-response-data.js';
 import { BaseApi } from '../base-api.js';
 
@@ -68,13 +68,14 @@ export class DonationAlertsCustomAlertsApi extends BaseApi {
 	 *
 	 * @param user The ID of the user to send the custom alert to.
 	 * @param data The data object containing properties for the custom alert, such as header, message, or sound URL.
-	 * @param rateLimiterOptions Optional rate limiting configuration.
+	 * @param requestOptions Optional rate limiter request options.
 	 *
 	 * @returns An instance of the newly created {@link DonationAlertsCustomAlert}.
 	 *
 	 * @throws {@link HttpError} if the HTTP status code is outside the range of 200–299.
 	 * @throws {@link UnregisteredUserError} if the specified user is not registered in the authentication provider.
 	 * @throws {@link MissingScopeError} if the access token lacks the necessary `oauth-custom_alert-store` scope.
+	 * @throws {@link RateLimitError} If the Donation Alerts API rate limit is exceeded.
 	 *
 	 * @example
 	 * ```ts
@@ -93,7 +94,7 @@ export class DonationAlertsCustomAlertsApi extends BaseApi {
 	public async sendCustomAlert(
 		user: UserIdResolvable,
 		data: DonationAlertsSendCustomAlertData,
-		rateLimiterOptions?: RateLimiterRequestOptions,
+		requestOptions?: DonationAlertsApiRequestOptions,
 	): Promise<DonationAlertsCustomAlert> {
 		const response = await this._apiClient.callApi<DonationAlertsResponseSingleData<DonationAlertsCustomAlertData>>(
 			user,
@@ -112,7 +113,7 @@ export class DonationAlertsCustomAlertsApi extends BaseApi {
 				},
 				auth: true,
 			},
-			rateLimiterOptions,
+			requestOptions,
 		);
 
 		return new DonationAlertsCustomAlert(response.data);

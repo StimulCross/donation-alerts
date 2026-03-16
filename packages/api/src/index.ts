@@ -1,7 +1,22 @@
 export { ApiClient } from './api-client.js';
 
+export {
+	type RateLimiter,
+	type RateLimiterRunOptions,
+	RateLimitError,
+	InvalidCostError,
+	type InvalidCostErrorPlainObject,
+	RateLimitErrorCode,
+	RateLimiterDestroyedError,
+	type RateLimitErrorPlainObject,
+	type LimitBehavior,
+	Priority,
+	type SelectionPolicy,
+	type SelectionPolicyCandidate,
+} from '@stimulcross/rate-limiter';
+
 export { type ApiConfig } from './interfaces/api-config.js';
-export { type RateLimiterOptions } from './interfaces/rate-limiter-options.js';
+export { type DonationAlertsApiRequestOptions } from './interfaces/donation-alerts-api-request-options.js';
 export { type DonationAlertsApiPagination } from './interfaces/donation-alerts-api-pagination.js';
 export type {
 	DonationAlertsResultPagination,
