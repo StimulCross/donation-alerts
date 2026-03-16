@@ -13,4 +13,4 @@ export {
 export { type AuthProvider } from './interfaces/auth-provider.js';
 export { type AuthStorage } from './interfaces/auth-storage.js';
 export { StaticAuthProvider } from './providers/static-auth-provider.js';
-export { RefreshingAuthProvider } from './providers/refreshing-auth-provider.js';
+export { RefreshingAuthProvider, type RefreshingAuthProviderConfig } from './providers/refreshing-auth-provider.js';
