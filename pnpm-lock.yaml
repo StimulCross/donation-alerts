@@ -104,8 +104,8 @@ importers:
         specifier: ^8.0.0
         version: 8.0.0
       '@stimulcross/rate-limiter':
-        specifier: ~0.0.7
-        version: 0.0.7
+        specifier: ~0.0.8
+        version: 0.0.8
       cross-sha256:
         specifier: ^1.2.0
         version: 1.2.0
@@ -1382,8 +1382,8 @@ packages:
     resolution: {integrity: sha512-ArLRUuWQMErMHdcVSYhWcy2qfxcnQSsNNUnKc88X2EgGUcEt+EY0n9ho/Z1kiIj4E2Gv8q4nZ0rAqyw1rcxw2g==}
     engines: {node: '>=20'}
 
-  '@stimulcross/rate-limiter@0.0.7':
-    resolution: {integrity: sha512-KxODdwF+YaX9zYcneCcCFcJuWv4qFAZXpIZVMA+thzbUh5STApOSIk3VkntDtTlzR173cW4AAyfkZmvTGRAPFQ==}
+  '@stimulcross/rate-limiter@0.0.8':
+    resolution: {integrity: sha512-RplX9wdcN6UpL9/1P9dKzjmYKoDv73x7Oxu8NwT9ViGqashJsaoFPUyruSfaOuKUuZX3fL+626x7oq8r/+FnBQ==}
     engines: {node: '>=20'}
 
   '@stylistic/eslint-plugin@3.1.0':
@@ -5711,7 +5711,7 @@ snapshots:
 
   '@stimulcross/prettier-config@2.0.0': {}
 
-  '@stimulcross/rate-limiter@0.0.7':
+  '@stimulcross/rate-limiter@0.0.8':
     dependencies:
       '@stimulcross/ds-binary-heap': 0.1.0
       '@stimulcross/ds-deque': 0.1.0
