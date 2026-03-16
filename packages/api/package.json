@@ -1,6 +1,6 @@
 {
 	"name": "@donation-alerts/api",
-	"version": "4.0.0",
+	"version": "5.0.0-next.0",
 	"description": "Interact with Donation Alerts API.",
 	"keywords": [
 		"donation-alerts",

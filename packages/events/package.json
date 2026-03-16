@@ -1,6 +1,6 @@
 {
 	"name": "@donation-alerts/events",
-	"version": "4.0.0",
+	"version": "5.0.0-next.0",
 	"description": "Listen to various Donation Alerts events.",
 	"keywords": [
 		"donation-alerts",
@@ -67,6 +67,6 @@
 		"@donation-alerts/api": "workspace:*",
 		"@donation-alerts/eslint-configs": "workspace:*",
 		"@donation-alerts/typescript-config": "workspace:*",
-		"@types/ws": "^8.5.14"
+		"@types/ws": "^8.18.1"
 	}
 }
