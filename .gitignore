@@ -26,3 +26,4 @@ yarn-error.log*
 .pnp.*
 coverage
 .turbo
+playground
